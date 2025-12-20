@@ -1,0 +1,66 @@
+# macOS system files
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+Icon?
+.Spotlight-V100
+.Trashes
+._*
+
+# editor files
+.vscode/
+*~
+
+# shell history & logs
+.zsh_history
+.bash_history
+.sh_history
+.zsh_sessions/
+*.logs
+
+# sensitive information
+.ssh/
+.gnupg/
+.aws/
+.netrc
+.env
+.env.*
+.tokens
+.secrets
+*.pem
+*.key
+**/id_rsa*
+**/id_ed25519*
+**/id_ecdsa*
+**/id_dsa*
+!**/*.pub
+
+# cache files
+.cache/
+.local/share/
+*.zwc
+*.pyc
+__pycache__/
+
+# application specific
+.config/git/credentials
+
+
+# package & build junk
+node_modules/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.vscode/
+.idea/
+dist/
+build/
+
+# temp files
+tmp/
+*.tmp
+*.temp
+
+# GNU Stow backup files
+*.stowbak
