@@ -1,0 +1,51 @@
+### config | ghostty | ishan kunam ###
+
+# -----------
+#    shell
+# -----------
+
+command = /bin/zsh
+auto-update-channel = stable
+
+# ----------
+#    font
+# ----------
+
+font-family = FiraCode Nerd Font Mono
+font-size = 12
+
+# -----------
+#    theme
+# -----------
+
+theme = Dracula
+
+# ------------
+#    window
+# ------------
+
+window-decoraction = false
+window-padding-x = 10
+window-padding-y = 10
+
+# ------------
+#    cursor
+# ------------
+
+cursor-style = bar
+cursor-style-blink = false
+
+# -----------------------
+#    shell integration
+# -----------------------
+
+shell-integration = detect
+shell-integration-features = cursor, sudo, title
+
+# --------------
+#    behavior
+# --------------
+
+click-repeat-interval = 500
+confirm-close-surface = false
+copy-on-select = false
