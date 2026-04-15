@@ -5,47 +5,76 @@
 # -----------
 
 command = /bin/zsh
+auto-update = check
 auto-update-channel = stable
 
 # ----------
 #    font
 # ----------
 
-font-family = FiraCode Nerd Font Mono
-font-size = 12
+font-family = Fira Code
+font-size = 14
 
 # -----------
 #    theme
 # -----------
 
 theme = Dracula
+macos-icon = chalkboard
+
+# ----------------
+#    background
+# ----------------
+
+background-opacity = 0.60
+background-blur = macos-glass-regular
 
 # ------------
 #    window
 # ------------
 
-window-decoraction = false
-window-padding-x = 10
-window-padding-y = 10
+window-decoration = true
+window-padding-x = 2
+window-padding-y = 2
+window-padding-balance = true
+window-save-state = always
+macos-titlebar-style = transparent
+scrollback-limit = 0
 
 # ------------
 #    cursor
 # ------------
 
-cursor-style = bar
+cursor-style = block
 cursor-style-blink = false
+cursor-invert-fg-bg = true
+mouse-hide-while-typing = true
 
 # -----------------------
 #    shell integration
 # -----------------------
 
 shell-integration = detect
-shell-integration-features = cursor, sudo, title
+shell-integration-features = true
 
 # --------------
 #    behavior
 # --------------
 
 click-repeat-interval = 500
-confirm-close-surface = false
-copy-on-select = false
+
+# ----------------------
+#    quick terminal
+# ----------------------
+
+quick-terminal-position = bottom
+quick-terminal-size = 50%
+quick-terminal-screen = mouse
+quick-terminal-animation-duration = 0
+
+# --------------
+#    keybinds
+# --------------
+
+keybind = cmd+shift+r=reload_config
+keybind = global:ctrl+grave_accent=toggle_quick_terminal
