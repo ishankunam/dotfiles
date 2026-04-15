@@ -39,7 +39,6 @@ window-padding-y = 2
 window-padding-balance = true
 window-save-state = always
 macos-titlebar-style = transparent
-scrollback-limit = 0
 
 # ------------
 #    cursor
@@ -61,6 +60,8 @@ shell-integration-features = true
 #    behavior
 # --------------
 
+working-directory = home
+window-inherit-working-directory = false
 click-repeat-interval = 500
 
 # ----------------------
