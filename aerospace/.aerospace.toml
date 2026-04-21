@@ -12,7 +12,7 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 default-root-container-layout = 'tiles'
 default-root-container-orientation = 'auto'
 
-# mouse follows focus when focused monitor changes
+# mouse follows focus when focused monitor changes (turned off)
 on-focused-monitor-changed = []
 
 # omitted options
