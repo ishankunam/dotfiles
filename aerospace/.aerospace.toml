@@ -13,7 +13,7 @@ default-root-container-layout = 'tiles'
 default-root-container-orientation = 'auto'
 
 # mouse follows focus when focused monitor changes
-on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+on-focused-monitor-changed = []
 
 # omitted options
 after-startup-command = []
