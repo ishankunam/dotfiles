@@ -17,7 +17,7 @@ on-focused-monitor-changed = []
 
 # omitted options
 after-startup-command = []
-automatically-unhide-macos-hidden-apps = false
+automatically-unhide-macos-hidden-apps = true
 persistent-workspaces = ['1']
 on-mode-changed = []
 accordion-padding = 0
