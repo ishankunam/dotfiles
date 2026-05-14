@@ -1,4 +1,4 @@
-# macOS system files
+# macOS
 .DS_Store
 .DS_Store?
 .AppleDouble
@@ -46,7 +46,6 @@ __pycache__/
 # application specific
 .config/git/credentials
 
-
 # package & build junk
 node_modules/
 __pycache__/
@@ -64,3 +63,6 @@ tmp/
 
 # GNU Stow backup files
 *.stowbak
+
+# tmux
+tmux/.tmux/plugins/
