@@ -1,5 +1,5 @@
-tap "jurplel/tap"
-tap "nikitabobko/tap"
+tap "jurplel/tap", trusted: true
+tap "nikitabobko/tap", trusted: true
 # Resource monitor. C++ version and continuation of bashtop and bpytop
 brew "btop"
 # Like neofetch, but much faster because written mostly in C
@@ -18,6 +18,8 @@ brew "git-filter-repo"
 brew "llvm"
 # Deep clean and optimize your Mac
 brew "mole"
+# Ambitious Vim-fork focused on extensibility and agility
+brew "neovim"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
 # PDF rendering library (based on the xpdf-3.0 code base)
@@ -25,7 +27,7 @@ brew "poppler"
 # Ruby version manager
 brew "rbenv"
 # Powerful, clean, object-oriented scripting language
-brew "ruby"
+brew "ruby", link: false
 # Extremely fast Python linter, written in Rust
 brew "ruff"
 # Organize software neatly under a single directory tree (e.g. /usr/local)
@@ -57,11 +59,12 @@ cask "iina"
 cask "jurplel/tap/instant-space-switcher"
 # Menu bar manager
 cask "jordanbaird-ice"
+# Tool to control external monitor brightness & volume
+cask "monitorcontrol"
 vscode "adpyke.codesnap"
 vscode "charliermarsh.ruff"
 vscode "dracula-theme.theme-dracula"
 vscode "esbenp.prettier-vscode"
-vscode "github.copilot-chat"
 vscode "james-yu.latex-workshop"
 vscode "jasew.anki"
 vscode "ms-python.debugpy"
