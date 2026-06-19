@@ -18,6 +18,8 @@ brew "git-filter-repo"
 brew "llvm"
 # Deep clean and optimize your Mac
 brew "mole"
+# Remote terminal application
+brew "mosh"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
 # Swiss-army knife of markup format conversion
@@ -27,7 +29,7 @@ brew "poppler"
 # Ruby version manager
 brew "rbenv"
 # Powerful, clean, object-oriented scripting language
-brew "ruby", link: false
+brew "ruby"
 # Extremely fast Python linter, written in Rust
 brew "ruff"
 # Organize software neatly under a single directory tree (e.g. /usr/local)
