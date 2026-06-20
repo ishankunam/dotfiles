@@ -1,5 +1,7 @@
+tap "anomalyco/tap"
 tap "jurplel/tap", trusted: true
 tap "nikitabobko/tap", trusted: true
+tap "rjyo/moshi", trusted: true
 # Resource monitor. C++ version and continuation of bashtop and bpytop
 brew "btop"
 # Like neofetch, but much faster because written mostly in C
@@ -44,12 +46,18 @@ brew "uv"
 brew "wget"
 # Feature-rich command-line audio/video downloader
 brew "yt-dlp"
+# The AI coding agent built for the terminal.
+brew "anomalyco/tap/opencode", trusted: true
+# Portable daemon + CLI that bridges AI coding agents to the Moshi mobile app
+brew "rjyo/moshi/moshi-hook"
 # AeroSpace is an i3-like tiling window manager for macOS
 cask "nikitabobko/tap/aerospace"
 # Enable Windows-like alt-tab
 cask "alt-tab"
 # Memory training application
 cask "anki"
+# Terminal interface for Antigravity agents
+cask "antigravity-cli"
 # Display management tool
 cask "betterdisplay"
 cask "font-departure-mono"
