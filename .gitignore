@@ -66,3 +66,16 @@ tmp/
 
 # tmux
 tmux/.tmux/plugins/
+
+# obsidian
+obsidian/.obsidian/plugins/
+obsidian/.obsidian/snippets/
+obsidian/.obsidian/themes/Cupertino/
+obsidian/.obsidian/themes/Minimal/
+obsidian/.obsidian/themes/*/theme.css
+obsidian/.obsidian/bookmarks.json
+obsidian/.obsidian/workspace.json
+obsidian/.obsidian/workspace-mobile.json
+obsidian/.obsidian/types.json
+obsidian/.obsidian/daily-notes.json
+obsidian/sync.sh
