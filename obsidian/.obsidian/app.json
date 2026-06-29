@@ -1,0 +1,22 @@
+{
+  "livePreview": false,
+  "defaultViewMode": "preview",
+  "showInlineTitle": false,
+  "mobileToolbarCommands": [
+    "editor:undo",
+    "editor:redo",
+    "editor:unindent-list",
+    "editor:indent-list",
+    "editor:insert-codeblock",
+    "editor:go-end"
+  ],
+  "pdfExportSettings": {
+    "pageSize": "Letter",
+    "landscape": false,
+    "margin": "0",
+    "downscalePercent": 100
+  },
+  "showLineNumber": false,
+  "readableLineLength": true,
+  "vimMode": true
+}
