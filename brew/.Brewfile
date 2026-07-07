@@ -4,6 +4,12 @@ tap "nikitabobko/tap", trusted: true
 tap "rjyo/moshi", trusted: true
 # Resource monitor. C++ version and continuation of bashtop and bpytop
 brew "btop"
+# Incredibly fast JavaScript runtime, bundler, test runner, and package manager
+brew "bun"
+# General-purpose scripting language
+brew "php"
+# Dependency Manager for PHP
+brew "composer"
 # Like neofetch, but much faster because written mostly in C
 brew "fastfetch"
 # Play, record, convert, and stream select audio and video codecs
@@ -85,6 +91,7 @@ vscode "ms-vscode-remote.remote-ssh"
 vscode "ms-vscode-remote.remote-ssh-edit"
 vscode "ms-vscode.cpptools"
 vscode "ms-vscode.remote-explorer"
+vscode "ms-vscode.wasm-wasi-core"
 vscode "mshr-h.veriloghdl"
 vscode "pkief.material-icon-theme"
 vscode "tamasfe.even-better-toml"
