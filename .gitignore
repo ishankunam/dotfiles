@@ -20,7 +20,6 @@ Icon?
 *.logs
 
 # sensitive information
-.ssh/
 .gnupg/
 .aws/
 .netrc
