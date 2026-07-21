@@ -70,6 +70,12 @@ cask "antigravity-cli"
 # Display management tool
 cask "betterdisplay"
 cask "font-departure-mono"
+# Ghostty's editor font
+cask "font-fira-code"
+# Used by SketchyBar for icon glyphs
+cask "font-hack-nerd-font"
+# Recommended font for Powerlevel10k
+cask "font-meslo-lg-nerd-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
 # Free and open-source media player
