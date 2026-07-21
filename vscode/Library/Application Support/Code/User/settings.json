@@ -1,0 +1,120 @@
+{
+  "breadcrumbs.enabled": true,
+
+  "terminal.integrated.fontFamily": "MesloLGS NF",
+
+  "editor.fontSize": 14,
+  "editor.fontWeight": "450",
+  "editor.fontLigatures": true,
+  "editor.fontFamily": "Fira Code",
+  "editor.wordWrap": "on",
+  "editor.lineNumbers": "on",
+  "editor.formatOnSave": true,
+  "editor.hover.enabled": "on",
+  "editor.minimap.enabled": false,
+  "editor.accessibilitySupport": "off",
+  // IntelliSense
+  "editor.quickSuggestions": {
+    "other": "on",
+    "comments": "off",
+    "strings": "off"
+  },
+  "[c]": { "editor.defaultFormatter": "ms-vscode.cpptools" },
+  "[cpp]": { "editor.defaultFormatter": "ms-vscode.cpptools" },
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+  "[javascript]":
+  {
+  "editor.defaultFormatter": "biomejs.biome",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave":
+  {
+    "source.organizeImports.biome": "explicit",
+    "source.fixAll.biome": "explicit"
+  }
+ },
+
+  "explorer.compactFolders": false,
+  "explorer.fileNesting.enabled": true,
+  "explorer.sortOrder": "foldersNestsFiles",
+  "explorer.confirmDragAndDrop": false,
+
+  "files.trimTrailingWhitespace": true,
+
+  "workbench.startupEditor": "none",
+  "workbench.editor.showTabs": "multiple",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.colorTheme": "Dracula Theme",
+
+  "security.workspace.trust.untrustedFiles": "open",
+
+  "extensions.ignoreRecommendations": true,
+
+  "lldb.showDisassembly": "never",
+
+  "git.openRepositoryInParentFolders": "never",
+  "github.copilot.enable": {
+    "*": false,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false,
+    "c": false
+  },
+  "C_Cpp.copilotHover": "disabled",
+  "github.copilot.chat.agent.runTasks": false,
+  "github.copilot.chat.codeGeneration.useInstructionFiles": false,
+  "github.copilot.chat.useProjectTemplates": false,
+  "github.copilot.editor.enableCodeActions": false,
+  "github.copilot.renameSuggestions.triggerAutomatically": false,
+  "github.copilot.chat.reviewSelection.enabled": false,
+  "github.copilot.chat.copilotDebugCommand.enabled": false,
+  "github.copilot.chat.startDebugging.enabled": false,
+  "github.copilot.chat.edits.newNotebook.enabled": false,
+  "github.copilot.chat.edits.suggestRelatedFilesForTests": false,
+  "github.copilot.chat.edits.suggestRelatedFilesFromGitHistory": false,
+  "github.copilot.chat.newWorkspaceCreation.enabled": false,
+  "github.copilot.chat.search.semanticTextResults": false,
+  "github.copilot.chat.setupTests.enabled": false,
+  "chat.agent.enabled": false,
+  "chat.extensionTools.enabled": false,
+  "chat.focusWindowOnConfirmation": false,
+  "chat.setupFromDialog": false,
+  "telemetry.feedback.enabled": false,
+
+  "codesnap.shutterAction": "copy",
+  "codesnap.showWindowControls": false,
+  "codesnap.backgroundColor": "#4C516D",
+
+  "latex-workshop.formatting.latex": "latexindent",
+  "latex-workshop.view.pdf.color.dark.backgroundColor": "#4C516D",
+  "workbench.editor.empty.hint": "hidden",
+  "anki.md.insertNewCardID": true,
+  "anki.md.updateCards": true,
+  "anki.defaultDeck": "",
+  "anki.md.createTagForTitle": false,
+  "anki.md.card.frontBackSeparator": "---",
+  "chat.commandCenter.enabled": false,
+  "editor.suggest.showStatusBar": true,
+  "lldb.suppressUpdateNotifications": true,
+  "remote.SSH.showLoginTerminal": true,
+  "evenBetterToml.taplo.configFile.enabled": false,
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
+  "workbench.activityBar.location": "hidden",
+  "python.analysis.typeCheckingMode": "standard",
+  "json.schemaDownload.trustedDomains": {
+    "https://schemastore.azurewebsites.net/": true,
+    "https://raw.githubusercontent.com/microsoft/vscode/": true,
+    "https://raw.githubusercontent.com/devcontainers/spec/": true,
+    "https://www.schemastore.org/": true,
+    "https://json.schemastore.org/": true,
+    "https://json-schema.org/": true,
+    "https://developer.microsoft.com/json-schemas/": true,
+    "https://biomejs.dev": true
+  }
+}

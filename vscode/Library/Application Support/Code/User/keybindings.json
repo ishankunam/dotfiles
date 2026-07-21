@@ -1,0 +1,88 @@
+// Place your key bindings in this file to override the defaults
+[
+  {
+    "key": "alt+s",
+    "command": "codesnap.start"
+  },
+  {
+    "key": "shift+cmd+/",
+    "command": "editor.action.commentLine",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "cmd+/",
+    "command": "-editor.action.commentLine",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "shift+cmd+left",
+    "command": "-cursorHomeSelect",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "shift+cmd+left",
+    "command": "-cursorWordAccessibilityLeftSelect",
+    "when": "accessibilityModeEnabled && isWindows && textInputFocus && focusedView == 'workbench.panel.output'"
+  },
+  {
+    "key": "shift+cmd+left",
+    "command": "-workbench.action.terminal.sendSequence",
+    "when": "terminalFocus && terminalShellType == 'pwsh'"
+  },
+  {
+    "key": "shift+cmd+h",
+    "command": "workbench.action.toggleSidebarVisibility"
+  },
+  {
+    "key": "cmd+b",
+    "command": "-workbench.action.toggleSidebarVisibility"
+  },
+  {
+    "key": "shift+cmd+l",
+    "command": "workbench.action.toggleAuxiliaryBar"
+  },
+  {
+    "key": "alt+cmd+b",
+    "command": "-workbench.action.toggleAuxiliaryBar"
+  },
+  {
+    "key": "shift+cmd+right",
+    "command": "-workbench.action.terminal.sendSequence",
+    "when": "terminalFocus && terminalShellIntegrationEnabled && !accessibilityModeEnabled && terminalShellType == 'pwsh'"
+  },
+  {
+    "key": "shift+cmd+right",
+    "command": "-cursorEndSelect",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "shift+cmd+right",
+    "command": "-cursorWordAccessibilityRightSelect",
+    "when": "accessibilityModeEnabled && isWindows && textInputFocus && focusedView == 'workbench.panel.output'"
+  },
+  {
+    "key": "shift+cmd+h",
+    "command": "-workbench.action.replaceInFiles",
+    "when": "!isSessionsWindow"
+  },
+  {
+    "key": "shift+cmd+l",
+    "command": "-addCursorsAtSearchResults",
+    "when": "fileMatchOrMatchFocus && searchViewletVisible"
+  },
+  {
+    "key": "shift+cmd+l",
+    "command": "-notebook.selectAllFindMatches",
+    "when": "config.notebook.multiCursor.enabled && notebookFindWidgetFocused || config.notebook.multiCursor.enabled && notebookCellEditorFocused && activeEditor == 'workbench.editor.notebook'"
+  },
+  {
+    "key": "shift+cmd+l",
+    "command": "-selectAllSearchEditorMatches",
+    "when": "inSearchEditor"
+  },
+  {
+    "key": "shift+cmd+l",
+    "command": "-editor.action.selectHighlights",
+    "when": "editorFocus"
+  }
+]
