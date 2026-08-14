@@ -31,6 +31,8 @@ brew "mole"
 brew "mosh"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
+# Open-source, cross-platform JavaScript runtime environment
+brew "node"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
 # PDF rendering library (based on the xpdf-3.0 code base)
@@ -69,13 +71,10 @@ cask "anki"
 cask "antigravity-cli"
 # Display management tool
 cask "betterdisplay"
+# OpenAI's coding agent that runs in your terminal
+cask "codex"
 cask "font-departure-mono"
-# Ghostty's editor font
-cask "font-fira-code"
-# Used by SketchyBar for icon glyphs
 cask "font-hack-nerd-font"
-# Recommended font for Powerlevel10k
-cask "font-meslo-lg-nerd-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
 # Free and open-source media player
