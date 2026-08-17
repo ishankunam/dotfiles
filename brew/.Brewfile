@@ -3,6 +3,10 @@ tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae", tr
 tap "jurplel/tap", trusted: true
 tap "nikitabobko/tap", trusted: true
 tap "rjyo/moshi", trusted: true
+# Open-source, cross-platform JavaScript runtime environment
+brew "node"
+# Browser automation CLI for AI agents
+brew "agent-browser"
 # Resource monitor. C++ version and continuation of bashtop and bpytop
 brew "btop"
 # Incredibly fast JavaScript runtime, bundler, test runner, and package manager
@@ -31,8 +35,6 @@ brew "mole"
 brew "mosh"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
-# Open-source, cross-platform JavaScript runtime environment
-brew "node"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
 # PDF rendering library (based on the xpdf-3.0 code base)
