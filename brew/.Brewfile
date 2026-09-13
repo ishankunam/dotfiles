@@ -37,8 +37,14 @@ brew "mosh"
 brew "neovim"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
+# Open-source vector similarity search for Postgres
+brew "pgvector"
+# Fast, disk space efficient package manager
+brew "pnpm"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
+# Object-relational database system
+brew "postgresql@17", link: true
 # Ruby version manager
 brew "rbenv"
 # Powerful, clean, object-oriented scripting language
@@ -53,6 +59,8 @@ brew "tmux"
 brew "tree"
 # Extremely fast Python package installer and resolver, written in Rust
 brew "uv"
+# Command-line interface for Vercel
+brew "vercel"
 # Internet file retriever
 brew "wget"
 # Feature-rich command-line audio/video downloader
@@ -79,6 +87,8 @@ cask "font-departure-mono"
 cask "font-hack-nerd-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
+# Local-first voice dictation
+cask "anomalyco/tap/hex", trusted: true
 # Free and open-source media player
 cask "iina"
 # Native instant workspace switching
