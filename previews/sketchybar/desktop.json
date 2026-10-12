@@ -1,0 +1,11 @@
+{
+  "capturedAt": "2026-10-12T01:12:00Z",
+  "displays": [
+    {"name": "MSI G273", "width": 1920, "height": 1080, "orientation": "Landscape", "notch": false},
+    {"name": "DELL S2721QS", "width": 1080, "height": 1920, "orientation": "Portrait", "notch": false}
+  ],
+  "snapshot": {"frontApp": "ChatGPT", "workspaces": ["1", "2", "3", "4"], "focusedWorkspace": "1", "battery": 100, "power": "AC Power", "clock": "11/10 21:12", "volume": 50},
+  "baseline": {"height": 40, "labelSize": 14, "iconSize": 17, "barColor": "0x40000000"},
+  "wallpaper": {"file": "assets/monet.jpg", "placement": "cover", "source": "https://commons.wikimedia.org/wiki/File:Claude_Monet_-_Bassin_d%27Argenteuil_-_Google_Art_Project.jpg", "selection": "User approved reproduction because the original local file is missing."},
+  "limitations": ["Snapshot values are frozen.", "Volume is sample data.", "Bar detail reflows at narrow widths. Screen proportions preserves monitor dimensions.", "The native config still uses Mission Control Spaces and yabai. The AeroSpace view is a preview only.", "The desktop capture did not provide the wallpaper. Placement uses cover as a preview assumption."]
+}

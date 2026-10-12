@@ -1,0 +1,181 @@
+<div id="sketchybar-desktop-preview" aria-label="Desktop and bar design">
+  <div class="viz-carousel" aria-label="SketchyBar design round">
+    <section data-variant="Grouped" aria-label="Grouped candidate">
+      <div class="sk-desktop" data-layout="grouped" aria-label="Grouped bar over the selected wallpaper"><div class="sk-wallpaper" aria-hidden="true"></div><div class="sk-mount"></div></div>
+    </section>
+    <section data-variant="Current config" aria-label="Current configuration reference" hidden>
+      <div class="sk-desktop" data-layout="baseline" aria-label="Current configuration over the selected wallpaper"><div class="sk-wallpaper" aria-hidden="true"></div><div class="sk-mount"></div></div>
+    </section>
+  </div>
+  <div class="sk-snapshot" role="status" aria-live="polite"></div>
+  <template id="sketchybar-desktop-items">
+    <div class="sk-bar">
+      <div class="sk-left">
+        <div class="sk-spaces" role="group" aria-label="Configured Mission Control Spaces"></div>
+        <div class="sk-app"><span class="sk-glyph" aria-hidden="true">&#xf054;</span><span class="sk-app-name"></span></div>
+      </div>
+      <div class="sk-right">
+        <button type="button" class="sk-battery cursor-interaction" aria-expanded="false"><span class="sk-glyph sk-battery-glyph" aria-hidden="true">&#xf0e7;</span><span class="sk-battery-value">100%</span></button>
+        <div class="sk-volume" aria-label="Sample volume"><span class="sk-glyph" aria-hidden="true">&#xf0580;</span><span>50%</span></div>
+        <div class="sk-clock"><span class="sk-glyph" aria-hidden="true">&#xf017;</span><span class="sk-clock-value"></span></div>
+      </div>
+    </div>
+    <div class="sk-popup" role="dialog" aria-label="Battery snapshot" hidden>
+      <div class="sk-popup-header"><span>Battery snapshot</span><button type="button" class="sk-popup-close cursor-interaction" aria-label="Close battery details">Close</button></div>
+      <div class="sk-popup-value">100%</div><div class="sk-popup-source">Charged · AC power</div>
+    </div>
+  </template>
+</div>
+<script type="application/json" id="sketchybar-preview-data">
+<!-- PREVIEW_DATA -->
+</script>
+<style>
+  @font-face { font-family: "Sketchybar Hack"; src: url("__HACK_FONT__") format("woff"); font-weight: 700; font-display: swap; }
+  #sketchybar-desktop-preview {
+    --sk-font: "Sketchybar Hack", "Hack Nerd Font", monospace;
+    --sk-font-size: 14px; --sk-icon-size: 17px; --sk-height: 40px; --sk-radius: 12px; --sk-gap: 10px;
+    --sk-accent: #3b9781; --sk-surface: #282a36; --sk-text: #ffffff; --sk-line: #585b7040; --sk-group-color: #282a36cc; --sk-group-height: 32px; --sk-blur: 30px; --sk-baseline-color: #00000040;
+    --sk-scale: 1; --sk-screen-width: 1920px; --sk-screen-height: 1080px; color-scheme: dark;
+  }
+  #sketchybar-desktop-preview .sk-desktop { position: relative; isolation: isolate; overflow: hidden; height: 330px; border-radius: 10px; background: #b8bfb0; font-family: var(--sk-font); font-size: var(--sk-font-size); font-weight: 700; color: var(--sk-text); }
+  #sketchybar-desktop-preview .sk-wallpaper { position: absolute; inset: 0; z-index: -1; background-image: url("__MONET_IMAGE__"); background-size: cover; background-position: center; }
+  #sketchybar-desktop-preview .sk-mount { position: relative; }
+  #sketchybar-desktop-preview .sk-bar { display: flex; align-items: center; justify-content: space-between; gap: 18px; height: var(--sk-height); box-sizing: border-box; padding: 0 14px; background: var(--sk-baseline-color); backdrop-filter: blur(var(--sk-blur)); }
+  #sketchybar-desktop-preview .sk-left, #sketchybar-desktop-preview .sk-right, #sketchybar-desktop-preview .sk-app, #sketchybar-desktop-preview .sk-spaces, #sketchybar-desktop-preview .sk-clock, #sketchybar-desktop-preview .sk-volume, #sketchybar-desktop-preview .sk-battery { display: flex; align-items: center; min-width: 0; }
+  #sketchybar-desktop-preview .sk-left { gap: var(--sk-gap); }
+  #sketchybar-desktop-preview .sk-right { gap: var(--sk-gap); flex-shrink: 0; }
+  #sketchybar-desktop-preview .sk-spaces { gap: 6px; flex-shrink: 0; }
+  #sketchybar-desktop-preview .sk-app { gap: 10px; overflow: hidden; }
+  #sketchybar-desktop-preview .sk-app-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #sketchybar-desktop-preview .sk-clock, #sketchybar-desktop-preview .sk-volume, #sketchybar-desktop-preview .sk-battery { gap: 8px; white-space: nowrap; }
+  #sketchybar-desktop-preview .sk-glyph { font-size: var(--sk-icon-size); }
+  #sketchybar-desktop-preview .sk-bar button, #sketchybar-desktop-preview .sk-popup button { font: inherit; color: inherit; border: 0; background: transparent; appearance: none; padding: 0; }
+  #sketchybar-desktop-preview .sk-space { min-width: 24px; height: 25px; border-radius: 5px; font-size: var(--sk-icon-size) !important; display: grid; place-items: center; }
+  #sketchybar-desktop-preview .sk-space[aria-pressed="true"] { background: #ffffff40; }
+  #sketchybar-desktop-preview .sk-battery { height: 28px; }
+  #sketchybar-desktop-preview .sk-desktop[data-layout="grouped"] .sk-bar { margin: 8px 14px 0; padding: 0; background: transparent; backdrop-filter: none; }
+  #sketchybar-desktop-preview .sk-desktop[data-layout="grouped"] .sk-spaces,
+  #sketchybar-desktop-preview .sk-desktop[data-layout="grouped"] .sk-app,
+  #sketchybar-desktop-preview .sk-desktop[data-layout="grouped"] .sk-right { height: var(--sk-group-height); box-sizing: border-box; padding: 0 8px; background: var(--sk-group-color); border: 1px solid var(--sk-line); border-radius: var(--sk-radius); backdrop-filter: blur(var(--sk-blur)); }
+  #sketchybar-desktop-preview .sk-desktop[data-layout="grouped"] .sk-space[aria-pressed="true"] { background: color-mix(in srgb, var(--sk-accent) 25%, transparent); }
+  #sketchybar-desktop-preview .sk-popup { position: absolute; top: calc(var(--sk-height) + 16px); right: 14px; width: min(260px, calc(100% - 28px)); box-sizing: border-box; padding: 14px; background: var(--sk-surface); border: 1px solid var(--sk-line); border-radius: var(--sk-radius); z-index: 4; }
+  #sketchybar-desktop-preview .sk-popup-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  #sketchybar-desktop-preview .sk-popup-close { min-height: 28px; }
+  #sketchybar-desktop-preview .sk-popup-value { margin: 12px 0 6px; font-size: 24px; }
+  #sketchybar-desktop-preview .sk-popup-source { font-size: 12px; }
+  #sketchybar-desktop-preview .sk-snapshot { margin-top: 8px; color: light-dark(#454c51, #b9bfc6); font: 12px -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.5; color-scheme: light dark; }
+  #sketchybar-desktop-preview [hidden] { display: none !important; }
+  #sketchybar-desktop-preview[data-view="Screen proportions"] .sk-desktop { height: auto; aspect-ratio: var(--sk-aspect); border-radius: 0; }
+  #sketchybar-desktop-preview[data-view="Screen proportions"] .sk-mount { width: var(--sk-screen-width); height: var(--sk-screen-height); transform: scale(var(--sk-scale)); transform-origin: top left; }
+  @media (max-width: 880px) {
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-app { max-width: 90px; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-spaces { gap: 2px; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-space { min-width: 20px; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-right { gap: 6px; }
+  }
+  @media (max-width: 740px) {
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-bar { height: auto; min-height: var(--sk-height); flex-wrap: wrap; gap: 8px; padding-top: 4px; padding-bottom: 4px; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-right { margin-left: auto; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-popup { top: calc(var(--sk-height) * 2 + 24px); }
+  }
+  @media (max-width: 430px) {
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-left { flex-wrap: wrap; gap: 8px; width: 100%; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-spaces { flex-wrap: wrap; gap: 2px; width: 100%; height: auto; min-height: calc(var(--sk-height) - 8px); }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-app { max-width: 100%; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-bar { gap: 8px; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-right { flex-wrap: wrap; height: auto; min-height: calc(var(--sk-height) - 8px); width: 100%; justify-content: space-between; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-clock { gap: 4px; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-popup { top: 170px; }
+  }
+  @media (pointer: coarse) {
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-space { min-width: 44px; min-height: 44px; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-spaces { flex-wrap: wrap; height: auto; max-width: 100%; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-left { flex-wrap: wrap; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-bar { flex-wrap: wrap; height: auto; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-app, #sketchybar-desktop-preview[data-view="Bar detail"] .sk-right { height: auto; min-height: 44px; }
+    #sketchybar-desktop-preview .sk-battery, #sketchybar-desktop-preview .sk-popup-close { min-height: 44px; }
+  }
+</style>
+<script>
+(() => {
+  const root = document.getElementById('sketchybar-desktop-preview');
+  const data = JSON.parse(document.getElementById('sketchybar-preview-data').textContent);
+  const template = document.getElementById('sketchybar-desktop-items');
+  const desktops = [...root.querySelectorAll('.sk-desktop')];
+  desktops.forEach(desktop => desktop.querySelector('.sk-mount').append(template.content.cloneNode(true)));
+  const state = { version: 2, height: data.config.height, fontSize: data.config.labelSize, gap: 10, radius: data.config.radius, accent: '#' + data.config.spaceColor.slice(4), scenario: 'Desktop snapshot', display: 'Landscape', view: 'Bar detail', spaceSource: 'Configured Spaces', space: data.snapshot.focusedWorkspace };
+  const cssColor = argb => '#' + argb.slice(4) + argb.slice(2,4);
+  root.style.setProperty('--sk-group-color',cssColor(data.config.groupColor));
+  root.style.setProperty('--sk-line',cssColor(data.config.borderColor));
+  root.style.setProperty('--sk-text',cssColor(data.config.textColor));
+  root.style.setProperty('--sk-baseline-color',cssColor(data.baseline.barColor));
+  root.style.setProperty('--sk-blur',data.config.blur + 'px');
+  function restore(saved) {
+    const source = saved && (saved.privateContent || saved.modelContent || saved);
+    const values = source?.sketchybarDesign;
+    if (!values || values.version !== 2) return;
+    for (const [key,min,max] of [['height',32,48],['fontSize',11,16],['gap',4,16],['radius',4,20]]) if (Number.isFinite(values[key])) state[key] = Math.max(min,Math.min(max,values[key]));
+    if (/^#[0-9a-f]{6}$/i.test(values.accent || '')) state.accent = values.accent;
+    for (const [key,options] of Object.entries({scenario:['Desktop snapshot','Long app name','Low battery','Charging'],display:['Landscape','Portrait'],view:['Bar detail','Screen proportions'],spaceSource:['Configured Spaces','AeroSpace snapshot']})) if (options.includes(values[key])) state[key] = values[key];
+    if (data.config.spaces.includes(values.space)) state.space = values.space;
+  }
+  restore(window.openai?.widgetState);
+  function save() {
+    if (!window.openai?.setWidgetState) return;
+    const saved = {sketchybarDesign:{...state}};
+    window.openai.setWidgetState({modelContent:saved,privateContent:saved}).catch(() => {});
+  }
+  function render() {
+    root.dataset.view = state.view;
+    for (const [name,value] of [['height',state.height],['font-size',state.fontSize],['gap',state.gap],['radius',state.radius]]) root.style.setProperty('--sk-' + name,value + 'px');
+    root.style.setProperty('--sk-accent',state.accent); root.style.setProperty('--sk-icon-size',data.config.iconSize + 'px');
+    root.style.setProperty('--sk-group-height',(data.config.groupHeight + state.height - data.config.height) + 'px');
+    const display = data.displays.find(d => d.orientation === state.display);
+    root.style.setProperty('--sk-screen-width',display.width + 'px'); root.style.setProperty('--sk-screen-height',display.height + 'px');
+    root.style.setProperty('--sk-aspect',display.width + ' / ' + display.height); root.style.setProperty('--sk-scale',root.clientWidth / display.width);
+    const spaces = state.spaceSource === 'Configured Spaces' ? data.config.spaces : data.snapshot.workspaces;
+    if (!spaces.includes(state.space)) state.space = spaces[0];
+    const percent = state.scenario === 'Low battery' ? 8 : state.scenario === 'Charging' ? 76 : data.snapshot.battery;
+    const power = state.scenario === 'Low battery' ? 'On battery power' : state.scenario === 'Charging' ? 'Charging · AC power' : 'Charged · AC power';
+    const app = state.scenario === 'Long app name' ? 'Visual Studio Code: SketchyBar design workspace' : data.snapshot.frontApp;
+    for (const desktop of desktops) {
+      const group = desktop.querySelector('.sk-spaces');
+      if (group.dataset.source !== state.spaceSource) {
+        group.replaceChildren(...spaces.map(id => {const b = document.createElement('button'); b.type = 'button'; b.className = 'sk-space cursor-interaction'; b.dataset.space = id; b.textContent = id; b.setAttribute('aria-label','Space ' + id); return b;}));
+        group.dataset.source = state.spaceSource;
+      }
+      group.setAttribute('aria-label',state.spaceSource);
+      desktop.querySelectorAll('.sk-space').forEach(el => el.setAttribute('aria-pressed',String(el.dataset.space === state.space)));
+      const label = desktop.querySelector('.sk-app-name'); label.textContent = app; label.dataset.tooltip = app;
+      desktop.querySelectorAll('.sk-battery-value, .sk-popup-value').forEach(el => el.textContent = percent + '%');
+      desktop.querySelector('.sk-battery-glyph').textContent = state.scenario === 'Low battery' ? '\uf244' : '\uf0e7';
+      desktop.querySelector('.sk-battery').setAttribute('aria-label','Battery ' + percent + '%, ' + power);
+      desktop.querySelector('.sk-clock-value').textContent = data.snapshot.clock; desktop.querySelector('.sk-popup-source').textContent = power;
+      if (desktop.dataset.layout === 'baseline') { desktop.style.setProperty('--sk-height',data.baseline.height + 'px'); desktop.style.setProperty('--sk-font-size',data.baseline.labelSize + 'px'); desktop.style.setProperty('--sk-icon-size',data.baseline.iconSize + 'px'); }
+    }
+    root.querySelector('.sk-snapshot').textContent = `${display.name} · ${display.width} × ${display.height} · ${state.view} · ${state.spaceSource} · Volume 50% is sample data`;
+  }
+  function closePopups() { root.querySelectorAll('.sk-popup').forEach(el => el.hidden = true); root.querySelectorAll('.sk-battery').forEach(el => el.setAttribute('aria-expanded','false')); }
+  root.addEventListener('click',event => {
+    const space = event.target.closest('[data-space]'); if (space) {state.space = space.dataset.space; render(); save(); return;}
+    const battery = event.target.closest('.sk-battery');
+    if (battery) {const popup = battery.closest('.sk-mount').querySelector('.sk-popup'); const open = popup.hidden; closePopups(); popup.hidden = !open; battery.setAttribute('aria-expanded',String(open)); if (open) popup.querySelector('.sk-popup-close').focus(); return;}
+    const close = event.target.closest('.sk-popup-close'); if (close) {closePopups(); close.closest('.sk-mount').querySelector('.sk-battery').focus();} else if (!event.target.closest('.sk-popup')) closePopups();
+  });
+  root.addEventListener('keydown',event => {if (event.key !== 'Escape') return; const popup = [...root.querySelectorAll('.sk-popup')].find(el => !el.hidden); if (popup) {closePopups(); popup.closest('.sk-mount').querySelector('.sk-battery').focus();}});
+  window.addEventListener('openai:set_globals',event => {if (event.detail?.globals?.widgetState) {restore(event.detail.globals.widgetState);render();}});
+  new ResizeObserver(render).observe(root); render();
+  if (globalThis.Tweak) {
+    const tweak = new Tweak({container:root,onChange:() => {render();save();}});
+    tweak.addSlider(state,'height',{label:'Bar height',min:32,max:48,unit:'px',reference:'bar.height'});
+    tweak.addSlider(state,'fontSize',{label:'Text size',min:11,max:16,unit:'px',reference:'label.font.size'});
+    tweak.addSlider(state,'gap',{label:'Item spacing',min:4,max:16,unit:'px',reference:'item.padding'});
+    tweak.addSlider(state,'radius',{label:'Group corners',min:4,max:20,unit:'px',reference:'bracket.background.corner_radius'});
+    tweak.addColorPicker(state,'accent',{label:'Selected Space',reference:'space.background.color'});
+    tweak.addSelect(state,'display',{label:'Display',options:['Landscape','Portrait'],reference:'preview.display'});
+    tweak.addSelect(state,'view',{label:'Preview scale',options:['Bar detail','Screen proportions'],reference:'preview.view'});
+    tweak.addSelect(state,'spaceSource',{label:'Space source',options:['Configured Spaces','AeroSpace snapshot'],reference:'preview.space_source'});
+    tweak.addSelect(state,'scenario',{label:'State',options:['Desktop snapshot','Long app name','Low battery','Charging'],reference:'preview.scenario'});
+  }
+})();
+</script>
