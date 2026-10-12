@@ -70,37 +70,42 @@ class Plugins(unittest.TestCase):
             self.assertEqual(workspaces.main(), 1)
         output.assert_called_once_with('aerospace', 'list-workspaces', '--all')
 
-    def test_focus_on_off_unknown_and_custom_name(self):
-        with tempfile.TemporaryDirectory() as temporary:
-            folder = Path(temporary)
-            self.assertEqual(focus.read_focus(folder)['state'], 'unavailable')
-            assertions = folder / 'Assertions.json'
-            assertions.write_text('{"data":[{"storeAssertionRecords":[]}]}')
-            self.assertEqual(focus.read_focus(folder)['state'], 'off')
-            assertions.write_text(json.dumps({'data': [{'storeAssertionRecords': [{'assertionDetails': {'assertionDetailsModeIdentifier': 'custom'}}]}]}))
-            (folder / 'ModeConfigurations.json').write_text(json.dumps({'data': [{'modeConfigurations': {'custom': {'mode': {'name': 'Deep Research', 'symbolImageName': 'moon.fill'}}}}]}))
-            self.assertEqual(focus.read_focus(folder), {'state': 'on', 'name': 'Deep Research', 'symbol': 'moon.fill'})
-            assertions.write_text('{"data":[{"storeAssertionRecords":[{}]}]}')
-            self.assertEqual(focus.read_focus(folder)['state'], 'unavailable')
-            assertions.write_text('invalid JSON')
-            self.assertEqual(focus.read_focus(folder)['state'], 'unavailable')
-        with patch.object(Path, 'read_text', side_effect=PermissionError):
-            self.assertEqual(focus.read_focus(Path('/fixture'))['state'], 'unavailable')
+    def test_focus_on_off_and_no_stale_icon(self):
+        paths = []
+        def shortcut(command, **options):
+            path = Path(command[command.index('--output-path') + 1])
+            paths.append(path)
+            if len(paths) == 1:
+                path.write_bytes(b'\x89PNG\r\n\x1a\nfixture')
+            return subprocess.CompletedProcess(command, 0)
+        with patch.object(focus.subprocess, 'run', side_effect=shortcut), patch.object(focus, 'render_image', return_value=Path('/fixture/logo.png')):
+            self.assertEqual(focus.read_focus(), {'state': 'on', 'image': Path('/fixture/logo.png')})
+            self.assertEqual(focus.read_focus(), {'state': 'off', 'image': None})
+        self.assertNotEqual(paths[0], paths[1])
+
+    def test_focus_failures_do_not_claim_off(self):
+        for error in [OSError('missing shortcut'), subprocess.TimeoutExpired('shortcuts', 15), subprocess.CalledProcessError(1, 'shortcuts')]:
+            with patch.object(focus.subprocess, 'run', side_effect=error):
+                self.assertEqual(focus.read_focus()['state'], 'unavailable')
+        def invalid(command, **options):
+            Path(command[command.index('--output-path') + 1]).write_bytes(b'invalid PNG')
+        with patch.object(focus.subprocess, 'run', side_effect=invalid):
+            self.assertEqual(focus.read_focus()['state'], 'unavailable')
 
     def test_focus_rendering_preserves_unknown_state(self):
         for state, expected in [('off', 'drawing=off'), ('on', 'background.image=/fixture/logo.png'), ('unavailable', 'background.image=/fixture/logo.png')]:
-            with patch.object(focus, 'read_focus', return_value={'state': state, 'name': 'Work' if state == 'on' else None, 'symbol': 'briefcase.fill' if state == 'on' else None}), patch.object(focus, 'render_symbol', return_value=Path('/fixture/logo.png')) as render, patch.object(focus.subprocess, 'run') as run:
+            with patch.object(focus, 'read_focus', return_value={'state': state, 'image': Path('/fixture/logo.png') if state == 'on' else None}), patch.object(focus, 'render_symbol', return_value=Path('/fixture/logo.png')) as render, patch.object(focus.subprocess, 'run') as run:
                 focus.main()
                 self.assertIn(expected, run.call_args.args[0])
                 self.assertIn('label.drawing=off', run.call_args.args[0])
                 self.assertNotIn('label=Work', run.call_args.args[0])
-                if state == 'off':
-                    render.assert_not_called()
+                if state == 'unavailable':
+                    render.assert_called_once_with('questionmark.circle')
                 else:
-                    render.assert_called_once_with('briefcase.fill' if state == 'on' else 'questionmark.circle')
+                    render.assert_not_called()
 
     def test_missing_symbol_never_becomes_a_different_focus_logo(self):
-        arguments = focus.display_arguments({'state': 'on', 'name': 'Custom Focus'}, None)
+        arguments = focus.display_arguments({'state': 'on'}, None)
         self.assertIn('icon=?', arguments)
         self.assertIn('background.image.drawing=off', arguments)
         self.assertNotIn('label=Custom Focus', arguments)
@@ -116,6 +121,11 @@ class Plugins(unittest.TestCase):
             self.assertEqual(focus.render_symbol('briefcase.fill'), image)
             self.assertEqual(run.call_count, 1)
             self.assertIsNone(focus.render_symbol('this.symbol.does.not.exist'))
+            with patch.object(focus.subprocess, 'run', wraps=subprocess.run) as normalize:
+                normalized = focus.render_image(image)
+                self.assertEqual(struct.unpack('>II', normalized.read_bytes()[16:24]), (36, 36))
+                self.assertEqual(focus.render_image(image), normalized)
+                self.assertEqual(normalize.call_count, 1)
 
     def test_clock_midnight_noon_and_evening(self):
         source = (PLUGINS / 'clock.sh').read_text()
