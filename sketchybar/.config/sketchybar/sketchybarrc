@@ -12,7 +12,9 @@ PLUGIN_DIR="$CONFIG_DIR/plugins"
 # If you are looking for other colors, see the color picker:
 # https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
 
-sketchybar --bar position=top height=40 blur_radius=30 color=0x40000000
+# Round 2: a transparent bar with separate Spaces, application, and status groups.
+sketchybar --bar position=top height=40 blur_radius=30 color=0x00000000 \
+                margin=10 y_offset=8 padding_left=4 padding_right=4
 
 ##### Changing Defaults #####
 # We now change some default values, which are applied to all further items.
@@ -47,7 +49,7 @@ do
     icon="${SPACE_ICONS[i]}"
     icon.padding_left=7
     icon.padding_right=7
-    background.color=0x40ffffff
+    background.color=0x403b9781
     background.corner_radius=5
     background.height=25
     label.drawing=off
@@ -86,6 +88,24 @@ sketchybar --add item clock right \
            --add item battery right \
            --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
            --subscribe battery system_woke power_source_change
+
+##### Group Backgrounds #####
+# Brackets draw a shared background behind the existing items.
+# These settings are a design candidate. The browser sandbox does not run them.
+group=(
+  background.color=0xcc282a36
+  background.border_color=0x40585b70
+  background.border_width=1
+  background.corner_radius=12
+  background.height=32
+  background.drawing=on
+)
+sketchybar --add bracket spaces '/space\..*/' \
+           --set spaces "${group[@]}" \
+           --add bracket application chevron front_app \
+           --set application "${group[@]}" \
+           --add bracket status battery volume clock \
+           --set status "${group[@]}"
 
 ##### Force all scripts to run the first time (never do this in a script) #####
 sketchybar --update
