@@ -1,0 +1,3 @@
+inline.html
+*.png
+!assets/focus/*.png

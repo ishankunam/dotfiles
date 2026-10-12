@@ -6,5 +6,8 @@
 # https://felixkratz.github.io/SketchyBar/config/events#events-and-scripting
 
 if [ "$SENDER" = "front_app_switched" ]; then
-  sketchybar --set "$NAME" label="$INFO"
+  "${BAR_NAME:-sketchybar}" --set "$NAME" label="$INFO"
+else
+  app=$(aerospace list-windows --focused --format '%{app-name}') || exit 1
+  [ -n "$app" ] && "${BAR_NAME:-sketchybar}" --set "$NAME" label="$app"
 fi

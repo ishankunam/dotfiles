@@ -1,8 +1,7 @@
-# This is a demo config to showcase some of the most important commands.
-# It is meant to be changed and configured, as it is intentionally kept sparse.
-# For a (much) more advanced configuration example see my dotfiles:
-# https://github.com/FelixKratz/dotfiles
-
+#!/bin/bash
+# Browser design candidate. Activate only after the sandbox rounds are approved.
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+BAR_NAME="${BAR_NAME:-sketchybar}"
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 
 ##### Bar Appearance #####
@@ -12,7 +11,9 @@ PLUGIN_DIR="$CONFIG_DIR/plugins"
 # If you are looking for other colors, see the color picker:
 # https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
 
-sketchybar --bar position=top height=40 blur_radius=30 color=0x40000000
+# Round 5: selected Dracula Glass with IBM Plex Mono Medium.
+"$BAR_NAME" --bar position=top height=38 blur_radius=30 color=0x00000000 \
+                margin=10 y_offset=8 padding_left=4 padding_right=4
 
 ##### Changing Defaults #####
 # We now change some default values, which are applied to all further items.
@@ -22,48 +23,50 @@ sketchybar --bar position=top height=40 blur_radius=30 color=0x40000000
 default=(
   padding_left=5
   padding_right=5
-  icon.font="Hack Nerd Font:Bold:17.0"
-  label.font="Hack Nerd Font:Bold:14.0"
-  icon.color=0xffffffff
-  label.color=0xffffffff
+  icon.font="IBM Plex Mono:Medium:14.0"
+  label.font="IBM Plex Mono:Medium:14.0"
+  icon.color=0xfff8f8f2
+  label.color=0xfff8f8f2
   icon.padding_left=4
   icon.padding_right=4
   label.padding_left=4
   label.padding_right=4
 )
-sketchybar --default "${default[@]}"
+"$BAR_NAME" --default "${default[@]}"
 
-##### Adding Mission Control Space Indicators #####
-# Let's add some mission control spaces:
-# https://felixkratz.github.io/SketchyBar/config/components#space----associate-mission-control-spaces-with-an-item
-# to indicate active and available mission control spaces.
+space=(
+  icon.padding_left=7
+  icon.padding_right=7
+  icon.highlight_color=0xffbd93f9
+  background.color=0x29bd93f9
+  background.corner_radius=5
+  background.height=25
+  background.drawing=off
+  label.drawing=off
+)
+group=(
+  background.color=0x99282a36
+  background.border_color=0x1fffffff
+  background.border_width=1
+  background.corner_radius=8
+  background.height=30
+  background.drawing=on
+)
 
-SPACE_ICONS=("1" "2" "3" "4" "5" "6" "7" "8" "9" "10")
-for i in "${!SPACE_ICONS[@]}"
-do
-  sid="$(($i+1))"
-  space=(
-    space="$sid"
-    icon="${SPACE_ICONS[i]}"
-    icon.padding_left=7
-    icon.padding_right=7
-    background.color=0x40ffffff
-    background.corner_radius=5
-    background.height=25
-    label.drawing=off
-    script="$PLUGIN_DIR/space.sh"
-    click_script="yabai -m space --focus $sid"
-  )
-  sketchybar --add space space."$sid" left --set space."$sid" "${space[@]}"
-done
+# Reconcile the current AeroSpace list. Polling catches creation and deletion.
+"$BAR_NAME" --add event aerospace_workspace_change \
+           --add item workspace_template left \
+           --set workspace_template "${space[@]}" drawing=off \
+           --add item workspaces left \
+           --set workspaces drawing=off updates=on update_freq=2 \
+             script="\"$PLUGIN_DIR/workspaces.sh\" ${group[*]}" \
+           --subscribe workspaces aerospace_workspace_change front_app_switched display_change system_woke
 
 ##### Adding Left Items #####
 # We add some regular items to the left side of the bar, where
 # only the properties deviating from the current defaults need to be set
 
-sketchybar --add item chevron left \
-           --set chevron icon= label.drawing=off \
-           --add item front_app left \
+"$BAR_NAME" --add item front_app left \
            --set front_app icon.drawing=off script="$PLUGIN_DIR/front_app.sh" \
            --subscribe front_app front_app_switched
 
@@ -72,20 +75,23 @@ sketchybar --add item chevron left \
 # Additional position (e.g. center) are available, see:
 # https://felixkratz.github.io/SketchyBar/config/items#adding-items-to-sketchybar
 
-# Some items refresh on a fixed cycle, e.g. the clock runs its script once
-# every 10s. Other items respond to events they subscribe to, e.g. the
-# volume.sh script is only executed once an actual change in system audio
-# volume is registered. More info about the event system can be found here:
-# https://felixkratz.github.io/SketchyBar/config/events
+# Right items grow leftward, so Focus appears before the clock.
+"$BAR_NAME" --add item clock right \
+           --set clock update_freq=10 icon.drawing=off script="$PLUGIN_DIR/clock.sh" \
+           --subscribe clock system_woke \
+           --add item focus right \
+           --set focus label.drawing=off width=24 background.color=0x00000000 \
+             background.image.scale=0.5 update_freq=10 updates=on \
+             script="$PLUGIN_DIR/focus.sh" \
+           --subscribe focus system_woke
 
-sketchybar --add item clock right \
-           --set clock update_freq=10 icon=  script="$PLUGIN_DIR/clock.sh" \
-           --add item volume right \
-           --set volume script="$PLUGIN_DIR/volume.sh" \
-           --subscribe volume volume_change \
-           --add item battery right \
-           --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
-           --subscribe battery system_woke power_source_change
+##### Group Backgrounds #####
+# Brackets draw a shared background behind the existing items.
+# These settings are a design candidate. The browser sandbox does not run them.
+"$BAR_NAME" --add bracket application front_app \
+           --set application "${group[@]}" \
+           --add bracket status focus clock \
+           --set status "${group[@]}"
 
 ##### Force all scripts to run the first time (never do this in a script) #####
-sketchybar --update
+"$BAR_NAME" --update

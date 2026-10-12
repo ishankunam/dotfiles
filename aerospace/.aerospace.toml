@@ -20,6 +20,9 @@ on-focused-monitor-changed = []
 
 # omitted options
 after-startup-command = []
+# Candidate hook. This worktree is not the installed AeroSpace configuration.
+# https://nikitabobko.github.io/AeroSpace/goodness#show-aerospace-workspaces-in-sketchybar
+exec-on-workspace-change = ['/bin/bash', '-c', 'PATH="/opt/homebrew/bin:/usr/local/bin:$PATH" sketchybar --trigger aerospace_workspace_change']
 automatically-unhide-macos-hidden-apps = false
 on-mode-changed = []
 accordion-padding = 0
