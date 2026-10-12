@@ -3,3 +3,5 @@
 	email = 148154907+ishankunam@users.noreply.github.com
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+[init]
+	defaultBranch = master
