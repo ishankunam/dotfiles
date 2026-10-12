@@ -33,8 +33,9 @@ def reconcile(workspaces, focused, items, group):
                          'drawing=on', 'icon=' + workspace,
                          'click_script=aerospace workspace ' + shlex.quote(workspace)]
         if changed:
-            commands += ['--move', item, 'before', 'chevron']
-        commands += ['--set', item, 'background.drawing=' + ('on' if workspace == focused else 'off')]
+            commands += ['--move', item, 'before', 'front_app']
+        selected = 'on' if workspace == focused else 'off'
+        commands += ['--set', item, 'background.drawing=' + selected, 'icon.highlight=' + selected]
     if changed and wanted:
         commands += ['--add', 'bracket', 'spaces', *wanted, '--set', 'spaces', *group]
     return commands

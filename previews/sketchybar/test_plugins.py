@@ -35,18 +35,25 @@ class Plugins(unittest.TestCase):
         self.assertNotIn('battery', flat)
         self.assertNotIn('volume', flat)
         self.assertNotIn('yabai', flat)
+        self.assertNotIn('chevron', flat)
+        self.assertIn('label.font=IBM Plex Mono:Medium:14.0', flat)
         self.assertIn(['--set', 'clock', 'update_freq=10', 'icon.drawing=off'], [flat[i:i+4] for i in range(len(flat))])
         self.assertIn(['--add', 'bracket', 'status', 'focus', 'clock'], [flat[i:i+5] for i in range(len(flat))])
         self.assertEqual(commands[-1], ['--update'])
 
     def test_workspace_creation_removal_and_selection(self):
-        old = ['chevron', 'front_app', 'space.31', 'space.32', 'spaces']
+        old = ['front_app', 'space.31', 'space.32', 'spaces']
         commands = workspaces.reconcile(['1', '3'], '3', old, ['background.height=32'])
         self.assertIn(['--remove', 'space.32'], [commands[i:i+2] for i in range(len(commands))])
         self.assertIn(['--clone', 'space.33', 'workspace_template'], [commands[i:i+3] for i in range(len(commands))])
         self.assertIn(['--set', 'space.33', 'background.drawing=on'], [commands[i:i+3] for i in range(len(commands))])
         moved = [commands[i+1] for i, value in enumerate(commands) if value == '--move']
         self.assertEqual(moved, ['space.31', 'space.33'])
+        for i, value in enumerate(commands):
+            if value == '--move':
+                self.assertIn(commands[i+3], old)
+        self.assertIn(['--set', 'space.33', 'background.drawing=on', 'icon.highlight=on'], [commands[i:i+4] for i in range(len(commands))])
+        self.assertIn(['--set', 'space.31', 'background.drawing=off', 'icon.highlight=off'], [commands[i:i+4] for i in range(len(commands))])
         stable = workspaces.reconcile(['1', '3'], '1', ['space.31', 'space.33', 'spaces'], [])
         self.assertNotIn('--clone', stable)
         self.assertNotIn('--remove', stable)

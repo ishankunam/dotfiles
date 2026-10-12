@@ -10,8 +10,8 @@ PLUGIN_DIR="$CONFIG_DIR/plugins"
 # If you are looking for other colors, see the color picker:
 # https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
 
-# Round 4: Focus uses its configured symbol, and the clock is text only.
-sketchybar --bar position=top height=40 blur_radius=30 color=0x00000000 \
+# Round 5: selected Dracula Glass with IBM Plex Mono Medium.
+sketchybar --bar position=top height=38 blur_radius=30 color=0x00000000 \
                 margin=10 y_offset=8 padding_left=4 padding_right=4
 
 ##### Changing Defaults #####
@@ -22,10 +22,10 @@ sketchybar --bar position=top height=40 blur_radius=30 color=0x00000000 \
 default=(
   padding_left=5
   padding_right=5
-  icon.font="Hack Nerd Font:Bold:17.0"
-  label.font="Hack Nerd Font:Bold:14.0"
-  icon.color=0xffffffff
-  label.color=0xffffffff
+  icon.font="IBM Plex Mono:Medium:14.0"
+  label.font="IBM Plex Mono:Medium:14.0"
+  icon.color=0xfff8f8f2
+  label.color=0xfff8f8f2
   icon.padding_left=4
   icon.padding_right=4
   label.padding_left=4
@@ -36,18 +36,19 @@ sketchybar --default "${default[@]}"
 space=(
   icon.padding_left=7
   icon.padding_right=7
-  background.color=0x403b9781
+  icon.highlight_color=0xffbd93f9
+  background.color=0x29bd93f9
   background.corner_radius=5
   background.height=25
   background.drawing=off
   label.drawing=off
 )
 group=(
-  background.color=0xcc282a36
-  background.border_color=0x40585b70
+  background.color=0x99282a36
+  background.border_color=0x1fffffff
   background.border_width=1
-  background.corner_radius=12
-  background.height=32
+  background.corner_radius=8
+  background.height=30
   background.drawing=on
 )
 
@@ -64,9 +65,7 @@ sketchybar --add event aerospace_workspace_change \
 # We add some regular items to the left side of the bar, where
 # only the properties deviating from the current defaults need to be set
 
-sketchybar --add item chevron left \
-           --set chevron icon= label.drawing=off \
-           --add item front_app left \
+sketchybar --add item front_app left \
            --set front_app icon.drawing=off script="$PLUGIN_DIR/front_app.sh" \
            --subscribe front_app front_app_switched
 
@@ -88,7 +87,7 @@ sketchybar --add item clock right \
 ##### Group Backgrounds #####
 # Brackets draw a shared background behind the existing items.
 # These settings are a design candidate. The browser sandbox does not run them.
-sketchybar --add bracket application chevron front_app \
+sketchybar --add bracket application front_app \
            --set application "${group[@]}" \
            --add bracket status focus clock \
            --set status "${group[@]}"
