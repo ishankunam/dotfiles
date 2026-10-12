@@ -39,6 +39,8 @@ class Plugins(unittest.TestCase):
         self.assertIn('label.font=IBM Plex Mono:Medium:14.0', flat)
         self.assertIn(['--set', 'clock', 'update_freq=10', 'icon.drawing=off'], [flat[i:i+4] for i in range(len(flat))])
         self.assertIn(['--add', 'bracket', 'status', 'focus', 'clock'], [flat[i:i+5] for i in range(len(flat))])
+        self.assertIn('update_freq=0', flat)
+        self.assertIn(['--subscribe', 'focus', 'focus_changed', 'system_woke'], [flat[i:i+4] for i in range(len(flat))])
         self.assertEqual(commands[-1], ['--update'])
 
     def test_workspace_creation_removal_and_selection(self):
@@ -70,27 +72,61 @@ class Plugins(unittest.TestCase):
             self.assertEqual(workspaces.main(), 1)
         output.assert_called_once_with('aerospace', 'list-workspaces', '--all')
 
-    def test_focus_on_off_and_no_stale_icon(self):
-        paths = []
-        def shortcut(command, **options):
-            path = Path(command[command.index('--output-path') + 1])
-            paths.append(path)
-            if len(paths) == 1:
-                path.write_bytes(b'\x89PNG\r\n\x1a\nfixture')
-            return subprocess.CompletedProcess(command, 0)
-        with patch.object(focus.subprocess, 'run', side_effect=shortcut), patch.object(focus, 'render_image', return_value=Path('/fixture/logo.png')):
-            self.assertEqual(focus.read_focus(), {'state': 'on', 'image': Path('/fixture/logo.png')})
+    def test_focus_publication_restoration_and_off_without_shortcut_calls(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(focus, 'cache_folder', return_value=Path(temporary)), patch.object(focus.subprocess, 'run') as run:
+            folder = Path(temporary)
+            icon = folder / 'logo.png'
+            icon.write_bytes(b'\x89PNG\r\n\x1a\nfixture')
+            with patch.object(focus, 'render_image', return_value=icon):
+                focus.publish_focus(icon)
+            self.assertEqual(focus.read_focus(), {'state': 'on', 'image': icon})
+            run.assert_called_once_with(['sketchybar', '--trigger', 'focus_changed'], check=True, capture_output=True, timeout=3)
+            focus.publish_focus()
             self.assertEqual(focus.read_focus(), {'state': 'off', 'image': None})
-        self.assertNotEqual(paths[0], paths[1])
+            self.assertTrue(icon.exists())
+            self.assertNotIn('shortcuts', repr(run.call_args_list))
 
-    def test_focus_failures_do_not_claim_off(self):
-        for error in [OSError('missing shortcut'), subprocess.TimeoutExpired('shortcuts', 15), subprocess.CalledProcessError(1, 'shortcuts')]:
-            with patch.object(focus.subprocess, 'run', side_effect=error):
-                self.assertEqual(focus.read_focus()['state'], 'unavailable')
-        def invalid(command, **options):
-            Path(command[command.index('--output-path') + 1]).write_bytes(b'invalid PNG')
-        with patch.object(focus.subprocess, 'run', side_effect=invalid):
+    def test_focus_invalid_missing_or_corrupt_state_never_claims_off(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(focus, 'cache_folder', return_value=Path(temporary)), patch.object(focus.subprocess, 'run'):
+            folder = Path(temporary)
             self.assertEqual(focus.read_focus()['state'], 'unavailable')
+            raw = folder / 'invalid.png'
+            raw.write_bytes(b'invalid PNG')
+            focus.publish_focus(raw)
+            self.assertEqual(focus.read_focus()['state'], 'unavailable')
+            for contents in ['{', '{"version":2,"state":"off"}', '{"version":1,"state":"on","image":"/missing.png"}', 'null']:
+                (folder / 'state.json').write_text(contents)
+                self.assertEqual(focus.read_focus()['state'], 'unavailable')
+
+    def test_focus_binary_input_is_rendered_before_temporary_source_is_removed(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(focus, 'cache_folder', return_value=Path(temporary)), patch.object(focus.subprocess, 'run') as run:
+            folder = Path(temporary)
+            png = b'\x89PNG\r\n\x1a\nfixture'
+            sources = []
+            def normalize(raw):
+                self.assertEqual(raw.read_bytes(), png)
+                sources.append(raw)
+                image = folder / 'normalized.png'
+                image.write_bytes(png)
+                return image
+            with patch.object(focus, 'render_image', side_effect=normalize):
+                focus.publish_image_bytes(png)
+            self.assertFalse(sources[0].exists())
+            self.assertEqual(focus.read_focus(), {'state': 'on', 'image': folder / 'normalized.png'})
+            self.assertEqual(run.call_args.args[0], ['sketchybar', '--trigger', 'focus_changed'])
+            focus.publish_image_bytes(b'')
+            self.assertEqual(focus.read_focus()['state'], 'unavailable')
+            saved = json.loads((folder / 'state.json').read_text())
+            self.assertEqual(saved['error'], 'The Focus automation did not provide PNG data.')
+
+    def test_focus_state_survives_stopped_bar_and_restores_without_querying_macOS(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(focus, 'cache_folder', return_value=Path(temporary)):
+            with patch.object(focus.subprocess, 'run', side_effect=OSError('bar stopped')):
+                focus.publish_focus()
+            self.assertEqual(focus.read_focus(), {'state': 'off', 'image': None})
+            with patch.object(focus.subprocess, 'run') as run:
+                focus.main()
+                self.assertEqual(run.call_args.args[0], ['sketchybar', '--set', 'focus', 'drawing=off', 'label.drawing=off', 'icon=?', 'icon.drawing=on', 'background.drawing=off', 'background.image.drawing=off'])
 
     def test_focus_rendering_preserves_unknown_state(self):
         for state, expected in [('off', 'drawing=off'), ('on', 'background.image=/fixture/logo.png'), ('unavailable', 'background.image=/fixture/logo.png')]:
@@ -111,8 +147,23 @@ class Plugins(unittest.TestCase):
         self.assertNotIn('label=Custom Focus', arguments)
 
     @unittest.skipUnless(sys.platform == 'darwin', 'AppKit requires macOS')
+    def test_real_png_bytes_publish_a_normalized_icon_without_contacting_the_bar(self):
+        actual_run = subprocess.run
+        def run(command, **options):
+            if command[0] == 'sketchybar':
+                return subprocess.CompletedProcess(command, 0)
+            return actual_run(command, **options)
+        with tempfile.TemporaryDirectory() as temporary, patch.object(focus, 'cache_folder', return_value=Path(temporary)), patch.object(focus.subprocess, 'run', side_effect=run):
+            png = (Path(__file__).parent / 'assets/focus/work.png').read_bytes()
+            focus.publish_image_bytes(png)
+            saved = focus.read_focus()
+            self.assertEqual(saved['state'], 'on')
+            self.assertEqual(struct.unpack('>II', saved['image'].read_bytes()[16:24]), (36, 36))
+            self.assertFalse(list(Path(temporary).glob('input-*')))
+
+    @unittest.skipUnless(sys.platform == 'darwin', 'AppKit requires macOS')
     def test_real_symbol_render_and_cache_without_a_window(self):
-        with tempfile.TemporaryDirectory() as temporary, patch.object(focus.tempfile, 'gettempdir', return_value=temporary), patch.object(focus.subprocess, 'run', wraps=subprocess.run) as run:
+        with tempfile.TemporaryDirectory() as temporary, patch.object(focus, 'cache_folder', return_value=Path(temporary)), patch.object(focus.subprocess, 'run', wraps=subprocess.run) as run:
             image = focus.render_symbol('briefcase.fill')
             self.assertIsNotNone(image)
             png = image.read_bytes()
