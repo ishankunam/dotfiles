@@ -1,55 +1,76 @@
-<div id="sketchybar-desktop-preview" aria-label="Grouped SketchyBar design">
-  <div class="sk-desktop" aria-label="Grouped bar over the selected wallpaper">
-    <div class="sk-wallpaper" aria-hidden="true"></div>
-    <div class="sk-mount">
-      <div class="sk-bar">
-        <div class="sk-left">
-          <div class="sk-spaces" role="group" aria-label="AeroSpace workspaces"></div>
-          <div class="sk-app"><span class="sk-glyph" aria-hidden="true">&#xf054;</span><span class="sk-app-name"></span></div>
-        </div>
-        <div class="sk-right">
-          <span class="sk-focus"></span>
-          <div class="sk-clock"><span class="sk-glyph" aria-hidden="true">&#xf43a;</span><span class="sk-clock-value"></span></div>
-        </div>
-      </div>
-    </div>
+<div id="sketchybar-desktop-preview" aria-label="SketchyBar designs from your dotfiles">
+  <div class="viz-carousel" aria-label="SketchyBar design directions">
+    <section data-variant="Grouped" aria-label="Grouped appearance"><div class="sk-desktop" data-layout="grouped"><div class="sk-wallpaper" aria-hidden="true"></div><div class="sk-mount"></div></div><div class="sk-source"></div></section>
+    <section data-variant="Dracula Glass" aria-label="Dracula Glass appearance" hidden><div class="sk-desktop" data-layout="glass"><div class="sk-wallpaper" aria-hidden="true"></div><div class="sk-mount"></div></div><div class="sk-source"></div></section>
+    <section data-variant="Terminal Line" aria-label="Terminal Line appearance" hidden><div class="sk-desktop" data-layout="terminal"><div class="sk-wallpaper" aria-hidden="true"></div><div class="sk-mount"></div></div><div class="sk-source"></div></section>
+    <section data-variant="Prompt Segments" aria-label="Prompt Segments appearance" hidden><div class="sk-desktop" data-layout="prompt"><div class="sk-wallpaper" aria-hidden="true"></div><div class="sk-mount"></div></div><div class="sk-source"></div></section>
   </div>
   <div class="sk-snapshot" role="status" aria-live="polite"></div>
+  <template id="sketchybar-desktop-items">
+    <div class="sk-bar">
+      <div class="sk-left">
+        <div class="sk-spaces" role="group" aria-label="AeroSpace workspaces"></div>
+        <div class="sk-app"><span class="sk-chevron" aria-hidden="true">&#xf054;</span><span class="sk-app-name"></span></div>
+      </div>
+      <div class="sk-right">
+        <span class="sk-focus-slot"><span class="sk-focus" role="img"></span></span>
+        <time class="sk-clock"></time>
+      </div>
+    </div>
+  </template>
 </div>
 <script type="application/json" id="sketchybar-preview-data">
 <!-- PREVIEW_DATA -->
 </script>
 <style>
   @font-face { font-family: "Sketchybar Hack"; src: url("__HACK_FONT__") format("woff"); font-weight: 700; font-display: swap; }
-  #sketchybar-desktop-preview {
-    --sk-font: "Sketchybar Hack", "Hack Nerd Font", monospace;
-    --sk-font-size: 14px; --sk-icon-size: 17px; --sk-height: 40px; --sk-radius: 12px; --sk-gap: 10px;
-    --sk-accent: #3b9781; --sk-text: #ffffff; --sk-line: #585b7040; --sk-group-color: #282a36cc; --sk-group-height: 32px; --sk-blur: 30px;
-    --sk-scale: 1; --sk-screen-width: 1920px; --sk-screen-height: 1080px; color-scheme: dark;
-  }
-  #sketchybar-desktop-preview .sk-desktop { position: relative; isolation: isolate; overflow: hidden; height: 330px; border-radius: 10px; background: #b8bfb0; font-family: var(--sk-font); font-size: var(--sk-font-size); font-weight: 700; color: var(--sk-text); }
+  @font-face { font-family: "Sketchybar Fira"; src: url("__FIRA_FONT__") format("woff"); font-weight: 500; font-display: swap; }
+  #sketchybar-desktop-preview { --sk-font-size: 14px; --sk-height: 40px; --sk-radius: 12px; --sk-gap: 10px; --sk-accent: #3b9781; --sk-text: #ffffff; --sk-line: #585b7040; --sk-group-color: #282a36cc; --sk-group-height: 32px; --sk-blur: 30px; --sk-scale: 1; --sk-screen-width: 1920px; --sk-screen-height: 1080px; color-scheme: dark; }
+  #sketchybar-desktop-preview .sk-desktop { position: relative; isolation: isolate; overflow: hidden; height: 330px; border-radius: 10px; background: #b8bfb0; font-family: var(--sk-font); font-size: var(--sk-font-size); font-weight: var(--sk-weight); color: var(--sk-text); }
   #sketchybar-desktop-preview .sk-wallpaper { position: absolute; inset: 0; z-index: -1; background-image: url("__MONET_IMAGE__"); background-size: cover; background-position: center; }
   #sketchybar-desktop-preview .sk-mount { position: relative; }
   #sketchybar-desktop-preview .sk-bar { display: flex; align-items: center; justify-content: space-between; gap: 18px; height: var(--sk-height); box-sizing: border-box; margin: 8px 14px 0; }
-  #sketchybar-desktop-preview .sk-left, #sketchybar-desktop-preview .sk-right, #sketchybar-desktop-preview .sk-app, #sketchybar-desktop-preview .sk-spaces, #sketchybar-desktop-preview .sk-clock { display: flex; align-items: center; min-width: 0; }
+  #sketchybar-desktop-preview .sk-left, #sketchybar-desktop-preview .sk-right, #sketchybar-desktop-preview .sk-app, #sketchybar-desktop-preview .sk-spaces, #sketchybar-desktop-preview .sk-focus-slot { display: flex; align-items: center; min-width: 0; }
   #sketchybar-desktop-preview .sk-left { gap: var(--sk-gap); }
-  #sketchybar-desktop-preview .sk-right { gap: 14px; flex-shrink: 0; }
+  #sketchybar-desktop-preview .sk-right { gap: 10px; flex-shrink: 0; }
   #sketchybar-desktop-preview .sk-spaces { gap: 6px; flex-shrink: 0; }
   #sketchybar-desktop-preview .sk-app { gap: 10px; overflow: hidden; }
-  #sketchybar-desktop-preview .sk-app-name, #sketchybar-desktop-preview .sk-focus { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  #sketchybar-desktop-preview .sk-focus { max-width: 24ch; }
-  #sketchybar-desktop-preview .sk-clock { gap: 8px; white-space: nowrap; flex-shrink: 0; }
-  #sketchybar-desktop-preview .sk-glyph { font-size: var(--sk-icon-size); }
+  #sketchybar-desktop-preview .sk-app-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #sketchybar-desktop-preview .sk-clock { white-space: nowrap; flex-shrink: 0; }
+  #sketchybar-desktop-preview .sk-chevron { font: 700 17px "Sketchybar Hack", monospace; }
+  #sketchybar-desktop-preview .sk-focus { display: block; flex-shrink: 0; width: 18px; height: 18px; background: currentColor; mask: var(--sk-focus-image) center / contain no-repeat; -webkit-mask: var(--sk-focus-image) center / contain no-repeat; }
   #sketchybar-desktop-preview .sk-bar button { font: inherit; color: inherit; border: 0; background: transparent; appearance: none; padding: 0; }
-  #sketchybar-desktop-preview .sk-space { min-width: 24px; height: 25px; border-radius: 5px; font-size: var(--sk-icon-size) !important; display: grid; place-items: center; }
+  #sketchybar-desktop-preview .sk-space { min-width: 24px; height: 25px; border-radius: 5px; font-size: var(--sk-workspace-size) !important; display: grid; place-items: center; }
   #sketchybar-desktop-preview .sk-space[aria-pressed="true"] { background: color-mix(in srgb, var(--sk-accent) 25%, transparent); }
   #sketchybar-desktop-preview .sk-spaces, #sketchybar-desktop-preview .sk-app, #sketchybar-desktop-preview .sk-right { height: var(--sk-group-height); box-sizing: border-box; padding: 0 8px; background: var(--sk-group-color); border: 1px solid var(--sk-line); border-radius: var(--sk-radius); backdrop-filter: blur(var(--sk-blur)); }
-  #sketchybar-desktop-preview .sk-snapshot { margin-top: 8px; color: light-dark(#454c51, #b9bfc6); font: 12px -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.5; color-scheme: light dark; }
+  #sketchybar-desktop-preview [data-layout="glass"] .sk-chevron { display: none; }
+  #sketchybar-desktop-preview [data-layout="glass"] .sk-spaces, #sketchybar-desktop-preview [data-layout="glass"] .sk-app, #sketchybar-desktop-preview [data-layout="glass"] .sk-right { border-color: #ffffff1f; padding: 0 10px; }
+  #sketchybar-desktop-preview [data-layout="glass"] .sk-space[aria-pressed="true"] { color: var(--sk-accent); background: color-mix(in srgb, var(--sk-accent) 16%, transparent); }
+  #sketchybar-desktop-preview [data-layout="terminal"] .sk-bar { margin: 0; padding: 0 16px; background: var(--sk-group-color); backdrop-filter: blur(var(--sk-blur)); }
+  #sketchybar-desktop-preview [data-layout="terminal"] .sk-spaces, #sketchybar-desktop-preview [data-layout="terminal"] .sk-app, #sketchybar-desktop-preview [data-layout="terminal"] .sk-right { background: transparent; border: 0; border-radius: 0; padding: 0; backdrop-filter: none; }
+  #sketchybar-desktop-preview [data-layout="terminal"] .sk-space { display: inline-flex; justify-content: center; min-width: 22px; padding: 0 5px; border-radius: 0; }
+  #sketchybar-desktop-preview [data-layout="terminal"] .sk-space[aria-pressed="true"] { background: var(--sk-accent); color: #282a36; }
+  #sketchybar-desktop-preview [data-layout="terminal"] .sk-space[aria-pressed="true"]::before { content: "["; }
+  #sketchybar-desktop-preview [data-layout="terminal"] .sk-space[aria-pressed="true"]::after { content: "]"; }
+  #sketchybar-desktop-preview [data-layout="terminal"] .sk-chevron { display: none; }
+  #sketchybar-desktop-preview [data-layout="terminal"] .sk-app::before { content: "|"; color: #6272a4; }
+  #sketchybar-desktop-preview [data-layout="prompt"] .sk-left { gap: 0; }
+  #sketchybar-desktop-preview [data-layout="prompt"] .sk-spaces { background: var(--sk-prompt-space); border: 0; border-radius: var(--sk-radius) 0 0 var(--sk-radius); }
+  #sketchybar-desktop-preview [data-layout="prompt"] .sk-app { position: relative; background: #50fa7b; color: #282a36; border: 0; border-radius: 0 var(--sk-radius) var(--sk-radius) 0; padding: 0 12px 0 22px; }
+  #sketchybar-desktop-preview [data-layout="prompt"] .sk-app::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 14px; background: var(--sk-prompt-space); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+  #sketchybar-desktop-preview [data-layout="prompt"] .sk-chevron { display: none; }
+  #sketchybar-desktop-preview [data-layout="prompt"] .sk-space[aria-pressed="true"] { background: var(--sk-accent); color: #282a36; }
+  #sketchybar-desktop-preview [data-layout="prompt"] .sk-right { gap: 0; padding: 0; border: 0; overflow: hidden; }
+  #sketchybar-desktop-preview [data-layout="prompt"] .sk-focus-slot { position: relative; justify-content: center; width: 38px; align-self: stretch; background: #453454; }
+  #sketchybar-desktop-preview [data-layout="prompt"] .sk-focus-slot::after { content: ""; position: absolute; top: 0; bottom: 0; left: 100%; width: 12px; background: #453454; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+  #sketchybar-desktop-preview [data-layout="prompt"] .sk-clock { padding: 0 12px 0 20px; }
+  #sketchybar-desktop-preview[data-focus="Off"] [data-layout="prompt"] .sk-clock { padding-left: 12px; }
+  #sketchybar-desktop-preview .sk-snapshot, #sketchybar-desktop-preview .sk-source { margin-top: 8px; color: light-dark(#454c51, #b9bfc6); font: 12px -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.5; color-scheme: light dark; }
   #sketchybar-desktop-preview [hidden] { display: none !important; }
   #sketchybar-desktop-preview[data-view="Screen proportions"] .sk-desktop { height: auto; aspect-ratio: var(--sk-aspect); border-radius: 0; }
   #sketchybar-desktop-preview[data-view="Screen proportions"] .sk-mount { width: var(--sk-screen-width); height: var(--sk-screen-height); transform: scale(var(--sk-scale)); transform-origin: top left; }
   @media (max-width: 880px) {
-    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-app { max-width: 110px; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-app { max-width: 130px; }
     #sketchybar-desktop-preview[data-view="Bar detail"] .sk-spaces { gap: 2px; }
     #sketchybar-desktop-preview[data-view="Bar detail"] .sk-space { min-width: 20px; }
   }
@@ -58,11 +79,10 @@
     #sketchybar-desktop-preview[data-view="Bar detail"] .sk-right { margin-left: auto; }
   }
   @media (max-width: 430px) {
-    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-left { flex-wrap: wrap; gap: 8px; width: 100%; }
-    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-spaces { flex-wrap: wrap; gap: 2px; max-width: 100%; height: auto; min-height: calc(var(--sk-height) - 8px); }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-left { flex-wrap: wrap; row-gap: 8px; max-width: 100%; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-spaces { flex-wrap: wrap; gap: 2px; max-width: 100%; height: auto; min-height: var(--sk-group-height); }
     #sketchybar-desktop-preview[data-view="Bar detail"] .sk-app { max-width: 100%; }
-    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-right { gap: 10px; height: auto; min-height: calc(var(--sk-height) - 8px); max-width: 100%; }
-    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-focus { max-width: 12ch; }
+    #sketchybar-desktop-preview[data-view="Bar detail"] .sk-right { max-width: 100%; }
   }
   @media (pointer: coarse) {
     #sketchybar-desktop-preview[data-view="Bar detail"] .sk-space { min-width: 44px; min-height: 44px; }
@@ -76,66 +96,86 @@
 (() => {
   const root = document.getElementById('sketchybar-desktop-preview');
   const data = JSON.parse(document.getElementById('sketchybar-preview-data').textContent);
-  const state = { version: 3, height: data.config.height, fontSize: data.config.labelSize, gap: 10, radius: data.config.radius, accent: '#' + data.config.spaceColor.slice(4), scenario: 'Desktop snapshot', display: 'Landscape', view: 'Bar detail', workspaceScenario: 'Desktop snapshot', focusMode: 'Work', space: data.snapshot.focusedWorkspace };
+  const sections = [...root.querySelectorAll('[data-variant]')];
+  const template = document.getElementById('sketchybar-desktop-items');
+  const shared = {display:'Landscape',view:'Bar detail',workspaceScenario:'Desktop snapshot',focusMode:'Work',scenario:'Desktop snapshot',space:data.snapshot.focusedWorkspace};
   const choices = {scenario:['Desktop snapshot','Long app name'],display:['Landscape','Portrait'],view:['Bar detail','Screen proportions'],workspaceScenario:['Desktop snapshot','One workspace','Six workspaces'],focusMode:['Work','Do Not Disturb','Off','Unavailable']};
-  const cssColor = argb => '#' + argb.slice(4) + argb.slice(2,4);
-  root.style.setProperty('--sk-group-color',cssColor(data.config.groupColor));
-  root.style.setProperty('--sk-line',cssColor(data.config.borderColor));
-  root.style.setProperty('--sk-text',cssColor(data.config.textColor));
-  root.style.setProperty('--sk-blur',data.config.blur + 'px');
+  const appearances = Object.fromEntries(data.designs.map(design => [design.name,{height:design.height,fontSize:design.fontSize,gap:design.gap,radius:design.radius,accent:design.accent,opacity:design.opacity}]));
+  sections.forEach(section => {section.querySelector('.sk-mount').append(template.content.cloneNode(true)); section.querySelector('.sk-source').textContent = data.designs.find(d => d.name === section.dataset.variant).source;});
   function restore(saved) {
     const values = (saved?.privateContent || saved?.modelContent || saved)?.sketchybarDesign;
-    if (!values || values.version !== 3) return;
-    for (const [key,min,max] of [['height',32,48],['fontSize',11,16],['gap',4,16],['radius',4,20]]) if (Number.isFinite(values[key])) state[key] = Math.max(min,Math.min(max,values[key]));
-    if (/^#[0-9a-f]{6}$/i.test(values.accent || '')) state.accent = values.accent;
-    for (const [key,options] of Object.entries(choices)) if (options.includes(values[key])) state[key] = values[key];
-    if (typeof values.space === 'string') state.space = values.space;
+    if (!values || ![3,4].includes(values.version)) return;
+    const previous = values.version === 3 ? values : values.shared;
+    for (const [key,options] of Object.entries(choices)) if (options.includes(previous?.[key])) shared[key] = previous[key];
+    if (typeof previous?.space === 'string') shared.space = previous.space;
+    const stored = values.version === 3 ? {'Grouped':values} : values.appearances;
+    for (const [name,appearance] of Object.entries(appearances)) {
+      const source = stored?.[name]; if (!source) continue;
+      for (const [key,min,max] of [['height',32,48],['fontSize',11,16],['gap',0,20],['radius',0,20],['opacity',40,100]]) if (Number.isFinite(source[key])) appearance[key] = Math.max(min,Math.min(max,source[key]));
+      if (/^#[0-9a-f]{6}$/i.test(source.accent || '')) appearance.accent = source.accent;
+    }
   }
   restore(window.openai?.widgetState);
   function save() {
     if (!window.openai?.setWidgetState) return;
-    const saved = {sketchybarDesign:{...state}};
+    const saved = {sketchybarDesign:{version:4,shared:{...shared},appearances:structuredClone(appearances)}};
     window.openai.setWidgetState({modelContent:saved,privateContent:saved}).catch(() => {});
   }
   function render() {
-    root.dataset.view = state.view;
-    for (const [name,value] of [['height',state.height],['font-size',state.fontSize],['gap',state.gap],['radius',state.radius]]) root.style.setProperty('--sk-' + name,value + 'px');
-    root.style.setProperty('--sk-accent',state.accent); root.style.setProperty('--sk-icon-size',data.config.iconSize + 'px');
-    root.style.setProperty('--sk-group-height',(data.config.groupHeight + state.height - data.config.height) + 'px');
-    const display = data.displays.find(d => d.orientation === state.display);
+    root.dataset.view = shared.view; root.dataset.focus = shared.focusMode;
+    const display = data.displays.find(d => d.orientation === shared.display);
     root.style.setProperty('--sk-screen-width',display.width + 'px'); root.style.setProperty('--sk-screen-height',display.height + 'px');
     root.style.setProperty('--sk-aspect',display.width + ' / ' + display.height); root.style.setProperty('--sk-scale',root.clientWidth / display.width);
-    const spaces = state.workspaceScenario === 'One workspace' ? [data.snapshot.focusedWorkspace] : state.workspaceScenario === 'Six workspaces' ? ['1','2','3','4','5','6'] : data.snapshot.workspaces;
-    if (!spaces.includes(state.space)) state.space = spaces[0];
-    const group = root.querySelector('.sk-spaces');
-    const key = JSON.stringify(spaces);
-    if (group.dataset.source !== key) {
-      group.replaceChildren(...spaces.map(id => {const b = document.createElement('button'); b.type = 'button'; b.className = 'sk-space cursor-interaction'; b.dataset.space = id; b.textContent = id; b.setAttribute('aria-label','Workspace ' + id); return b;}));
-      group.dataset.source = key;
+    root.style.setProperty('--sk-focus-image','url("' + data.focusImages[shared.focusMode === 'Off' ? 'Work' : shared.focusMode] + '")');
+    const spaces = shared.workspaceScenario === 'One workspace' ? [data.snapshot.focusedWorkspace] : shared.workspaceScenario === 'Six workspaces' ? ['1','2','3','4','5','6'] : data.snapshot.workspaces;
+    if (!spaces.includes(shared.space)) shared.space = spaces[0];
+    for (const section of sections) {
+      const design = data.designs.find(d => d.name === section.dataset.variant),appearance = appearances[design.name];
+      const desktop = section.querySelector('.sk-desktop');
+      for (const [name,key] of [['height','height'],['font-size','fontSize'],['gap','gap'],['radius','radius']]) desktop.style.setProperty('--sk-' + name,appearance[key] + 'px');
+      desktop.style.setProperty('--sk-font',design.font === 'Hack' ? '"Sketchybar Hack", monospace' : '"Sketchybar Fira", monospace');
+      desktop.style.setProperty('--sk-weight',design.font === 'Hack' ? 700 : 500);
+      desktop.style.setProperty('--sk-workspace-size',(design.font === 'Hack' ? data.config.iconSize : appearance.fontSize) + 'px');
+      desktop.style.setProperty('--sk-accent',appearance.accent);
+      desktop.style.setProperty('--sk-group-color',`rgb(40 42 54 / ${appearance.opacity / 100})`);
+      desktop.style.setProperty('--sk-prompt-space',`rgb(68 71 90 / ${appearance.opacity / 100})`);
+      desktop.style.setProperty('--sk-group-height',(appearance.height - (design.layout === 'terminal' ? 0 : 8)) + 'px');
+      const group = section.querySelector('.sk-spaces'),key = JSON.stringify(spaces);
+      if (group.dataset.source !== key) {
+        group.replaceChildren(...spaces.map(id => {const button = document.createElement('button'); button.type = 'button'; button.className = 'sk-space cursor-interaction'; button.dataset.space = id; button.textContent = id; button.setAttribute('aria-label','Workspace ' + id); return button;}));
+        group.dataset.source = key;
+      }
+      section.querySelectorAll('.sk-space').forEach(el => el.setAttribute('aria-pressed',String(el.dataset.space === shared.space)));
+      const app = shared.scenario === 'Long app name' ? 'Visual Studio Code: SketchyBar design workspace' : data.snapshot.frontApp;
+      const label = section.querySelector('.sk-app-name'); label.textContent = app; label.dataset.tooltip = app;
+      section.querySelector('.sk-focus-slot').hidden = shared.focusMode === 'Off';
+      const focus = section.querySelector('.sk-focus');
+      const description = shared.focusMode === 'Unavailable' ? 'Focus state unavailable' : 'Sample Focus: ' + shared.focusMode;
+      focus.setAttribute('aria-label',description); focus.dataset.tooltip = description;
+      section.querySelector('.sk-clock').textContent = data.snapshot.clock;
+      section.querySelector('.sk-clock').dateTime = data.capturedAt;
+      desktop.setAttribute('aria-label',design.name + ' bar over the selected wallpaper');
     }
-    root.querySelectorAll('.sk-space').forEach(el => el.setAttribute('aria-pressed',String(el.dataset.space === state.space)));
-    const app = state.scenario === 'Long app name' ? 'Visual Studio Code: SketchyBar design workspace' : data.snapshot.frontApp;
-    const label = root.querySelector('.sk-app-name'); label.textContent = app; label.dataset.tooltip = app;
-    const focus = root.querySelector('.sk-focus');
-    focus.hidden = state.focusMode === 'Off'; focus.textContent = state.focusMode === 'Unavailable' ? 'Focus unavailable' : state.focusMode;
-    focus.setAttribute('aria-label',state.focusMode === 'Unavailable' ? 'Focus state unavailable' : 'Sample Focus: ' + state.focusMode);
-    focus.dataset.tooltip = focus.textContent;
-    root.querySelector('.sk-clock-value').textContent = data.snapshot.clock;
-    const workspaceLabel = state.workspaceScenario === 'Desktop snapshot' ? spaces.length + ' AeroSpace workspaces' : 'Sample: ' + spaces.length + ' workspaces';
-    const focusLabel = state.focusMode === 'Unavailable' ? 'Focus reading unavailable' : 'Sample Focus: ' + state.focusMode;
-    root.querySelector('.sk-snapshot').textContent = `${display.name} · ${display.width} × ${display.height} · ${state.view} · ${workspaceLabel} · ${focusLabel}`;
+    const workspaceLabel = shared.workspaceScenario === 'Desktop snapshot' ? spaces.length + ' AeroSpace workspaces' : 'Sample: ' + spaces.length + ' workspaces';
+    const focusLabel = shared.focusMode === 'Unavailable' ? 'Focus reading unavailable' : 'Sample Focus: ' + shared.focusMode;
+    root.querySelector('.sk-snapshot').textContent = `${display.name} · ${display.width} × ${display.height} · ${shared.view} · ${workspaceLabel} · ${focusLabel}`;
   }
-  root.addEventListener('click',event => {const space = event.target.closest('[data-space]'); if (space) {state.space = space.dataset.space; render(); save();}});
+  root.addEventListener('click',event => {const space = event.target.closest('[data-space]'); if (space) {shared.space = space.dataset.space; render(); save();}});
   window.addEventListener('openai:set_globals',event => {if (event.detail?.globals?.widgetState) {restore(event.detail.globals.widgetState);render();}});
   new ResizeObserver(render).observe(root); render();
   if (globalThis.Tweak) {
-    const tweak = new Tweak({container:root,onChange:() => {render();save();}});
-    tweak.addSlider(state,'height',{label:'Bar height',min:32,max:48,unit:'px',reference:'bar.height'});
-    tweak.addSlider(state,'fontSize',{label:'Text size',min:11,max:16,unit:'px',reference:'label.font.size'});
-    tweak.addSlider(state,'gap',{label:'Item spacing',min:4,max:16,unit:'px',reference:'item.padding'});
-    tweak.addSlider(state,'radius',{label:'Group corners',min:4,max:20,unit:'px',reference:'bracket.background.corner_radius'});
-    tweak.addColorPicker(state,'accent',{label:'Selected workspace',reference:'space.background.color'});
-    for (const [key,label] of [['display','Display'],['view','Preview scale'],['workspaceScenario','Workspace list'],['focusMode','Sample Focus'],['scenario','Application']]) tweak.addSelect(state,key,{label,options:choices[key],reference:'preview.' + key});
+    const snapshot = new Tweak({container:root,onChange:() => {render();save();}});
+    for (const [key,label] of [['display','Display'],['view','Preview scale'],['workspaceScenario','Workspace list'],['focusMode','Sample Focus'],['scenario','Application']]) snapshot.addSelect(shared,key,{label,options:choices[key],reference:'preview.' + key});
+    for (const section of sections) {
+      const appearance = appearances[section.dataset.variant];
+      const tweak = new Tweak({container:section,onChange:() => {render();save();}});
+      tweak.addSlider(appearance,'height',{label:'Bar height',min:32,max:48,unit:'px',reference:'bar.height'});
+      tweak.addSlider(appearance,'fontSize',{label:'Text size',min:11,max:16,unit:'px',reference:'label.font.size'});
+      tweak.addSlider(appearance,'gap',{label:'Group spacing',min:0,max:20,unit:'px',reference:'item.padding'});
+      if (section.dataset.variant !== 'Terminal Line') tweak.addSlider(appearance,'radius',{label:'Corners',min:0,max:20,unit:'px',reference:'bracket.background.corner_radius'});
+      tweak.addSlider(appearance,'opacity',{label:'Surface opacity',min:40,max:100,unit:'%',reference:'bracket.background.color'});
+      tweak.addColorPicker(appearance,'accent',{label:'Selected workspace',reference:'space.background.color'});
+    }
   }
 })();
 </script>

@@ -38,10 +38,13 @@ def main():
     args = parser.parse_args()
     data = json.loads((folder / 'desktop.json').read_text())
     data['config'] = config_values(folder.parents[1] / 'sketchybar/.config/sketchybar/sketchybarrc')
+    data['focusImages'] = {name: 'data:image/png;base64,' + base64.b64encode((folder / 'assets/focus' / filename).read_bytes()).decode()
+                           for name, filename in [('Work', 'work.png'), ('Do Not Disturb', 'do-not-disturb.png'), ('Unavailable', 'unavailable.png')]}
     source = (folder / 'desktop-preview.html').read_text()
     replacements = {
         '<!-- PREVIEW_DATA -->': json.dumps(data, ensure_ascii=False).replace('<', '\\u003c'),
         '__HACK_FONT__': 'data:font/woff;base64,' + base64.b64encode((folder / 'assets/hack-nerd-bold-subset.woff').read_bytes()).decode(),
+        '__FIRA_FONT__': 'data:font/woff;base64,' + base64.b64encode((folder / 'assets/fira-code-medium-subset.woff').read_bytes()).decode(),
         '__MONET_IMAGE__': 'data:image/jpeg;base64,' + base64.b64encode((folder / 'assets/monet.jpg').read_bytes()).decode(),
     }
     for placeholder, value in replacements.items():
