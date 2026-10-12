@@ -45,14 +45,15 @@ def main():
     try:
         workspaces = list(dict.fromkeys(output('aerospace', 'list-workspaces', '--all').splitlines()))
         focused = output('aerospace', 'list-workspaces', '--focused').strip()
-        items = json.loads(output('sketchybar', '--query', 'bar'))['items']
+        bar = os.environ.get('BAR_NAME', 'sketchybar')
+        items = json.loads(output(bar, '--query', 'bar'))['items']
         if not workspaces or focused not in workspaces or not isinstance(items, list):
             raise ValueError('Incomplete workspace snapshot')
         if not all(isinstance(item, str) for item in items):
             raise ValueError('Unexpected SketchyBar item list')
         commands = reconcile(workspaces, focused, items, sys.argv[1:])
         if commands:
-            output('sketchybar', *commands)
+            output(bar, *commands)
     except (OSError, subprocess.SubprocessError, ValueError, KeyError, TypeError) as error:
         # Keep the last contents while a service is unavailable or restarting.
         print('Workspace refresh unavailable: ' + str(error), file=sys.stderr)

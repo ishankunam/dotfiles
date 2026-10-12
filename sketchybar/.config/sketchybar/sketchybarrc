@@ -1,6 +1,7 @@
 #!/bin/bash
 # Browser design candidate. Activate only after the sandbox rounds are approved.
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+BAR_NAME="${BAR_NAME:-sketchybar}"
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 
 ##### Bar Appearance #####
@@ -11,7 +12,7 @@ PLUGIN_DIR="$CONFIG_DIR/plugins"
 # https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
 
 # Round 5: selected Dracula Glass with IBM Plex Mono Medium.
-sketchybar --bar position=top height=38 blur_radius=30 color=0x00000000 \
+"$BAR_NAME" --bar position=top height=38 blur_radius=30 color=0x00000000 \
                 margin=10 y_offset=8 padding_left=4 padding_right=4
 
 ##### Changing Defaults #####
@@ -31,7 +32,7 @@ default=(
   label.padding_left=4
   label.padding_right=4
 )
-sketchybar --default "${default[@]}"
+"$BAR_NAME" --default "${default[@]}"
 
 space=(
   icon.padding_left=7
@@ -53,7 +54,7 @@ group=(
 )
 
 # Reconcile the current AeroSpace list. Polling catches creation and deletion.
-sketchybar --add event aerospace_workspace_change \
+"$BAR_NAME" --add event aerospace_workspace_change \
            --add item workspace_template left \
            --set workspace_template "${space[@]}" drawing=off \
            --add item workspaces left \
@@ -65,7 +66,7 @@ sketchybar --add event aerospace_workspace_change \
 # We add some regular items to the left side of the bar, where
 # only the properties deviating from the current defaults need to be set
 
-sketchybar --add item front_app left \
+"$BAR_NAME" --add item front_app left \
            --set front_app icon.drawing=off script="$PLUGIN_DIR/front_app.sh" \
            --subscribe front_app front_app_switched
 
@@ -75,7 +76,7 @@ sketchybar --add item front_app left \
 # https://felixkratz.github.io/SketchyBar/config/items#adding-items-to-sketchybar
 
 # Right items grow leftward, so Focus appears before the clock.
-sketchybar --add item clock right \
+"$BAR_NAME" --add item clock right \
            --set clock update_freq=10 icon.drawing=off script="$PLUGIN_DIR/clock.sh" \
            --subscribe clock system_woke \
            --add item focus right \
@@ -87,10 +88,10 @@ sketchybar --add item clock right \
 ##### Group Backgrounds #####
 # Brackets draw a shared background behind the existing items.
 # These settings are a design candidate. The browser sandbox does not run them.
-sketchybar --add bracket application front_app \
+"$BAR_NAME" --add bracket application front_app \
            --set application "${group[@]}" \
            --add bracket status focus clock \
            --set status "${group[@]}"
 
 ##### Force all scripts to run the first time (never do this in a script) #####
-sketchybar --update
+"$BAR_NAME" --update

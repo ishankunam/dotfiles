@@ -9,7 +9,7 @@ from pathlib import Path
 
 def config_values(path):
     source = path.read_text().replace('\\\n', ' ')
-    bar = re.search(r'^sketchybar --bar (.+)$', source, re.MULTILINE)
+    bar = re.search(r'^(?:sketchybar|"\$BAR_NAME") --bar (.+)$', source, re.MULTILINE)
     defaults = re.search(r'default=\((.*?)\)', source, re.DOTALL)
     space = re.search(r'\bspace=\((.*?)\)', source, re.DOTALL)
     groups = re.search(r'group=\((.*?)\)', source, re.DOTALL)

@@ -4,5 +4,5 @@
 # the item invoking this script:
 # https://felixkratz.github.io/SketchyBar/config/events#events-and-scripting
 
-sketchybar --set "$NAME" label="$(LC_TIME=C date '+%I:%M %p' | sed 's/^0//')"
+"${BAR_NAME:-sketchybar}" --set "$NAME" label="$(LC_TIME=C date '+%I:%M %p' | sed 's/^0//')"
 
