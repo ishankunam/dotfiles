@@ -1,7 +1,7 @@
-<div id="sketchybar-desktop-preview" aria-label="SketchyBar designs from your dotfiles">
+<div id="sketchybar-desktop-preview" aria-label="Dracula Glass with IBM Plex Mono">
   <div class="viz-carousel" aria-label="SketchyBar design directions">
-    <section data-variant="Grouped" aria-label="Grouped appearance"><div class="sk-desktop" data-layout="grouped"><div class="sk-wallpaper" aria-hidden="true"></div><div class="sk-mount"></div></div><div class="sk-source"></div></section>
-    <section data-variant="Dracula Glass" aria-label="Dracula Glass appearance" hidden><div class="sk-desktop" data-layout="glass"><div class="sk-wallpaper" aria-hidden="true"></div><div class="sk-mount"></div></div><div class="sk-source"></div></section>
+    <section data-variant="Dracula Glass" aria-label="Dracula Glass appearance"><div class="sk-desktop" data-layout="glass"><div class="sk-wallpaper" aria-hidden="true"></div><div class="sk-mount"></div></div><div class="sk-source"></div></section>
+    <section data-variant="Grouped" aria-label="Grouped appearance" hidden><div class="sk-desktop" data-layout="grouped"><div class="sk-wallpaper" aria-hidden="true"></div><div class="sk-mount"></div></div><div class="sk-source"></div></section>
     <section data-variant="Terminal Line" aria-label="Terminal Line appearance" hidden><div class="sk-desktop" data-layout="terminal"><div class="sk-wallpaper" aria-hidden="true"></div><div class="sk-mount"></div></div><div class="sk-source"></div></section>
     <section data-variant="Prompt Segments" aria-label="Prompt Segments appearance" hidden><div class="sk-desktop" data-layout="prompt"><div class="sk-wallpaper" aria-hidden="true"></div><div class="sk-mount"></div></div><div class="sk-source"></div></section>
   </div>
@@ -25,6 +25,7 @@
 <style>
   @font-face { font-family: "Sketchybar Hack"; src: url("__HACK_FONT__") format("woff"); font-weight: 700; font-display: swap; }
   @font-face { font-family: "Sketchybar Fira"; src: url("__FIRA_FONT__") format("woff"); font-weight: 500; font-display: swap; }
+  @font-face { font-family: "Sketchybar Plex"; src: url("__PLEX_FONT__") format("truetype"); font-weight: 500; font-display: swap; }
   #sketchybar-desktop-preview { --sk-font-size: 14px; --sk-height: 40px; --sk-radius: 12px; --sk-gap: 10px; --sk-accent: #3b9781; --sk-text: #ffffff; --sk-line: #585b7040; --sk-group-color: #282a36cc; --sk-group-height: 32px; --sk-blur: 30px; --sk-scale: 1; --sk-screen-width: 1920px; --sk-screen-height: 1080px; color-scheme: dark; }
   #sketchybar-desktop-preview .sk-desktop { position: relative; isolation: isolate; overflow: hidden; height: 330px; border-radius: 10px; background: #b8bfb0; font-family: var(--sk-font); font-size: var(--sk-font-size); font-weight: var(--sk-weight); color: var(--sk-text); }
   #sketchybar-desktop-preview .sk-wallpaper { position: absolute; inset: 0; z-index: -1; background-image: url("__MONET_IMAGE__"); background-size: cover; background-position: center; }
@@ -104,7 +105,7 @@
   sections.forEach(section => {section.querySelector('.sk-mount').append(template.content.cloneNode(true)); section.querySelector('.sk-source').textContent = data.designs.find(d => d.name === section.dataset.variant).source;});
   function restore(saved) {
     const values = (saved?.privateContent || saved?.modelContent || saved)?.sketchybarDesign;
-    if (!values || ![3,4].includes(values.version)) return;
+    if (!values || ![3,4,5].includes(values.version)) return;
     const previous = values.version === 3 ? values : values.shared;
     for (const [key,options] of Object.entries(choices)) if (options.includes(previous?.[key])) shared[key] = previous[key];
     if (typeof previous?.space === 'string') shared.space = previous.space;
@@ -118,7 +119,7 @@
   restore(window.openai?.widgetState);
   function save() {
     if (!window.openai?.setWidgetState) return;
-    const saved = {sketchybarDesign:{version:4,shared:{...shared},appearances:structuredClone(appearances)}};
+    const saved = {sketchybarDesign:{version:5,shared:{...shared},appearances:structuredClone(appearances)}};
     window.openai.setWidgetState({modelContent:saved,privateContent:saved}).catch(() => {});
   }
   function render() {
@@ -133,9 +134,11 @@
       const design = data.designs.find(d => d.name === section.dataset.variant),appearance = appearances[design.name];
       const desktop = section.querySelector('.sk-desktop');
       for (const [name,key] of [['height','height'],['font-size','fontSize'],['gap','gap'],['radius','radius']]) desktop.style.setProperty('--sk-' + name,appearance[key] + 'px');
-      desktop.style.setProperty('--sk-font',design.font === 'Hack' ? '"Sketchybar Hack", monospace' : '"Sketchybar Fira", monospace');
+      const fonts = {Hack:'"Sketchybar Hack", monospace',Fira:'"Sketchybar Fira", monospace',Plex:'"Sketchybar Plex", monospace'};
+      desktop.style.setProperty('--sk-font',fonts[design.font]);
       desktop.style.setProperty('--sk-weight',design.font === 'Hack' ? 700 : 500);
-      desktop.style.setProperty('--sk-workspace-size',(design.font === 'Hack' ? data.config.iconSize : appearance.fontSize) + 'px');
+      desktop.style.setProperty('--sk-workspace-size',(design.workspaceSize ?? appearance.fontSize) + 'px');
+      if (design.name === data.selectedDesign) desktop.style.setProperty('--sk-text','#' + data.config.textColor.slice(4));
       desktop.style.setProperty('--sk-accent',appearance.accent);
       desktop.style.setProperty('--sk-group-color',`rgb(40 42 54 / ${appearance.opacity / 100})`);
       desktop.style.setProperty('--sk-prompt-space',`rgb(68 71 90 / ${appearance.opacity / 100})`);

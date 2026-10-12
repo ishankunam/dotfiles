@@ -10,6 +10,8 @@ Round 1 compares Minimal, Floating, and Grouped with identical sample contents.
 Round 2 compared Grouped with the original native configuration.
 Round 3 uses Grouped with AeroSpace workspaces, the enabled Focus, and 12-hour time.
 Round 4 removes the clock glyph and uses the configured Focus symbol without its name.
+Round 5 selects Dracula Glass and replaces its Fira Code text with IBM Plex Mono Medium at 14 points.
+The selected design opens first. Earlier directions remain available as references.
 Workspace selection and sample states change only the browser preview.
 Codex exposes design controls for height, text, spacing, corners, color, and sample states.
 
@@ -44,7 +46,9 @@ The original local image was missing. The user approved a reproduction from
 This asset has a public-domain designation on its source page.
 The preview uses a centered cover crop because the desktop capture did not show the wallpaper.
 The Hack Nerd Font and Fira Code subsets come from the installed fonts.
-Their licenses are in `assets/HACK-LICENSE.txt` and `assets/FIRA-LICENSE.txt`.
+IBM Plex Mono Medium uses the complete, unmodified installed TTF file.
+Their licenses are in `assets/HACK-LICENSE.txt`, `assets/FIRA-LICENSE.txt`, and `assets/IBM-PLEX-LICENSE.txt`.
+The [IBM Plex license](https://github.com/IBM/plex/blob/master/LICENSE.txt) accompanies the font asset.
 
 Bar detail keeps the items readable and reflows them in narrow browser windows.
 Screen proportions uses the monitor's full dimensions and scales the bar with the screen.
@@ -70,11 +74,16 @@ Battery and volume items are absent. The clock uses `h:mm AM/PM` without a date.
 
 ## Alternatives from the dotfiles
 
-The current Grouped candidate is the reference. The three alternatives are browser designs until one is selected.
+Dracula Glass is the selected native candidate in the isolated worktree.
+It uses IBM Plex Mono Medium for the workspace numbers, application name, and clock.
+The candidate has a 38-point bar, 30-point group backgrounds, 8-point corners, and 60% Dracula surfaces.
+The application chevron is absent. Selected workspaces use Dracula purple text and a subtle purple background.
+Workspace items now move before the application item, which remains present when the chevron is removed.
+The installed bar remains unchanged. Earlier directions remain browser references.
 
 | Design | Source | Applied choices |
 |---|---|---|
-| Dracula Glass | Ghostty and VS Code | Fira Code at 14 points, Dracula purple, 60% surfaces, smaller floating groups. |
+| Dracula Glass | Ghostty, VS Code, and the user's font selection | IBM Plex Mono Medium at 14 points, Dracula purple, 60% surfaces, smaller floating groups. |
 | Terminal Line | tmux and reduced chrome in VS Code/Obsidian | One continuous strip, bracketed selection, direct time display, no group boxes. |
 | Prompt Segments | Powerlevel10k and Ghostty's Dracula palette | Joined segments, slanted separators, rounded ends, a green app segment. |
 
@@ -102,7 +111,7 @@ Each later round starts from the preceding round and targets that branch.
 Register the ordered PRs in GitHub's native stack after creating them.
 
 ```text
-master → round-1 → round-2 → round-3 → round-4
+master → round-1 → round-2 → round-3 → round-4 → round-5
 ```
 
 Only create a branch and PR when the corresponding round has concrete changes.
