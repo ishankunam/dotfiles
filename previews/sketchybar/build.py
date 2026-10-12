@@ -11,10 +11,9 @@ def config_values(path):
     source = path.read_text().replace('\\\n', ' ')
     bar = re.search(r'^sketchybar --bar (.+)$', source, re.MULTILINE)
     defaults = re.search(r'default=\((.*?)\)', source, re.DOTALL)
-    spaces = re.search(r'SPACE_ICONS=\((.*?)\)', source, re.DOTALL)
     space = re.search(r'\bspace=\((.*?)\)', source, re.DOTALL)
     groups = re.search(r'group=\((.*?)\)', source, re.DOTALL)
-    if not all((bar, defaults, spaces, space, groups)):
+    if not all((bar, defaults, space, groups)):
         raise ValueError('Expected the reviewed shell configuration format.')
 
     def properties(text):
@@ -25,7 +24,7 @@ def config_values(path):
         raise ValueError('Create a matching browser font asset before changing the native font.')
     return {'height': int(b['height']), 'labelSize': float(d['label.font'].rsplit(':', 1)[1]),
             'iconSize': float(d['icon.font'].rsplit(':', 1)[1]), 'font': d['label.font'],
-            'radius': int(g['background.corner_radius']), 'spaces': shlex.split(spaces[1]),
+            'radius': int(g['background.corner_radius']),
             'barColor': b['color'], 'groupColor': g['background.color'],
             'groupHeight': int(g['background.height']), 'blur': int(b['blur_radius']),
             'borderColor': g['background.border_color'], 'textColor': d['label.color'],
