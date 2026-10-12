@@ -10,7 +10,7 @@ PLUGIN_DIR="$CONFIG_DIR/plugins"
 # If you are looking for other colors, see the color picker:
 # https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
 
-# Round 3: a transparent bar with workspace, application, and Focus/time groups.
+# Round 4: Focus uses its configured symbol, and the clock is text only.
 sketchybar --bar position=top height=40 blur_radius=30 color=0x00000000 \
                 margin=10 y_offset=8 padding_left=4 padding_right=4
 
@@ -77,10 +77,11 @@ sketchybar --add item chevron left \
 
 # Right items grow leftward, so Focus appears before the clock.
 sketchybar --add item clock right \
-           --set clock update_freq=10 icon=  script="$PLUGIN_DIR/clock.sh" \
+           --set clock update_freq=10 icon.drawing=off script="$PLUGIN_DIR/clock.sh" \
            --subscribe clock system_woke \
            --add item focus right \
-           --set focus icon.drawing=off label.max_chars=24 update_freq=10 updates=on \
+           --set focus label.drawing=off width=24 background.color=0x00000000 \
+             background.image.scale=0.5 update_freq=10 updates=on \
              script="$PLUGIN_DIR/focus.sh" \
            --subscribe focus system_woke
 

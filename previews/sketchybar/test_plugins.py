@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 import shlex
 import subprocess
+import struct
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -33,6 +35,7 @@ class Plugins(unittest.TestCase):
         self.assertNotIn('battery', flat)
         self.assertNotIn('volume', flat)
         self.assertNotIn('yabai', flat)
+        self.assertIn(['--set', 'clock', 'update_freq=10', 'icon.drawing=off'], [flat[i:i+4] for i in range(len(flat))])
         self.assertIn(['--add', 'bracket', 'status', 'focus', 'clock'], [flat[i:i+5] for i in range(len(flat))])
         self.assertEqual(commands[-1], ['--update'])
 
@@ -68,8 +71,8 @@ class Plugins(unittest.TestCase):
             assertions.write_text('{"data":[{"storeAssertionRecords":[]}]}')
             self.assertEqual(focus.read_focus(folder)['state'], 'off')
             assertions.write_text(json.dumps({'data': [{'storeAssertionRecords': [{'assertionDetails': {'assertionDetailsModeIdentifier': 'custom'}}]}]}))
-            (folder / 'ModeConfigurations.json').write_text(json.dumps({'data': [{'modeConfigurations': {'custom': {'mode': {'name': 'Deep Research'}}}}]}))
-            self.assertEqual(focus.read_focus(folder), {'state': 'on', 'name': 'Deep Research'})
+            (folder / 'ModeConfigurations.json').write_text(json.dumps({'data': [{'modeConfigurations': {'custom': {'mode': {'name': 'Deep Research', 'symbolImageName': 'moon.fill'}}}}]}))
+            self.assertEqual(focus.read_focus(folder), {'state': 'on', 'name': 'Deep Research', 'symbol': 'moon.fill'})
             assertions.write_text('{"data":[{"storeAssertionRecords":[{}]}]}')
             self.assertEqual(focus.read_focus(folder)['state'], 'unavailable')
             assertions.write_text('invalid JSON')
@@ -78,10 +81,34 @@ class Plugins(unittest.TestCase):
             self.assertEqual(focus.read_focus(Path('/fixture'))['state'], 'unavailable')
 
     def test_focus_rendering_preserves_unknown_state(self):
-        for state, expected in [('off', 'drawing=off'), ('on', 'label=Work'), ('unavailable', 'label=Focus unavailable')]:
-            with patch.object(focus, 'read_focus', return_value={'state': state, 'name': 'Work' if state == 'on' else None}), patch.object(focus.subprocess, 'run') as run:
+        for state, expected in [('off', 'drawing=off'), ('on', 'background.image=/fixture/logo.png'), ('unavailable', 'background.image=/fixture/logo.png')]:
+            with patch.object(focus, 'read_focus', return_value={'state': state, 'name': 'Work' if state == 'on' else None, 'symbol': 'briefcase.fill' if state == 'on' else None}), patch.object(focus, 'render_symbol', return_value=Path('/fixture/logo.png')) as render, patch.object(focus.subprocess, 'run') as run:
                 focus.main()
                 self.assertIn(expected, run.call_args.args[0])
+                self.assertIn('label.drawing=off', run.call_args.args[0])
+                self.assertNotIn('label=Work', run.call_args.args[0])
+                if state == 'off':
+                    render.assert_not_called()
+                else:
+                    render.assert_called_once_with('briefcase.fill' if state == 'on' else 'questionmark.circle')
+
+    def test_missing_symbol_never_becomes_a_different_focus_logo(self):
+        arguments = focus.display_arguments({'state': 'on', 'name': 'Custom Focus'}, None)
+        self.assertIn('icon=?', arguments)
+        self.assertIn('background.image.drawing=off', arguments)
+        self.assertNotIn('label=Custom Focus', arguments)
+
+    @unittest.skipUnless(sys.platform == 'darwin', 'AppKit requires macOS')
+    def test_real_symbol_render_and_cache_without_a_window(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(focus.tempfile, 'gettempdir', return_value=temporary), patch.object(focus.subprocess, 'run', wraps=subprocess.run) as run:
+            image = focus.render_symbol('briefcase.fill')
+            self.assertIsNotNone(image)
+            png = image.read_bytes()
+            self.assertEqual(png[:8], b'\x89PNG\r\n\x1a\n')
+            self.assertEqual(struct.unpack('>II', png[16:24]), (36, 36))
+            self.assertEqual(focus.render_symbol('briefcase.fill'), image)
+            self.assertEqual(run.call_count, 1)
+            self.assertIsNone(focus.render_symbol('this.symbol.does.not.exist'))
 
     def test_clock_midnight_noon_and_evening(self):
         source = (PLUGINS / 'clock.sh').read_text()
