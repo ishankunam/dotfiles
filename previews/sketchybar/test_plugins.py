@@ -98,6 +98,27 @@ class Plugins(unittest.TestCase):
                 (folder / 'state.json').write_text(contents)
                 self.assertEqual(focus.read_focus()['state'], 'unavailable')
 
+    def test_focus_binary_input_is_rendered_before_temporary_source_is_removed(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(focus, 'cache_folder', return_value=Path(temporary)), patch.object(focus.subprocess, 'run') as run:
+            folder = Path(temporary)
+            png = b'\x89PNG\r\n\x1a\nfixture'
+            sources = []
+            def normalize(raw):
+                self.assertEqual(raw.read_bytes(), png)
+                sources.append(raw)
+                image = folder / 'normalized.png'
+                image.write_bytes(png)
+                return image
+            with patch.object(focus, 'render_image', side_effect=normalize):
+                focus.publish_image_bytes(png)
+            self.assertFalse(sources[0].exists())
+            self.assertEqual(focus.read_focus(), {'state': 'on', 'image': folder / 'normalized.png'})
+            self.assertEqual(run.call_args.args[0], ['sketchybar', '--trigger', 'focus_changed'])
+            focus.publish_image_bytes(b'')
+            self.assertEqual(focus.read_focus()['state'], 'unavailable')
+            saved = json.loads((folder / 'state.json').read_text())
+            self.assertEqual(saved['error'], 'The Focus automation did not provide PNG data.')
+
     def test_focus_state_survives_stopped_bar_and_restores_without_querying_macOS(self):
         with tempfile.TemporaryDirectory() as temporary, patch.object(focus, 'cache_folder', return_value=Path(temporary)):
             with patch.object(focus.subprocess, 'run', side_effect=OSError('bar stopped')):
@@ -124,6 +145,21 @@ class Plugins(unittest.TestCase):
         self.assertIn('icon=?', arguments)
         self.assertIn('background.image.drawing=off', arguments)
         self.assertNotIn('label=Custom Focus', arguments)
+
+    @unittest.skipUnless(sys.platform == 'darwin', 'AppKit requires macOS')
+    def test_real_png_bytes_publish_a_normalized_icon_without_contacting_the_bar(self):
+        actual_run = subprocess.run
+        def run(command, **options):
+            if command[0] == 'sketchybar':
+                return subprocess.CompletedProcess(command, 0)
+            return actual_run(command, **options)
+        with tempfile.TemporaryDirectory() as temporary, patch.object(focus, 'cache_folder', return_value=Path(temporary)), patch.object(focus.subprocess, 'run', side_effect=run):
+            png = (Path(__file__).parent / 'assets/focus/work.png').read_bytes()
+            focus.publish_image_bytes(png)
+            saved = focus.read_focus()
+            self.assertEqual(saved['state'], 'on')
+            self.assertEqual(struct.unpack('>II', saved['image'].read_bytes()[16:24]), (36, 36))
+            self.assertFalse(list(Path(temporary).glob('input-*')))
 
     @unittest.skipUnless(sys.platform == 'darwin', 'AppKit requires macOS')
     def test_real_symbol_render_and_cache_without_a_window(self):

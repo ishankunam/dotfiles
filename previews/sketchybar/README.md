@@ -76,12 +76,12 @@ Create or edit **SketchyBar Focus** with the following actions:
 
 1. Add **Get Current Focus**.
 2. Add **If Current Focus has any value**.
-3. Inside the If branch, add **Convert Image**, with **Current Focus** as its input and **PNG** as its format.
-4. Add **Run Shell Script** after conversion. Use **Converted Image** as input, **as arguments**, and leave **Run as Administrator** off.
+3. Inside the If branch, add **Convert Image**. Select **Current Focus**, then its **Icon** property, and choose **PNG** as the format.
+4. Add **Run Shell Script** after conversion. Use **Converted Image** as input, **to stdin**, and leave **Run as Administrator** off.
 
 ```sh
 export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
-python3 "$HOME/.config/sketchybar/plugins/focus.py" --image "$1"
+python3 "$HOME/.config/sketchybar/plugins/focus.py" --stdin
 ```
 
 5. Inside **Otherwise**, add **Run Shell Script** with no input and **Run as Administrator** off:
@@ -101,9 +101,11 @@ Apple documents [Mac automations](https://support.apple.com/guide/shortcuts-mac/
 SketchyBar documents [custom events](https://felixkratz.github.io/SketchyBar/config/events).
 
 The publisher saves the icon and state before sending `sketchybar --trigger focus_changed`.
+It receives PNG bytes through standard input. It does not assume image arguments are file paths.
 It emits no shell output. If the bar is stopped, the saved state remains available for its next startup.
 A successful off branch clears the active image reference. Old cached icons cannot become the current state.
 Missing or invalid state and invalid PNG input display a question mark instead of claiming Focus is off.
+An unavailable publication includes a short error reason in `state.json` for diagnosis.
 The state survives bar restarts. Deleting the cache requires running the shortcut again to initialize it.
 Startup and wake refresh the saved state without executing a shortcut.
 If macOS misses an automation, the bar retains the last published state until another trigger or manual shortcut run.

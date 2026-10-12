@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 
 
@@ -59,13 +60,14 @@ def publish_focus(raw=None):
         if raw is not None:
             try:
                 if raw.read_bytes()[:8] != b'\x89PNG\r\n\x1a\n':
-                    raise ValueError('The Focus automation must provide a PNG icon.')
+                    raise ValueError('The Focus automation did not provide PNG data.')
                 image = render_image(raw)
                 if image is None:
                     raise ValueError('Focus icon conversion failed.')
                 focus.update(state='on', image=str(image))
-            except (OSError, ValueError):
-                focus.update(state='unavailable')
+            except (OSError, ValueError) as error:
+                message = str(error) if isinstance(error, ValueError) else 'Cannot read the Focus icon input.'
+                focus.update(state='unavailable', error=message)
         with tempfile.NamedTemporaryFile(mode='w', dir=folder, delete=False) as temporary:
             json.dump(focus, temporary)
         try:
@@ -77,6 +79,14 @@ def publish_focus(raw=None):
                            check=True, capture_output=True, timeout=3)
         except (OSError, subprocess.SubprocessError):
             pass  # Keep the state even when SketchyBar is stopped or restarting.
+
+
+def publish_image_bytes(data):
+    """Read binary PNG input from Shortcuts, rather than interpreting it as a path."""
+    with tempfile.TemporaryDirectory(prefix='input-', dir=cache_folder()) as temporary:
+        raw = Path(temporary) / 'focus.png'
+        raw.write_bytes(data)
+        publish_focus(raw)
 
 
 def display_arguments(focus, image):
@@ -102,9 +112,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     publish = parser.add_mutually_exclusive_group()
     publish.add_argument('--image', type=Path, help='Publish the PNG from the Focus automation.')
+    publish.add_argument('--stdin', action='store_true', help='Publish PNG bytes from standard input.')
     publish.add_argument('--off', action='store_true', help='Publish that no Focus is enabled.')
     arguments = parser.parse_args()
-    if arguments.image is not None or arguments.off:
+    if arguments.stdin:
+        publish_image_bytes(sys.stdin.buffer.read())
+    elif arguments.image is not None or arguments.off:
         publish_focus(arguments.image)
     else:
         main()
