@@ -93,8 +93,6 @@ cask "anomalyco/tap/hex", trusted: true
 cask "iina"
 # Native instant workspace switching
 cask "jurplel/tap/instant-space-switcher"
-# Menu bar manager
-cask "jordanbaird-ice"
 # Tool to control external monitor brightness & volume
 cask "monitorcontrol"
 vscode "adpyke.codesnap"
