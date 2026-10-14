@@ -36,7 +36,7 @@ inner.vertical = 10
 inner.horizontal = 10
 outer.left = 10
 outer.right = 10
-outer.top = 0         # menu bar pads enough
+outer.top = 52 # SketchyBar visible bottom (42) + edge gap (10)
 outer.bottom = 10
 
 # ---------------
