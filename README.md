@@ -25,6 +25,7 @@ directory mirrors the exact path it should occupy under `$HOME`, and
 | `claude/` | Claude Code `settings.json`, plus `instructions.md` kept as reference (not wired to a live path) |
 | `macos/` | `defaults.sh` — Dock/Finder/Trackpad/appearance tweaks (not a stow package, just a script) |
 | `obsidian/` | Vault settings snapshot — copied by hand, see [`obsidian/README.md`](obsidian/README.md) |
+| `previews/` | Browser sandbox for SketchyBar designs — not a stow package, see [`previews/sketchybar/README.md`](previews/sketchybar/README.md) |
 
 ## Setup on a new machine
 

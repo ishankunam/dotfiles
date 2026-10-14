@@ -1,16 +1,13 @@
 <div id="sketchybar-desktop-preview" aria-label="Dracula Glass with IBM Plex Mono">
   <div class="viz-carousel" aria-label="SketchyBar design directions">
     <section data-variant="Dracula Glass" aria-label="Dracula Glass appearance"><div class="sk-desktop" data-layout="glass"><div class="sk-wallpaper" aria-hidden="true"></div><div class="sk-mount"></div></div><div class="sk-source"></div></section>
-    <section data-variant="Grouped" aria-label="Grouped appearance" hidden><div class="sk-desktop" data-layout="grouped"><div class="sk-wallpaper" aria-hidden="true"></div><div class="sk-mount"></div></div><div class="sk-source"></div></section>
-    <section data-variant="Terminal Line" aria-label="Terminal Line appearance" hidden><div class="sk-desktop" data-layout="terminal"><div class="sk-wallpaper" aria-hidden="true"></div><div class="sk-mount"></div></div><div class="sk-source"></div></section>
-    <section data-variant="Prompt Segments" aria-label="Prompt Segments appearance" hidden><div class="sk-desktop" data-layout="prompt"><div class="sk-wallpaper" aria-hidden="true"></div><div class="sk-mount"></div></div><div class="sk-source"></div></section>
   </div>
   <div class="sk-snapshot" role="status" aria-live="polite"></div>
   <template id="sketchybar-desktop-items">
     <div class="sk-bar">
       <div class="sk-left">
         <div class="sk-spaces" role="group" aria-label="AeroSpace workspaces"></div>
-        <div class="sk-app"><span class="sk-chevron" aria-hidden="true">&#xf054;</span><span class="sk-app-name"></span></div>
+        <div class="sk-app"><span class="sk-app-name"></span></div>
       </div>
       <div class="sk-right">
         <span class="sk-focus-slot"><span class="sk-focus" role="img"></span></span>
@@ -23,8 +20,6 @@
 <!-- PREVIEW_DATA -->
 </script>
 <style>
-  @font-face { font-family: "Sketchybar Hack"; src: url("__HACK_FONT__") format("woff"); font-weight: 700; font-display: swap; }
-  @font-face { font-family: "Sketchybar Fira"; src: url("__FIRA_FONT__") format("woff"); font-weight: 500; font-display: swap; }
   @font-face { font-family: "Sketchybar Plex"; src: url("__PLEX_FONT__") format("truetype"); font-weight: 500; font-display: swap; }
   #sketchybar-desktop-preview { --sk-font-size: 14px; --sk-height: 40px; --sk-radius: 12px; --sk-gap: 10px; --sk-accent: #3b9781; --sk-text: #ffffff; --sk-line: #585b7040; --sk-group-color: #282a36cc; --sk-group-height: 32px; --sk-blur: 30px; --sk-scale: 1; --sk-screen-width: 1920px; --sk-screen-height: 1080px; color-scheme: dark; }
   #sketchybar-desktop-preview .sk-desktop { position: relative; isolation: isolate; overflow: hidden; height: 330px; border-radius: 10px; background: #b8bfb0; font-family: var(--sk-font); font-size: var(--sk-font-size); font-weight: var(--sk-weight); color: var(--sk-text); }
@@ -38,34 +33,13 @@
   #sketchybar-desktop-preview .sk-app { gap: 10px; overflow: hidden; }
   #sketchybar-desktop-preview .sk-app-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   #sketchybar-desktop-preview .sk-clock { white-space: nowrap; flex-shrink: 0; }
-  #sketchybar-desktop-preview .sk-chevron { font: 700 17px "Sketchybar Hack", monospace; }
   #sketchybar-desktop-preview .sk-focus { display: block; flex-shrink: 0; width: 18px; height: 18px; background: currentColor; mask: var(--sk-focus-image) center / contain no-repeat; -webkit-mask: var(--sk-focus-image) center / contain no-repeat; }
   #sketchybar-desktop-preview .sk-bar button { font: inherit; color: inherit; border: 0; background: transparent; appearance: none; padding: 0; }
   #sketchybar-desktop-preview .sk-space { min-width: 24px; height: 25px; border-radius: 5px; font-size: var(--sk-workspace-size) !important; display: grid; place-items: center; }
   #sketchybar-desktop-preview .sk-space[aria-pressed="true"] { background: color-mix(in srgb, var(--sk-accent) 25%, transparent); }
   #sketchybar-desktop-preview .sk-spaces, #sketchybar-desktop-preview .sk-app, #sketchybar-desktop-preview .sk-right { height: var(--sk-group-height); box-sizing: border-box; padding: 0 8px; background: var(--sk-group-color); border: 1px solid var(--sk-line); border-radius: var(--sk-radius); backdrop-filter: blur(var(--sk-blur)); }
-  #sketchybar-desktop-preview [data-layout="glass"] .sk-chevron { display: none; }
   #sketchybar-desktop-preview [data-layout="glass"] .sk-spaces, #sketchybar-desktop-preview [data-layout="glass"] .sk-app, #sketchybar-desktop-preview [data-layout="glass"] .sk-right { border-color: #ffffff1f; padding: 0 10px; }
   #sketchybar-desktop-preview [data-layout="glass"] .sk-space[aria-pressed="true"] { color: var(--sk-accent); background: color-mix(in srgb, var(--sk-accent) 16%, transparent); }
-  #sketchybar-desktop-preview [data-layout="terminal"] .sk-bar { margin: 0; padding: 0 16px; background: var(--sk-group-color); backdrop-filter: blur(var(--sk-blur)); }
-  #sketchybar-desktop-preview [data-layout="terminal"] .sk-spaces, #sketchybar-desktop-preview [data-layout="terminal"] .sk-app, #sketchybar-desktop-preview [data-layout="terminal"] .sk-right { background: transparent; border: 0; border-radius: 0; padding: 0; backdrop-filter: none; }
-  #sketchybar-desktop-preview [data-layout="terminal"] .sk-space { display: inline-flex; justify-content: center; min-width: 22px; padding: 0 5px; border-radius: 0; }
-  #sketchybar-desktop-preview [data-layout="terminal"] .sk-space[aria-pressed="true"] { background: var(--sk-accent); color: #282a36; }
-  #sketchybar-desktop-preview [data-layout="terminal"] .sk-space[aria-pressed="true"]::before { content: "["; }
-  #sketchybar-desktop-preview [data-layout="terminal"] .sk-space[aria-pressed="true"]::after { content: "]"; }
-  #sketchybar-desktop-preview [data-layout="terminal"] .sk-chevron { display: none; }
-  #sketchybar-desktop-preview [data-layout="terminal"] .sk-app::before { content: "|"; color: #6272a4; }
-  #sketchybar-desktop-preview [data-layout="prompt"] .sk-left { gap: 0; }
-  #sketchybar-desktop-preview [data-layout="prompt"] .sk-spaces { background: var(--sk-prompt-space); border: 0; border-radius: var(--sk-radius) 0 0 var(--sk-radius); }
-  #sketchybar-desktop-preview [data-layout="prompt"] .sk-app { position: relative; background: #50fa7b; color: #282a36; border: 0; border-radius: 0 var(--sk-radius) var(--sk-radius) 0; padding: 0 12px 0 22px; }
-  #sketchybar-desktop-preview [data-layout="prompt"] .sk-app::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 14px; background: var(--sk-prompt-space); clip-path: polygon(0 0, 100% 50%, 0 100%); }
-  #sketchybar-desktop-preview [data-layout="prompt"] .sk-chevron { display: none; }
-  #sketchybar-desktop-preview [data-layout="prompt"] .sk-space[aria-pressed="true"] { background: var(--sk-accent); color: #282a36; }
-  #sketchybar-desktop-preview [data-layout="prompt"] .sk-right { gap: 0; padding: 0; border: 0; overflow: hidden; }
-  #sketchybar-desktop-preview [data-layout="prompt"] .sk-focus-slot { position: relative; justify-content: center; width: 38px; align-self: stretch; background: #453454; }
-  #sketchybar-desktop-preview [data-layout="prompt"] .sk-focus-slot::after { content: ""; position: absolute; top: 0; bottom: 0; left: 100%; width: 12px; background: #453454; clip-path: polygon(0 0, 100% 50%, 0 100%); }
-  #sketchybar-desktop-preview [data-layout="prompt"] .sk-clock { padding: 0 12px 0 20px; }
-  #sketchybar-desktop-preview[data-focus="Off"] [data-layout="prompt"] .sk-clock { padding-left: 12px; }
   #sketchybar-desktop-preview .sk-snapshot, #sketchybar-desktop-preview .sk-source { margin-top: 8px; color: light-dark(#454c51, #b9bfc6); font: 12px -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.5; color-scheme: light dark; }
   #sketchybar-desktop-preview [hidden] { display: none !important; }
   #sketchybar-desktop-preview[data-view="Screen proportions"] .sk-desktop { height: auto; aspect-ratio: var(--sk-aspect); border-radius: 0; }
@@ -105,11 +79,11 @@
   sections.forEach(section => {section.querySelector('.sk-mount').append(template.content.cloneNode(true)); section.querySelector('.sk-source').textContent = data.designs.find(d => d.name === section.dataset.variant).source;});
   function restore(saved) {
     const values = (saved?.privateContent || saved?.modelContent || saved)?.sketchybarDesign;
-    if (!values || ![3,4,5].includes(values.version)) return;
-    const previous = values.version === 3 ? values : values.shared;
+    if (!values || ![4,5].includes(values.version)) return;
+    const previous = values.shared;
     for (const [key,options] of Object.entries(choices)) if (options.includes(previous?.[key])) shared[key] = previous[key];
     if (typeof previous?.space === 'string') shared.space = previous.space;
-    const stored = values.version === 3 ? {'Grouped':values} : values.appearances;
+    const stored = values.appearances;
     for (const [name,appearance] of Object.entries(appearances)) {
       const source = stored?.[name]; if (!source) continue;
       for (const [key,min,max] of [['height',32,48],['fontSize',11,16],['gap',0,20],['radius',0,20],['opacity',40,100]]) if (Number.isFinite(source[key])) appearance[key] = Math.max(min,Math.min(max,source[key]));
@@ -134,15 +108,13 @@
       const design = data.designs.find(d => d.name === section.dataset.variant),appearance = appearances[design.name];
       const desktop = section.querySelector('.sk-desktop');
       for (const [name,key] of [['height','height'],['font-size','fontSize'],['gap','gap'],['radius','radius']]) desktop.style.setProperty('--sk-' + name,appearance[key] + 'px');
-      const fonts = {Hack:'"Sketchybar Hack", monospace',Fira:'"Sketchybar Fira", monospace',Plex:'"Sketchybar Plex", monospace'};
-      desktop.style.setProperty('--sk-font',fonts[design.font]);
-      desktop.style.setProperty('--sk-weight',design.font === 'Hack' ? 700 : 500);
-      desktop.style.setProperty('--sk-workspace-size',(design.workspaceSize ?? appearance.fontSize) + 'px');
+      desktop.style.setProperty('--sk-font','"Sketchybar Plex", monospace');
+      desktop.style.setProperty('--sk-weight',500);
+      desktop.style.setProperty('--sk-workspace-size',appearance.fontSize + 'px');
       if (design.name === data.selectedDesign) desktop.style.setProperty('--sk-text','#' + data.config.textColor.slice(4));
       desktop.style.setProperty('--sk-accent',appearance.accent);
       desktop.style.setProperty('--sk-group-color',`rgb(40 42 54 / ${appearance.opacity / 100})`);
-      desktop.style.setProperty('--sk-prompt-space',`rgb(68 71 90 / ${appearance.opacity / 100})`);
-      desktop.style.setProperty('--sk-group-height',(appearance.height - (design.layout === 'terminal' ? 0 : 8)) + 'px');
+      desktop.style.setProperty('--sk-group-height',(appearance.height - 8) + 'px');
       const group = section.querySelector('.sk-spaces'),key = JSON.stringify(spaces);
       if (group.dataset.source !== key) {
         group.replaceChildren(...spaces.map(id => {const button = document.createElement('button'); button.type = 'button'; button.className = 'sk-space cursor-interaction'; button.dataset.space = id; button.textContent = id; button.setAttribute('aria-label','Workspace ' + id); return button;}));
@@ -175,7 +147,7 @@
       tweak.addSlider(appearance,'height',{label:'Bar height',min:32,max:48,unit:'px',reference:'bar.height'});
       tweak.addSlider(appearance,'fontSize',{label:'Text size',min:11,max:16,unit:'px',reference:'label.font.size'});
       tweak.addSlider(appearance,'gap',{label:'Group spacing',min:0,max:20,unit:'px',reference:'item.padding'});
-      if (section.dataset.variant !== 'Terminal Line') tweak.addSlider(appearance,'radius',{label:'Corners',min:0,max:20,unit:'px',reference:'bracket.background.corner_radius'});
+      tweak.addSlider(appearance,'radius',{label:'Corners',min:0,max:20,unit:'px',reference:'bracket.background.corner_radius'});
       tweak.addSlider(appearance,'opacity',{label:'Surface opacity',min:40,max:100,unit:'%',reference:'bracket.background.color'});
       tweak.addColorPicker(appearance,'accent',{label:'Selected workspace',reference:'space.background.color'});
     }
