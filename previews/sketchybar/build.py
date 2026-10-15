@@ -20,8 +20,7 @@ def config_values(path):
         return dict(token.split('=', 1) for token in shlex.split(text, comments=True) if '=' in token)
 
     b, d, g = properties(bar[1]), properties(defaults[1]), properties(groups[1])
-    fonts = {('Hack Nerd Font', 'Bold'): 'Hack', ('IBM Plex Mono', 'Medium'): 'Plex'}
-    font = fonts.get(tuple(d['label.font'].split(':')[:2]))
+    font = 'Plex' if d['label.font'].split(':')[:2] == ['IBM Plex Mono', 'Medium'] else None
     if font is None:
         raise ValueError('Create a matching browser font asset before changing the native font.')
     return {'height': int(b['height']), 'labelSize': float(d['label.font'].rsplit(':', 1)[1]),
@@ -49,8 +48,6 @@ def main():
     source = (folder / 'desktop-preview.html').read_text()
     replacements = {
         '<!-- PREVIEW_DATA -->': json.dumps(data, ensure_ascii=False).replace('<', '\\u003c'),
-        '__HACK_FONT__': 'data:font/woff;base64,' + base64.b64encode((folder / 'assets/hack-nerd-bold-subset.woff').read_bytes()).decode(),
-        '__FIRA_FONT__': 'data:font/woff;base64,' + base64.b64encode((folder / 'assets/fira-code-medium-subset.woff').read_bytes()).decode(),
         '__PLEX_FONT__': 'data:font/ttf;base64,' + base64.b64encode((folder / 'assets/ibm-plex-mono-medium.ttf').read_bytes()).decode(),
         '__MONET_IMAGE__': 'data:image/jpeg;base64,' + base64.b64encode((folder / 'assets/monet.jpg').read_bytes()).decode(),
     }

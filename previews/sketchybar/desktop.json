@@ -9,10 +9,7 @@
   "focusSamples": {"Work": "briefcase.fill", "Do Not Disturb": "moon.fill", "Unavailable": "questionmark.circle"},
   "selectedDesign": "Dracula Glass",
   "designs": [
-    {"name": "Dracula Glass", "layout": "glass", "font": "Plex", "height": 38, "fontSize": 14, "gap": 10, "radius": 8, "accent": "#bd93f9", "opacity": 60, "source": "Selected design · IBM Plex Mono Medium · 14 pt · Dracula · 60% glass"},
-    {"name": "Grouped", "layout": "grouped", "font": "Hack", "height": 40, "fontSize": 14, "workspaceSize": 17, "gap": 10, "radius": 12, "accent": "#3b9781", "opacity": 80, "source": "Previous Grouped · Hack Nerd Font · Three groups"},
-    {"name": "Terminal Line", "layout": "terminal", "font": "Fira", "height": 34, "fontSize": 14, "gap": 12, "radius": 0, "accent": "#bd93f9", "opacity": 60, "source": "tmux + Obsidian · Bracketed selection · Reduced chrome"},
-    {"name": "Prompt Segments", "layout": "prompt", "font": "Fira", "height": 38, "fontSize": 14, "gap": 0, "radius": 12, "accent": "#bd93f9", "opacity": 95, "source": "Powerlevel10k · Joined segments · Slanted separators"}
+    {"name": "Dracula Glass", "layout": "glass", "font": "Plex", "height": 38, "fontSize": 14, "gap": 10, "radius": 8, "accent": "#bd93f9", "opacity": 60, "source": "Selected design · IBM Plex Mono Medium · 14 pt · Dracula · 60% glass"}
   ],
   "limitations": ["Snapshot values are frozen. The native candidate queries AeroSpace dynamically.", "The enabled Focus could not be read because macOS denied database access. Work is a labeled design sample using the verified briefcase.fill SF Symbol.", "Dracula Glass with IBM Plex Mono is the selected native candidate in the isolated worktree. The installed configuration remains unchanged.", "Bar detail reflows at narrow widths. Screen proportions preserves monitor dimensions.", "The desktop capture did not provide the wallpaper. Placement uses cover as a preview assumption."]
 }
