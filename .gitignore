@@ -12,6 +12,9 @@ Icon?
 .vscode/
 *~
 
+# claude
+.claude
+
 # shell history & logs
 .zsh_history
 .bash_history

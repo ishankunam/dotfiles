@@ -36,7 +36,12 @@ inner.vertical = 10
 inner.horizontal = 10
 outer.left = 10
 outer.right = 10
-outer.top = 52 # SketchyBar visible bottom (42) + edge gap (10)
+# macOS reserves 32 points above windows on the built-in display.
+# Both settings place windows 10 points below SketchyBar's visible bottom.
+outer.top = [
+    { monitor."built-in" = 20 },
+    52,
+]
 outer.bottom = 10
 
 # ---------------
