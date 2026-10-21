@@ -1,6 +1,7 @@
 """Fixture checks. No native service calls or Focus database access."""
 import contextlib
 import fcntl
+import hashlib
 import importlib.util
 import io
 import json
@@ -39,7 +40,8 @@ class Plugins(unittest.TestCase):
         self.assertNotIn('chevron', flat)
         self.assertIn('label.font=IBM Plex Mono:Medium:14.0', flat)
         self.assertIn(['--set', 'clock', 'update_freq=10', 'icon.drawing=off'], [flat[i:i+4] for i in range(len(flat))])
-        self.assertIn(['--add', 'bracket', 'status', 'caffeine', 'focus', 'clock'], [flat[i:i+6] for i in range(len(flat))])
+        self.assertIn(['--add', 'bracket', 'status', 'caffeine', 'focus'], [flat[i:i+5] for i in range(len(flat))])
+        self.assertIn(['--add', 'bracket', 'clock_group', 'clock'], [flat[i:i+4] for i in range(len(flat))])
         self.assertIn(['--subscribe', 'caffeine', 'system_woke'], [flat[i:i+3] for i in range(len(flat))])
         self.assertIn('update_freq=0', flat)
         self.assertIn(['--subscribe', 'focus', 'focus_changed', 'system_woke'], [flat[i:i+4] for i in range(len(flat))])
@@ -147,6 +149,26 @@ class Plugins(unittest.TestCase):
         self.assertIn('icon=?', arguments)
         self.assertIn('background.image.drawing=off', arguments)
         self.assertNotIn('label=Custom Focus', arguments)
+
+    def test_focus_uses_native_symbol_only_for_an_exact_known_image(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            image = Path(temporary) / 'focus.png'
+            image.write_bytes(b'known-focus-image')
+            digest = hashlib.sha256(image.read_bytes()).hexdigest()
+            native = Path(temporary) / 'native.png'
+            with patch.dict(focus.NATIVE_FOCUS_IMAGES, {digest: 'moon.fill'}, clear=True), patch.object(focus, 'render_symbol', return_value=native) as render:
+                self.assertEqual(focus.native_image(image), native)
+                image.write_bytes(b'another-custom-focus-image')
+                self.assertEqual(focus.native_image(image), image)
+                render.assert_called_once_with('moon.fill')
+
+    def test_focus_native_render_failure_preserves_the_supplied_icon(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            image = Path(temporary) / 'focus.png'
+            image.write_bytes(b'known-focus-image')
+            digest = hashlib.sha256(image.read_bytes()).hexdigest()
+            with patch.dict(focus.NATIVE_FOCUS_IMAGES, {digest: 'moon.fill'}, clear=True), patch.object(focus, 'render_symbol', return_value=None):
+                self.assertEqual(focus.native_image(image), image)
 
     @unittest.skipUnless(sys.platform == 'darwin', 'AppKit requires macOS')
     def test_real_png_bytes_publish_a_normalized_icon_without_contacting_the_bar(self):

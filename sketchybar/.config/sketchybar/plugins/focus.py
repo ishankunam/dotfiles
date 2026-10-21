@@ -10,6 +10,17 @@ import sys
 import tempfile
 
 
+# Exact PNG fingerprints of this setup's five verified Shortcuts glyphs.
+# Unknown or changed glyphs retain their supplied image instead of guessing a mode.
+NATIVE_FOCUS_IMAGES = {
+    '6354eeab8f80155083e2ad1c5b1840aaa76ca6ec24a28b15c54b640f1e17aa18': 'moon.fill',
+    'be5f7311b627b73d5ed78b886017764886d1d9b7ca0857c707d128e7ab663891': 'building.2.fill',
+    '99f9220449cb9d270ac2853a9b823ea3e79d5415851799ee4f888bbc606ab41d': 'curlybraces',
+    '8e1e3427300cf3ebb4a9cd635ebc63a05488a3cc71d402e85d79af061e5d17a0': 'sunset.fill',
+    '2cbc3ac6f29e10388b159b3e4b81e5c75798737ed7f7a348d5f6d914520d484b': 'books.vertical.fill',
+}
+
+
 def cache_folder():
     folder = Path.home() / 'Library/Caches/sketchybar-focus'
     folder.mkdir(mode=0o700, exist_ok=True)
@@ -34,6 +45,14 @@ def render_symbol(symbol):
 
 def render_image(image):
     return render(Path(__file__).with_name('focus_image.swift'), str(image), image.read_bytes())
+
+
+def native_image(image):
+    try:
+        symbol = NATIVE_FOCUS_IMAGES.get(hashlib.sha256(image.read_bytes()).hexdigest())
+    except OSError:
+        return image
+    return (render_symbol(symbol) or image) if symbol else image
 
 
 def read_focus():
@@ -101,7 +120,7 @@ def display_arguments(focus, image):
 
 def main():
     focus = read_focus()
-    image = focus['image'] if focus['state'] == 'on' else None
+    image = native_image(focus['image']) if focus['state'] == 'on' else None
     if focus['state'] == 'unavailable':
         image = render_symbol('questionmark.circle')
     subprocess.run([os.environ.get('BAR_NAME', 'sketchybar'), '--set', os.environ.get('NAME', 'focus'),

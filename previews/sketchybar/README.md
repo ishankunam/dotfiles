@@ -104,7 +104,13 @@ The shortcut reads the current Focus on both transitions, so an old mode's off e
 The AppKit renderer crops transparent padding, preserves the symbol shape, and tints it white in a cached 36×36 PNG.
 It uses the installed Swift toolchain and standard AppKit. It creates no window or native settings.
 It displays the logo to the left of the time and hides the item when Focus is off.
-It does not substitute another mode's logo.
+Five verified glyph images use native Apple symbols: `moon.fill` for Do Not Disturb,
+`building.2.fill` for in class, `curlybraces` for silence, `sunset.fill` for sleep,
+and `books.vertical.fill` for work.
+The reader recognizes exact PNG content fingerprints, then renders the matching SF Symbol.
+This keeps the existing Shortcuts automation unchanged and does not infer the active mode from its name.
+Unknown images, changed image versions, and failed native renders retain the supplied bitmap.
+New glyph versions need explicit registration to use native rendering.
 The reader never sets Focus, writes the Focus database, or changes macOS privacy permissions.
 Battery and volume items are absent. The clock uses `h:mm AM/PM` without a date.
 
@@ -137,7 +143,11 @@ Diagnostics appear under `~/Library/Caches/sketchybar-caffeine/<bar-key>/listene
 
 The item uses Raycast Coffee's outline mug, bundled as a white 36×36 transparent PNG.
 It displays the image at 18 points. Caffeine startup loads the bundled image without compiling a renderer.
-The status order is Caffeine, Focus, then the clock. The current mug and moon have about 11-point visible gaps.
+The status order is Caffeine, Focus, then the clock.
+Caffeine and Focus share one glass pill. The clock has its own pill, separated by 7 points.
+The icon pill uses 8-point internal edge padding and about 11 points of visible space between the current mug and moon.
+The clock pill uses symmetric 9-point text insets.
+The icon pill collapses to one icon when either is off, and disappears when both are off.
 The mug background has a 1-point optical adjustment to align it with the text.
 The original SVG, MIT license, and regeneration instructions live in `sketchybar/.config/sketchybar/assets/caffeine/`.
 No Raycast extension files, hotkeys, or power settings change.

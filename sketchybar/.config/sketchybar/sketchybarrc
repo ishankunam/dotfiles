@@ -86,17 +86,21 @@ group=(
 # Right items grow leftward: Caffeine, Focus, then the clock.
 "$BAR_NAME" --add event focus_changed \
            --add item clock right \
-           --set clock update_freq=10 icon.drawing=off padding_left=0 \
-             label.padding_left=2 script="$PLUGIN_DIR/clock.sh" \
+           --set clock update_freq=10 icon.drawing=off script="$PLUGIN_DIR/clock.sh" \
            --subscribe clock system_woke \
+           --add item status_gap right \
+           --set status_gap width=7 padding_left=0 padding_right=0 \
+             icon.drawing=off label.drawing=off \
            --add item focus right \
-           --set focus label.drawing=off width=24 padding_right=0 background.color=0x00000000 \
-             background.image.scale=0.5 update_freq=0 updates=on \
+           --set focus label.drawing=off width=26 padding_left=4 padding_right=4 \
+             background.color=0x00000000 background.image.scale=0.5 \
+             background.image.padding_left=4 update_freq=0 updates=on \
              script="$PLUGIN_DIR/focus.sh" \
            --subscribe focus focus_changed system_woke \
            --add item caffeine right \
-           --set caffeine drawing=off icon.drawing=off label.drawing=off width=24 \
-             padding_right=2 background.color=0x00000000 background.image.scale=0.5 \
+           --set caffeine drawing=off icon.drawing=off label.drawing=off width=26 \
+             padding_left=4 padding_right=4 background.color=0x00000000 background.image.scale=0.5 \
+             background.image.padding_left=4 \
              background.image.y_offset=-1 \
              update_freq=0 updates=on script="$PLUGIN_DIR/caffeine.sh" \
            --subscribe caffeine system_woke
@@ -106,8 +110,10 @@ group=(
 # These settings are a design candidate. The browser sandbox does not run them.
 "$BAR_NAME" --add bracket application front_app \
            --set application "${group[@]}" \
-           --add bracket status caffeine focus clock \
-           --set status "${group[@]}"
+           --add bracket status caffeine focus \
+           --set status "${group[@]}" \
+           --add bracket clock_group clock \
+           --set clock_group "${group[@]}"
 
 ##### Force all scripts to run the first time (never do this in a script) #####
 "$BAR_NAME" --update
