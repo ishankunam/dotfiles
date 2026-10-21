@@ -1,5 +1,6 @@
 """Fixture checks. No native service calls or Focus database access."""
 import contextlib
+import fcntl
 import importlib.util
 import io
 import json
@@ -22,7 +23,7 @@ def module(name):
     return result
 
 
-workspaces, focus = module('workspaces'), module('focus')
+workspaces, focus, caffeine = module('workspaces'), module('focus'), module('caffeine')
 
 
 class Plugins(unittest.TestCase):
@@ -38,7 +39,8 @@ class Plugins(unittest.TestCase):
         self.assertNotIn('chevron', flat)
         self.assertIn('label.font=IBM Plex Mono:Medium:14.0', flat)
         self.assertIn(['--set', 'clock', 'update_freq=10', 'icon.drawing=off'], [flat[i:i+4] for i in range(len(flat))])
-        self.assertIn(['--add', 'bracket', 'status', 'focus', 'clock'], [flat[i:i+5] for i in range(len(flat))])
+        self.assertIn(['--add', 'bracket', 'status', 'focus', 'caffeine', 'clock'], [flat[i:i+6] for i in range(len(flat))])
+        self.assertIn(['--subscribe', 'caffeine', 'system_woke'], [flat[i:i+3] for i in range(len(flat))])
         self.assertIn('update_freq=0', flat)
         self.assertIn(['--subscribe', 'focus', 'focus_changed', 'system_woke'], [flat[i:i+4] for i in range(len(flat))])
         self.assertEqual(commands[-1], ['--update'])
@@ -185,6 +187,55 @@ class Plugins(unittest.TestCase):
             result = subprocess.run(['/bin/sh', '-c', script], env={'CLOCK_FIXTURE': value, 'NAME': 'clock', 'PATH': '/usr/bin:/bin'}, capture_output=True, text=True, check=True)
             self.assertEqual(result.stdout.splitlines(), ['--set', 'clock', 'label=' + expected])
             self.assertIn("date '+%I:%M %p'", source)
+
+    def test_caffeine_overlapping_sessions_keep_mug_until_last_process_exits(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(caffeine, 'cache_folder', return_value=Path(temporary)), patch.object(caffeine, 'render_mug', return_value=Path('/fixture/mug.png')), patch.object(caffeine.subprocess, 'run') as run:
+            for pids, expected in [({101, 102}, 'on'), ({102}, 'on'), (set(), 'off')]:
+                with patch.object(caffeine, 'process_ids', return_value=pids):
+                    self.assertEqual(caffeine.refresh(), pids)
+                command = run.call_args.args[0]
+                self.assertIn('drawing=' + expected, command)
+                if pids:
+                    self.assertIn('background.image=/fixture/mug.png', command)
+
+    def test_caffeine_failed_process_query_never_hides_the_mug(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(caffeine, 'cache_folder', return_value=Path(temporary)), patch.object(caffeine.subprocess, 'run') as run:
+            run.return_value = subprocess.CompletedProcess([], 2, '', 'Cannot get process list')
+            with self.assertRaisesRegex(RuntimeError, 'Cannot get process list'):
+                caffeine.refresh()
+            self.assertEqual(run.call_count, 1)
+            self.assertEqual(run.call_args.args[0][0], '/usr/bin/pgrep')
+
+    def test_caffeine_exit_between_snapshot_and_watch_rechecks_state(self):
+        watched = set()
+        with patch.object(caffeine, 'refresh', side_effect=[{101}, set()]) as refresh, patch.object(caffeine, 'watch_process', return_value=False):
+            caffeine.reconcile(object(), watched)
+        self.assertEqual(refresh.call_count, 2)
+        self.assertEqual(watched, set())
+
+    def test_caffeine_listener_survives_item_removal_during_reload(self):
+        watched = {101}
+        unavailable = subprocess.CalledProcessError(1, ['sketchybar', '--set', 'caffeine'])
+        with patch.object(caffeine, 'refresh', side_effect=[unavailable, {101}]) as refresh, contextlib.redirect_stderr(io.StringIO()):
+            caffeine.reconcile(object(), watched)
+            caffeine.reconcile(object(), watched)
+        self.assertEqual(refresh.call_count, 2)
+        self.assertEqual(watched, {101})
+
+    def test_caffeine_duplicate_listener_never_starts_another_stream(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(caffeine, 'cache_folder', return_value=Path(temporary)), patch.object(caffeine, 'process_ids') as processes:
+            with (Path(temporary) / 'listener.lock').open('a') as lock:
+                fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                self.assertEqual(caffeine.listen(), 0)
+            processes.assert_not_called()
+
+    @unittest.skipUnless(sys.platform == 'darwin', 'AppKit requires macOS')
+    def test_caffeine_real_mug_renders_once_and_uses_transparent_png(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(caffeine, 'cache_folder', return_value=Path(temporary)), patch.object(caffeine.subprocess, 'run', wraps=subprocess.run) as run:
+            image = caffeine.render_mug()
+            self.assertEqual(struct.unpack('>II', image.read_bytes()[16:24]), (36, 36))
+            self.assertEqual(caffeine.render_mug(), image)
+            self.assertEqual(run.call_count, 1)
 
 
 if __name__ == '__main__':
