@@ -96,7 +96,15 @@ group=(
              background.color=0x00000000 background.image.scale=0.5 \
              background.image.padding_left=4 update_freq=0 updates=on \
              script="$PLUGIN_DIR/focus.sh" \
-           --subscribe focus focus_changed system_woke \
+             click_script="\"$PLUGIN_DIR/focus_menu.sh\" toggle" \
+             popup.align=right popup.height=32 popup.y_offset=2 \
+             popup.background.color=0xff282a36 popup.background.corner_radius=12 \
+             popup.background.border_width=1 popup.background.border_color=0x28ffffff \
+           --subscribe focus focus_changed system_woke mouse.exited.global \
+           --add item focus_menu_controller right \
+           --set focus_menu_controller drawing=off update_freq=0 updates=on \
+             script="\"$PLUGIN_DIR/focus_menu.sh\" refresh" \
+           --subscribe focus_menu_controller focus_changed system_woke \
            --add item caffeine right \
            --set caffeine drawing=off icon.drawing=off label.drawing=off width=26 \
              padding_left=4 padding_right=4 background.color=0x00000000 background.image.scale=0.5 \

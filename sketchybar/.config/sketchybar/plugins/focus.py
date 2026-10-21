@@ -109,7 +109,10 @@ def publish_image_bytes(data):
 
 
 def display_arguments(focus, image):
-    arguments = ['drawing=' + ('off' if focus['state'] == 'off' else 'on'), 'label.drawing=off']
+    visible = focus['state'] == 'on' and image is not None
+    arguments = ['drawing=' + ('on' if visible else 'off'), 'label.drawing=off']
+    if not visible:
+        arguments += ['popup.drawing=off']
     if image:
         arguments += ['icon.drawing=off', 'background.drawing=on', 'background.image=' + str(image),
                       'background.image.drawing=on']
@@ -118,12 +121,10 @@ def display_arguments(focus, image):
     return arguments
 
 
-def main():
+def main(name=None):
     focus = read_focus()
     image = native_image(focus['image']) if focus['state'] == 'on' else None
-    if focus['state'] == 'unavailable':
-        image = render_symbol('questionmark.circle')
-    subprocess.run([os.environ.get('BAR_NAME', 'sketchybar'), '--set', os.environ.get('NAME', 'focus'),
+    subprocess.run([os.environ.get('BAR_NAME', 'sketchybar'), '--set', name or os.environ.get('NAME', 'focus'),
                     *display_arguments(focus, image)], check=True, timeout=3)
 
 

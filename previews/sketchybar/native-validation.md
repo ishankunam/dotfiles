@@ -24,3 +24,14 @@ Further Focus changes require the user's explicit choice. The current mode remai
 
 Shortcuts export required an unavailable iCloud sign-in. The helper's source is the two-action recipe in README.md.
 No privacy permissions were expanded.
+
+## Focus picker validation, 2026-10-21
+
+The approved picker is installed in the live bar. Five one-action Shortcuts toggle the configured modes.
+The native test used each popup row's `NAME` environment and verified all five resulting Focus glyphs.
+Each selected row used its native colored badge and retained a transparent row background.
+Live `mouse.entered` and `mouse.exited` handler calls enabled and cleared the purple highlight.
+These calls verified native properties, rather than physical pointer movement.
+The original Focus state was off. The test restored it and confirmed that the icon was hidden and the popup was closed.
+Twenty-six fixture checks passed, including the actual popup-row environment, failure refresh, unknown-mode handling, and native badge rendering.
+The background SketchyBar process was unavailable as a computer-use app surface. Popup placement and physical mouse interaction on both monitors remain visually unverified.

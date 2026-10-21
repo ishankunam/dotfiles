@@ -25,6 +25,8 @@ def module(name):
 
 
 workspaces, focus, caffeine = module('workspaces'), module('focus'), module('caffeine')
+with patch.dict(sys.modules, {'focus': focus}):
+    focus_menu = module('focus_menu')
 
 
 class Plugins(unittest.TestCase):
@@ -44,7 +46,7 @@ class Plugins(unittest.TestCase):
         self.assertIn(['--add', 'bracket', 'clock_group', 'clock'], [flat[i:i+4] for i in range(len(flat))])
         self.assertIn(['--subscribe', 'caffeine', 'system_woke'], [flat[i:i+3] for i in range(len(flat))])
         self.assertIn('update_freq=0', flat)
-        self.assertIn(['--subscribe', 'focus', 'focus_changed', 'system_woke'], [flat[i:i+4] for i in range(len(flat))])
+        self.assertIn(['--subscribe', 'focus', 'focus_changed', 'system_woke', 'mouse.exited.global'], [flat[i:i+5] for i in range(len(flat))])
         self.assertEqual(commands[-1], ['--update'])
 
     def test_workspace_creation_removal_and_selection(self):
@@ -130,25 +132,97 @@ class Plugins(unittest.TestCase):
             self.assertEqual(focus.read_focus(), {'state': 'off', 'image': None})
             with patch.object(focus.subprocess, 'run') as run:
                 focus.main()
-                self.assertEqual(run.call_args.args[0], ['sketchybar', '--set', 'focus', 'drawing=off', 'label.drawing=off', 'icon=?', 'icon.drawing=on', 'background.drawing=off', 'background.image.drawing=off'])
+                self.assertEqual(run.call_args.args[0], ['sketchybar', '--set', 'focus', 'drawing=off', 'label.drawing=off', 'popup.drawing=off', 'icon=?', 'icon.drawing=on', 'background.drawing=off', 'background.image.drawing=off'])
 
     def test_focus_rendering_preserves_unknown_state(self):
-        for state, expected in [('off', 'drawing=off'), ('on', 'background.image=/fixture/logo.png'), ('unavailable', 'background.image=/fixture/logo.png')]:
+        for state, expected in [('off', 'drawing=off'), ('on', 'background.image=/fixture/logo.png'), ('unavailable', 'drawing=off')]:
             with patch.object(focus, 'read_focus', return_value={'state': state, 'image': Path('/fixture/logo.png') if state == 'on' else None}), patch.object(focus, 'render_symbol', return_value=Path('/fixture/logo.png')) as render, patch.object(focus.subprocess, 'run') as run:
                 focus.main()
                 self.assertIn(expected, run.call_args.args[0])
                 self.assertIn('label.drawing=off', run.call_args.args[0])
                 self.assertNotIn('label=Work', run.call_args.args[0])
-                if state == 'unavailable':
-                    render.assert_called_once_with('questionmark.circle')
-                else:
-                    render.assert_not_called()
+                render.assert_not_called()
 
     def test_missing_symbol_never_becomes_a_different_focus_logo(self):
         arguments = focus.display_arguments({'state': 'on'}, None)
         self.assertIn('icon=?', arguments)
         self.assertIn('background.image.drawing=off', arguments)
         self.assertNotIn('label=Custom Focus', arguments)
+        self.assertIn('drawing=off', arguments)
+        self.assertIn('popup.drawing=off', arguments)
+
+    def test_focus_picker_keeps_only_icon_selection_and_hover_background(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(focus, 'cache_folder', return_value=Path(temporary)), patch.object(focus_menu, 'bar') as bar, patch.object(focus_menu, 'badge', return_value=Path('/badge.png')), patch.object(focus, 'read_focus', return_value={'state': 'off', 'image': None}):
+            bar.return_value = {'items': []}
+            focus_menu.refresh()
+            arguments = bar.call_args.args
+            names = [value for value in arguments if value.startswith('label=')]
+            self.assertEqual(names, ['label=do not disturb', 'label=silence', 'label=in class', 'label=work', 'label=sleep'])
+            self.assertNotIn('background.drawing=on', arguments)
+            self.assertIn('background.color=0x29bd93f9', arguments)
+            self.assertIn('background.corner_radius=5', arguments)
+            self.assertNotIn('update_freq=2', arguments)
+            bar.return_value = {'items': [focus_menu.PREFIX + mode[0] for mode in focus_menu.MODES]}
+            focus_menu.refresh()
+            self.assertNotIn('--add', bar.call_args.args)
+            with patch.dict('os.environ', {'NAME': 'focus.mode.work', 'SENDER': 'mouse.entered'}):
+                focus_menu.hover()
+                self.assertIn('background.drawing=on', bar.call_args.args)
+                self.assertIn('label.color=0xffbd93f9', bar.call_args.args)
+            with patch.dict('os.environ', {'NAME': 'focus.mode.work', 'SENDER': 'mouse.exited'}):
+                focus_menu.hover()
+                self.assertIn('background.drawing=off', bar.call_args.args)
+
+    def test_focus_picker_never_opens_when_off_or_unavailable(self):
+        for state in ('off', 'unavailable'):
+            with patch.object(focus, 'read_focus', return_value={'state': state, 'image': None}), patch.object(focus_menu, 'close') as close, patch.object(focus_menu, 'refresh') as refresh:
+                focus_menu.toggle()
+                close.assert_called_once()
+                refresh.assert_not_called()
+        with patch.object(focus, 'read_focus', return_value={'state': 'on', 'image': Path('/valid.png')}), patch.object(focus_menu, 'refresh') as refresh, patch.object(focus_menu, 'bar') as bar:
+            focus_menu.toggle()
+            refresh.assert_called_once()
+            self.assertIn('popup.drawing=toggle', bar.call_args.args)
+            self.assertEqual(bar.call_args.args.count('background.drawing=off'), 5)
+
+    def test_focus_picker_selects_through_shortcuts_and_reads_actual_result(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(focus, 'cache_folder', return_value=Path(temporary)), patch.object(focus_menu, 'close') as close, patch.object(focus, 'main') as display, patch.object(focus_menu, 'refresh') as refresh, patch.object(focus_menu.subprocess, 'run') as run:
+            with patch.dict('os.environ', {'NAME': 'focus.mode.in-class'}):
+                focus_menu.select('in-class')
+            close.assert_called_once()
+            display.assert_called_once_with('focus')
+            refresh.assert_called_once()
+            self.assertEqual([call.args[0] for call in run.call_args_list], [
+                ['/usr/bin/shortcuts', 'run', 'SketchyBar Focus: in class'],
+                ['/usr/bin/shortcuts', 'run', 'SketchyBar Focus']])
+            run.reset_mock()
+            with self.assertRaises(ValueError):
+                focus_menu.select('$(touch /tmp/not-a-mode)')
+            run.assert_not_called()
+            run.side_effect = [subprocess.CalledProcessError(1, ['shortcuts']), subprocess.CompletedProcess([], 0)]
+            with self.assertRaises(subprocess.CalledProcessError):
+                focus_menu.select('work')
+            self.assertEqual(run.call_args.args[0], ['/usr/bin/shortcuts', 'run', 'SketchyBar Focus'])
+
+    def test_focus_picker_identifies_only_exact_known_glyphs(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            image = Path(temporary) / 'focus.png'
+            image.write_bytes(b'known focus')
+            digest = hashlib.sha256(image.read_bytes()).hexdigest()
+            with patch.dict(focus.NATIVE_FOCUS_IMAGES, {digest: 'sunset.fill'}, clear=True):
+                self.assertEqual(focus_menu.active_mode({'state': 'on', 'image': image}), 'sleep')
+                image.write_bytes(b'new or unregistered mode')
+                self.assertIsNone(focus_menu.active_mode({'state': 'on', 'image': image}))
+
+    @unittest.skipUnless(sys.platform == 'darwin', 'AppKit requires macOS')
+    def test_native_focus_badges_render_at_double_resolution(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(focus, 'cache_folder', return_value=Path(temporary)):
+            for symbol, color in [('moon.fill', None), ('sunset.fill', '27a5ff')]:
+                image = focus_menu.badge(symbol, color)
+                self.assertIsNotNone(image)
+                png = image.read_bytes()
+                self.assertEqual(struct.unpack('>II', png[16:24]), (48, 48))
+                self.assertEqual(png[25], 6)
 
     def test_focus_uses_native_symbol_only_for_an_exact_known_image(self):
         with tempfile.TemporaryDirectory() as temporary:

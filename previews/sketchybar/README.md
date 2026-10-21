@@ -57,7 +57,8 @@ The candidate uses Python 3, already available on this machine, with standard-li
 
 The Focus item subscribes to `focus_changed` and has `update_freq=0`.
 It reads `~/Library/Caches/sketchybar-focus/state.json` at startup, after waking, and when that event arrives.
-The bar never launches Shortcuts. It does not access the protected Focus database.
+State refreshes never launch Shortcuts. The picker launches Shortcuts only after a mode click.
+Neither path accesses the protected Focus database.
 The shared **SketchyBar Focus** shortcut publishes the state when any configured Focus turns on or off.
 This recipe is its reproducible source. Shortcuts export requires an unavailable iCloud sign-in on this machine.
 
@@ -95,7 +96,8 @@ The publisher saves the icon and state before sending `sketchybar --trigger focu
 It receives PNG bytes through standard input. It does not assume image arguments are file paths.
 It emits no shell output. If the bar is stopped, the saved state remains available for its next startup.
 A successful off branch clears the active image reference. Old cached icons cannot become the current state.
-Missing or invalid state and invalid PNG input display a question mark instead of claiming Focus is off.
+Missing or invalid state and invalid PNG input hide the Focus item and close its picker.
+This does not claim that Focus is off. The publisher retains the unavailable state for diagnosis.
 An unavailable publication includes a short error reason in `state.json` for diagnosis.
 The state survives bar restarts. Deleting the cache requires running the shortcut again to initialize it.
 Startup and wake refresh the saved state without executing a shortcut.
@@ -113,6 +115,42 @@ Unknown images, changed image versions, and failed native renders retain the sup
 New glyph versions need explicit registration to use native rendering.
 The reader never sets Focus, writes the Focus database, or changes macOS privacy permissions.
 Battery and volume items are absent. The clock uses `h:mm AM/PM` without a date.
+
+## Focus quick switch
+
+Click the active Focus icon to open its native SketchyBar popup.
+The icon and picker remain hidden when Focus is off or no valid icon is available.
+Enable a Focus through macOS to make the picker available again.
+The five rows are **do not disturb**, **silence**, **in class**, **work**, and **sleep**.
+All labels are lowercase. The selected mode has a colored circular icon badge and no row background.
+Hovering a row uses the workspace highlight's purple (`0x29bd93f9`), purple text, and 5-point corners.
+The row background returns to transparent when the pointer leaves.
+Clicking a row closes the picker. Clicking the bar icon again toggles the picker.
+Leaving the bar and popup closes it through `mouse.exited.global`.
+
+Install these five shortcuts in the Shortcuts app, each with one **Set Focus** action:
+
+| Shortcut name | Action |
+| --- | --- |
+| `SketchyBar Focus: do not disturb` | Toggle **Do Not Disturb**. |
+| `SketchyBar Focus: silence` | Toggle **silence**. |
+| `SketchyBar Focus: in class` | Toggle **in class**. |
+| `SketchyBar Focus: work` | Toggle **work**. |
+| `SketchyBar Focus: sleep` | Toggle **sleep**. |
+
+In the action, click **Turn**, select **Toggle**, and select the exact configured Focus.
+The five shortcuts are installed on this Mac. Their names are the interface used by `focus_menu.py`.
+The selected mode toggles off. Selecting a different mode switches to that mode.
+The picker runs the existing **SketchyBar Focus** publisher afterward, then refreshes the bar and badges from its actual result.
+It never writes an assumed selection to the state cache. A lock ignores overlapping clicks while a switch runs.
+Normal state changes continue to arrive through the existing automations. No polling is added.
+
+`focus_badge.swift` renders native symbols into 48×48 transparent PNGs displayed at 24 points.
+The renderer caches both the inactive and selected badge for each mode.
+Only exact registered glyph fingerprints identify the selected mode. Unknown Focus icons remain visible in the bar without selecting a guessed row.
+Add new modes explicitly in `focus_menu.py`, register their verified glyphs, and install the corresponding toggle shortcut.
+Apple documents the [Shortcuts command-line interface](https://support.apple.com/guide/shortcuts-mac/apd455c82f02/mac).
+SketchyBar documents [native popups](https://felixkratz.github.io/SketchyBar/config/popups) and [mouse events](https://felixkratz.github.io/SketchyBar/config/events).
 
 ## Caffeine indicator
 
@@ -180,8 +218,8 @@ Convert SVG assets to PNG before using this native image interface.
 
 ## Workflow
 
-Each design round gets a branch and a draft PR. Only create them when the round has concrete changes.
-Rounds 1 to 7 are merged into `master`.
+Rounds 1 to 7 used branches and draft PRs and are merged into `master`.
+The user subsequently approved small appearance and Focus-picker changes as direct commits to local `master`.
 
 Keep native configuration candidates in an isolated worktree.
 Do not stow, reload, install, or start services during browser design rounds.
