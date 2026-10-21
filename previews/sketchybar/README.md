@@ -135,9 +135,9 @@ If the power-event stream itself stops, the listener logs the error and exits.
 A config reload or wake starts it again. There is no periodic recovery timer.
 Diagnostics appear under `~/Library/Caches/sketchybar-caffeine/<bar-key>/listener.log`.
 
-The existing AppKit renderer creates the `mug` SF Symbol as a cached 36×36 transparent PNG.
-The item displays it at 18 points. Startup warms the cache even when no session runs.
-This uses the same Python 3 and Swift toolchain as the existing plugins.
+The item uses Raycast Coffee's outline mug, bundled as a white 36×36 transparent PNG.
+It displays the image at 18 points. Caffeine startup loads the bundled image without compiling a renderer.
+The original SVG, MIT license, and regeneration instructions live in `sketchybar/.config/sketchybar/assets/caffeine/`.
 No Raycast extension files, hotkeys, or power settings change.
 Raycast's [Coffee implementation](https://github.com/raycast/extensions/blob/main/extensions/coffee/src/utils.ts)
 starts `/usr/bin/caffeinate`. Apple's [pmset implementation](https://github.com/apple-oss-distributions/PowerManagement/blob/main/pmset/pmset.m)

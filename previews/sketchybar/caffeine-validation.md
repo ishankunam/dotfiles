@@ -46,3 +46,16 @@ It remained active and recovered after the item returned.
 Raycast start/stop commands were not invoked during the trial.
 The installed Coffee extension was inspected and uses `/usr/bin/caffeinate`.
 No end-to-end screen-pixel latency measurement was made.
+
+## Raycast mug update
+
+The selected Raycast mug replaces the original Apple symbol.
+The plugin loads a bundled 36×36 transparent PNG at the existing 18-point scale.
+The SVG source and MIT license are included beside the PNG.
+The rendered PNG was visually inspected for the selected outline and transparent background.
+
+All 19 plugin checks passed with the bundled image.
+A separate native bar confirmed the exact asset path and scale.
+The icon remained immediately left of the clock on both displays.
+The same trial listener survived config reload and `system_woke`.
+The installed configuration remained unchanged.

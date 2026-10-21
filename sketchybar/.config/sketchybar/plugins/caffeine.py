@@ -35,14 +35,8 @@ def process_ids(name, oldest=False):
     return {int(value) for value in result.stdout.split()}
 
 
-def render_mug():
-    source = Path(__file__).with_name('focus_symbol.swift')
-    key = hashlib.sha256(source.read_bytes() + b'mug').hexdigest()
-    image = cache_folder() / (key + '.png')
-    if not image.exists():
-        subprocess.run(['/usr/bin/swift', str(source), 'mug', str(image)],
-                       capture_output=True, check=True, timeout=30)
-    return image
+def mug_image():
+    return Path(__file__).resolve().parents[1] / 'assets/caffeine/mug.png'
 
 
 def refresh():
@@ -52,7 +46,7 @@ def refresh():
         pids = process_ids('caffeinate')
         arguments = ['drawing=' + ('on' if pids else 'off')]
         if pids:
-            arguments += ['background.drawing=on', 'background.image=' + str(render_mug()),
+            arguments += ['background.drawing=on', 'background.image=' + str(mug_image()),
                           'background.image.drawing=on']
         subprocess.run([BAR, '--set', ITEM, *arguments], check=True,
                        capture_output=True, timeout=3)
@@ -174,8 +168,6 @@ def main():
                 raise SystemExit(0)
             signal.signal(signal.SIGTERM, stop)
             return listen()
-        # Warm the icon even when off so the first start needs no compilation.
-        render_mug()
         refresh()
         with (cache_folder() / 'listener.log').open('a') as log:
             subprocess.Popen([sys.executable, str(Path(__file__).resolve()), '--listen'],
