@@ -75,11 +75,16 @@ group=(
 # Additional position (e.g. center) are available, see:
 # https://felixkratz.github.io/SketchyBar/config/items#adding-items-to-sketchybar
 
-# Right items grow leftward, so Focus appears before the clock.
+# Right items grow leftward: Focus, Caffeine, then the clock.
 "$BAR_NAME" --add event focus_changed \
            --add item clock right \
            --set clock update_freq=10 icon.drawing=off script="$PLUGIN_DIR/clock.sh" \
            --subscribe clock system_woke \
+           --add item caffeine right \
+           --set caffeine drawing=off icon.drawing=off label.drawing=off width=24 \
+             background.color=0x00000000 background.image.scale=0.5 \
+             update_freq=0 updates=on script="$PLUGIN_DIR/caffeine.sh" \
+           --subscribe caffeine system_woke \
            --add item focus right \
            --set focus label.drawing=off width=24 background.color=0x00000000 \
              background.image.scale=0.5 update_freq=0 updates=on \
@@ -91,7 +96,7 @@ group=(
 # These settings are a design candidate. The browser sandbox does not run them.
 "$BAR_NAME" --add bracket application front_app \
            --set application "${group[@]}" \
-           --add bracket status focus clock \
+           --add bracket status focus caffeine clock \
            --set status "${group[@]}"
 
 ##### Force all scripts to run the first time (never do this in a script) #####

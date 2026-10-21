@@ -108,6 +108,41 @@ It does not substitute another mode's logo.
 The reader never sets Focus, writes the Focus database, or changes macOS privacy permissions.
 Battery and volume items are absent. The clock uses `h:mm AM/PM` without a date.
 
+## Caffeine indicator
+
+The native bar shows a white outline mug immediately left of the clock while any `caffeinate` process runs.
+This includes sessions started by Raycast's Coffee extension and sessions started in a terminal.
+The item hides when the last session exits. Overlapping sessions keep it visible.
+The browser snapshot does not include this live indicator.
+
+```text
+caffeinate starts → macOS power event → pmset terminal stream ┐
+                                                             ├→ read processes → update mug
+caffeinate exits → kqueue process notification ────────────────┘
+```
+
+The item uses `update_freq=0`. It reads the state at startup and after `system_woke`.
+One Python listener per bar reads `pmset -g assertionslog` through a pseudo-terminal.
+The pseudo-terminal prevents pipe buffering. macOS wakes the listener when a power event or watched process exit occurs.
+The listener uses a blocking kqueue without a timeout. It has no polling timer.
+Process-exit notifications cover manual stops and timer expiry, including exits immediately after assertion release.
+The initial event-stream marker forces another snapshot to close the subscription/startup race.
+
+The listener holds a file lock to prevent duplicates across wake events and config reloads.
+It watches the bar process and closes its event stream when that process exits.
+Temporary read or item-update failures preserve the last state and leave the listener running.
+If the power-event stream itself stops, the listener logs the error and exits.
+A config reload or wake starts it again. There is no periodic recovery timer.
+Diagnostics appear under `~/Library/Caches/sketchybar-caffeine/<bar-key>/listener.log`.
+
+The existing AppKit renderer creates the `mug` SF Symbol as a cached 36×36 transparent PNG.
+The item displays it at 18 points. Startup warms the cache even when no session runs.
+This uses the same Python 3 and Swift toolchain as the existing plugins.
+No Raycast extension files, hotkeys, or power settings change.
+Raycast's [Coffee implementation](https://github.com/raycast/extensions/blob/main/extensions/coffee/src/utils.ts)
+starts `/usr/bin/caffeinate`. Apple's [pmset implementation](https://github.com/apple-oss-distributions/PowerManagement/blob/main/pmset/pmset.m)
+subscribes to power-assertion change notifications.
+
 ## Selected design
 
 Dracula Glass uses IBM Plex Mono Medium for the workspace numbers, application name, and clock.
