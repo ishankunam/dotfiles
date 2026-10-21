@@ -189,7 +189,7 @@ class Plugins(unittest.TestCase):
             self.assertIn("date '+%I:%M %p'", source)
 
     def test_caffeine_overlapping_sessions_keep_mug_until_last_process_exits(self):
-        with tempfile.TemporaryDirectory() as temporary, patch.object(caffeine, 'cache_folder', return_value=Path(temporary)), patch.object(caffeine, 'render_mug', return_value=Path('/fixture/mug.png')), patch.object(caffeine.subprocess, 'run') as run:
+        with tempfile.TemporaryDirectory() as temporary, patch.object(caffeine, 'cache_folder', return_value=Path(temporary)), patch.object(caffeine, 'mug_image', return_value=Path('/fixture/mug.png')), patch.object(caffeine.subprocess, 'run') as run:
             for pids, expected in [({101, 102}, 'on'), ({102}, 'on'), (set(), 'off')]:
                 with patch.object(caffeine, 'process_ids', return_value=pids):
                     self.assertEqual(caffeine.refresh(), pids)
@@ -229,13 +229,11 @@ class Plugins(unittest.TestCase):
                 self.assertEqual(caffeine.listen(), 0)
             processes.assert_not_called()
 
-    @unittest.skipUnless(sys.platform == 'darwin', 'AppKit requires macOS')
-    def test_caffeine_real_mug_renders_once_and_uses_transparent_png(self):
-        with tempfile.TemporaryDirectory() as temporary, patch.object(caffeine, 'cache_folder', return_value=Path(temporary)), patch.object(caffeine.subprocess, 'run', wraps=subprocess.run) as run:
-            image = caffeine.render_mug()
-            self.assertEqual(struct.unpack('>II', image.read_bytes()[16:24]), (36, 36))
-            self.assertEqual(caffeine.render_mug(), image)
-            self.assertEqual(run.call_count, 1)
+    def test_caffeine_bundled_mug_is_a_transparent_png(self):
+        png = caffeine.mug_image().read_bytes()
+        self.assertEqual(png[:8], b'\x89PNG\r\n\x1a\n')
+        self.assertEqual(struct.unpack('>II', png[16:24]), (36, 36))
+        self.assertEqual(png[25], 6)  # Truecolor with alpha.
 
 
 if __name__ == '__main__':
