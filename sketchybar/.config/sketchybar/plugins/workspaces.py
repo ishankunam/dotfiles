@@ -36,7 +36,9 @@ def reconcile(workspaces, focused, items, group):
         if changed:
             commands += ['--move', item, 'before', anchor]
         selected = 'on' if workspace == focused else 'off'
-        commands += ['--set', item, 'background.drawing=' + selected, 'icon.highlight=' + selected]
+        commands += ['--set', item, 'background.drawing=' + selected, 'icon.highlight=' + selected,
+                     'padding_left=' + ('3' if item == wanted[0] else '4'),
+                     'padding_right=' + ('3' if item == wanted[-1] else '4')]
     if changed and wanted:
         commands += ['--add', 'bracket', 'spaces', *wanted, '--set', 'spaces', *group]
     return commands

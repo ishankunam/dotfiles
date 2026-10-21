@@ -151,6 +151,8 @@ Dracula Glass uses IBM Plex Mono Medium for the workspace numbers, application n
 It has a 38-point bar, 30-point group backgrounds, 8-point corners, and 60% Dracula surfaces.
 The workspace and application glass brackets have a 7-point gap.
 The application chevron is absent. Selected workspaces use Dracula purple text and a subtle purple background.
+Workspace highlights are 24×24 points, with 3-point outer insets and centered numbers.
+Four-point padding on adjacent items gives an 8-point gap between highlight tiles.
 Workspace items move before the 7-point application spacer. The approved bar runs at login.
 
 The choices follow `ghostty/.config/ghostty/config`, `vscode/Library/Application Support/Code/User/settings.json`,

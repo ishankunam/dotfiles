@@ -35,12 +35,16 @@ default=(
 "$BAR_NAME" --default "${default[@]}"
 
 space=(
-  icon.padding_left=7
-  icon.padding_right=7
+  icon.width=24
+  icon.align=center
+  icon.padding_left=0
+  icon.padding_right=0
+  padding_left=4
+  padding_right=4
   icon.highlight_color=0xffbd93f9
   background.color=0x29bd93f9
   background.corner_radius=5
-  background.height=25
+  background.height=24
   background.drawing=off
   label.drawing=off
 )
