@@ -39,7 +39,7 @@ class Plugins(unittest.TestCase):
         self.assertNotIn('chevron', flat)
         self.assertIn('label.font=IBM Plex Mono:Medium:14.0', flat)
         self.assertIn(['--set', 'clock', 'update_freq=10', 'icon.drawing=off'], [flat[i:i+4] for i in range(len(flat))])
-        self.assertIn(['--add', 'bracket', 'status', 'focus', 'caffeine', 'clock'], [flat[i:i+6] for i in range(len(flat))])
+        self.assertIn(['--add', 'bracket', 'status', 'caffeine', 'focus', 'clock'], [flat[i:i+6] for i in range(len(flat))])
         self.assertIn(['--subscribe', 'caffeine', 'system_woke'], [flat[i:i+3] for i in range(len(flat))])
         self.assertIn('update_freq=0', flat)
         self.assertIn(['--subscribe', 'focus', 'focus_changed', 'system_woke'], [flat[i:i+4] for i in range(len(flat))])

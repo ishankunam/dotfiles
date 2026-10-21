@@ -110,7 +110,7 @@ Battery and volume items are absent. The clock uses `h:mm AM/PM` without a date.
 
 ## Caffeine indicator
 
-The native bar shows a white outline mug immediately left of the clock while any `caffeinate` process runs.
+The native bar shows a white outline mug left of the Focus icon and clock while any `caffeinate` process runs.
 This includes sessions started by Raycast's Coffee extension and sessions started in a terminal.
 The item hides when the last session exits. Overlapping sessions keep it visible.
 The browser snapshot does not include this live indicator.
@@ -137,7 +137,7 @@ Diagnostics appear under `~/Library/Caches/sketchybar-caffeine/<bar-key>/listene
 
 The item uses Raycast Coffee's outline mug, bundled as a white 36×36 transparent PNG.
 It displays the image at 18 points. Caffeine startup loads the bundled image without compiling a renderer.
-The status items remove redundant padding to bring the mug about 11 points from the time.
+The status order is Caffeine, Focus, then the clock. The current mug and moon have about 11-point visible gaps.
 The mug background has a 1-point optical adjustment to align it with the text.
 The original SVG, MIT license, and regeneration instructions live in `sketchybar/.config/sketchybar/assets/caffeine/`.
 No Raycast extension files, hotkeys, or power settings change.
