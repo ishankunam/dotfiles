@@ -137,6 +137,8 @@ Diagnostics appear under `~/Library/Caches/sketchybar-caffeine/<bar-key>/listene
 
 The item uses Raycast Coffee's outline mug, bundled as a white 36×36 transparent PNG.
 It displays the image at 18 points. Caffeine startup loads the bundled image without compiling a renderer.
+The status items remove redundant padding to bring the mug about 11 points from the time.
+The mug background has a 1-point optical adjustment to align it with the text.
 The original SVG, MIT license, and regeneration instructions live in `sketchybar/.config/sketchybar/assets/caffeine/`.
 No Raycast extension files, hotkeys, or power settings change.
 Raycast's [Coffee implementation](https://github.com/raycast/extensions/blob/main/extensions/coffee/src/utils.ts)
@@ -147,8 +149,9 @@ subscribes to power-assertion change notifications.
 
 Dracula Glass uses IBM Plex Mono Medium for the workspace numbers, application name, and clock.
 It has a 38-point bar, 30-point group backgrounds, 8-point corners, and 60% Dracula surfaces.
+The workspace and application glass brackets have a 7-point gap.
 The application chevron is absent. Selected workspaces use Dracula purple text and a subtle purple background.
-Workspace items move before the application item. The approved bar runs at login.
+Workspace items move before the 7-point application spacer. The approved bar runs at login.
 
 The choices follow `ghostty/.config/ghostty/config`, `vscode/Library/Application Support/Code/User/settings.json`,
 and the Dracula palette used across the dotfiles.

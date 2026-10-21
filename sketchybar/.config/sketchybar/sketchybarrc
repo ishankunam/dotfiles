@@ -66,7 +66,11 @@ group=(
 # We add some regular items to the left side of the bar, where
 # only the properties deviating from the current defaults need to be set
 
-"$BAR_NAME" --add item front_app left \
+# A separate spacer keeps the gap outside both glass brackets.
+"$BAR_NAME" --add item application_gap left \
+           --set application_gap width=7 padding_left=0 padding_right=0 \
+             icon.drawing=off label.drawing=off \
+           --add item front_app left \
            --set front_app icon.drawing=off script="$PLUGIN_DIR/front_app.sh" \
            --subscribe front_app front_app_switched
 
@@ -78,11 +82,13 @@ group=(
 # Right items grow leftward: Focus, Caffeine, then the clock.
 "$BAR_NAME" --add event focus_changed \
            --add item clock right \
-           --set clock update_freq=10 icon.drawing=off script="$PLUGIN_DIR/clock.sh" \
+           --set clock update_freq=10 icon.drawing=off padding_left=0 \
+             label.padding_left=2 script="$PLUGIN_DIR/clock.sh" \
            --subscribe clock system_woke \
            --add item caffeine right \
            --set caffeine drawing=off icon.drawing=off label.drawing=off width=24 \
-             background.color=0x00000000 background.image.scale=0.5 \
+             padding_right=0 background.color=0x00000000 background.image.scale=0.5 \
+             background.image.y_offset=-1 \
              update_freq=0 updates=on script="$PLUGIN_DIR/caffeine.sh" \
            --subscribe caffeine system_woke \
            --add item focus right \

@@ -21,6 +21,7 @@ def reconcile(workspaces, focused, items, group):
     wanted = [item_name(workspace) for workspace in workspaces]
     existing = [item for item in items if item.startswith('space.')]
     changed = existing != wanted or ('spaces' not in items and bool(wanted))
+    anchor = 'application_gap' if 'application_gap' in items else 'front_app'
     commands = []
     if changed and 'spaces' in items:
         commands += ['--remove', 'spaces']
@@ -33,7 +34,7 @@ def reconcile(workspaces, focused, items, group):
                          'drawing=on', 'icon=' + workspace,
                          'click_script=aerospace workspace ' + shlex.quote(workspace)]
         if changed:
-            commands += ['--move', item, 'before', 'front_app']
+            commands += ['--move', item, 'before', anchor]
         selected = 'on' if workspace == focused else 'off'
         commands += ['--set', item, 'background.drawing=' + selected, 'icon.highlight=' + selected]
     if changed and wanted:
