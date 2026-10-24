@@ -49,7 +49,7 @@ def command(*arguments):
 
 
 def refresh():
-    """Create missing popup rows after reload, then update only their icon badges."""
+    """Reconcile popup rows and badges, including visibility after stale updates."""
     with (focus.cache_folder() / 'menu.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         existing = set(bar('--query', 'bar', query=True)['items'])
@@ -61,25 +61,29 @@ def refresh():
             if image is None:
                 raise RuntimeError('Cannot render Focus mode: ' + name)
             if item not in existing:
-                arguments += ['--add', 'item', item, 'popup.focus', '--set', item,
-                              'width=236', 'padding_left=6', 'padding_right=6',
-                              'icon=', 'icon.width=24', 'icon.drawing=on',
-                              'icon.padding_left=7', 'icon.padding_right=0',
-                              'icon.background.drawing=on', 'icon.background.color=0x00000000',
-                              'icon.background.image.scale=0.5',
-                              'label=' + name, 'label.drawing=on',
-                              'label.font=SF Pro:Regular:13.0', 'label.color=' + WHITE,
-                              'label.padding_left=8', 'label.padding_right=7',
-                              'background.drawing=off', 'background.color=0x29bd93f9',
-                              'background.height=24', 'background.corner_radius=5',
-                              'background.border_width=0',
-                              'background.padding_left=6', 'background.padding_right=6',
-                              'update_freq=0', 'updates=on',
-                              'script=' + command('hover'),
-                              'click_script=' + command('select', identifier),
+                arguments += ['--add', 'item', item, 'popup.focus',
                               '--subscribe', item, 'mouse.entered', 'mouse.exited']
-            arguments += ['--set', item, 'icon.background.image=' + str(image),
-                          'icon.background.image.drawing=on']
+            arguments += ['--set', item, 'drawing=on',
+                          'width=236', 'padding_left=6', 'padding_right=6',
+                          'icon=', 'icon.width=24', 'icon.drawing=on',
+                          'icon.padding_left=7', 'icon.padding_right=0',
+                          'icon.background.drawing=on', 'icon.background.color=0x00000000',
+                          'icon.background.image.scale=0.5',
+                          'label=' + name, 'label.drawing=on',
+                          'label.font=SF Pro:Regular:13.0', 'label.color=' + WHITE,
+                          'label.padding_left=8', 'label.padding_right=7',
+                          'background.color=0x29bd93f9',
+                          'background.image.drawing=off',
+                          'background.height=24', 'background.corner_radius=5',
+                          'background.border_width=0',
+                          'background.padding_left=6', 'background.padding_right=6',
+                          'update_freq=0', 'updates=on',
+                          'script=' + command('hover'),
+                          'click_script=' + command('select', identifier),
+                          'icon.background.image=' + str(image),
+                          'icon.background.image.drawing=on',
+                          # Setting a background color enables it, so clear it last.
+                          'background.drawing=off']
         if arguments:
             bar(*arguments)
 

@@ -151,6 +151,43 @@ class Plugins(unittest.TestCase):
         self.assertIn('drawing=off', arguments)
         self.assertIn('popup.drawing=off', arguments)
 
+    def test_focus_reader_never_uses_a_popup_row_name_from_the_environment(self):
+        for state in ('on', 'off', 'unavailable'):
+            image = Path('/fixture/logo.png') if state == 'on' else None
+            with patch.dict('os.environ', {'NAME': 'focus.mode.work'}), patch.object(focus, 'read_focus', return_value={'state': state, 'image': image}), patch.object(focus, 'native_image', return_value=image), patch.object(focus.subprocess, 'run') as run:
+                focus.main()
+                self.assertEqual(run.call_args.args[0][1:3], ['--set', 'focus'])
+
+    def test_focus_picker_repairs_an_existing_hidden_work_row(self):
+        rows = {focus_menu.PREFIX + mode[0]: {} for mode in focus_menu.MODES}
+        rows['focus.mode.work'] = {'drawing': 'off', 'label.drawing': 'off',
+                                   'icon': '?', 'background.image.drawing': 'on'}
+
+        def native_bar(*arguments, query=False):
+            if query:
+                return {'items': list(rows)}
+            current = None
+            for argument in arguments:
+                if argument == '--set':
+                    current = None
+                elif current is None:
+                    current = rows[argument]
+                else:
+                    key, value = argument.split('=', 1)
+                    current[key] = value
+
+        with tempfile.TemporaryDirectory() as temporary, patch.object(focus, 'cache_folder', return_value=Path(temporary)), patch.object(focus_menu, 'bar', side_effect=native_bar), patch.object(focus_menu, 'badge', return_value=Path('/badge.png')), patch.object(focus, 'read_focus', return_value={'state': 'on', 'image': Path('/fixture/work.png')}), patch.object(focus_menu, 'active_mode', return_value='work'), patch.object(focus_menu.subprocess, 'run') as run:
+            focus_menu.refresh()
+            run.assert_not_called()  # Repairing the menu must not change macOS Focus.
+        for identifier, name, *_ in focus_menu.MODES:
+            row = rows[focus_menu.PREFIX + identifier]
+            self.assertEqual(row['drawing'], 'on')
+            self.assertEqual(row['label.drawing'], 'on')
+            self.assertEqual(row['label'], name)
+            self.assertEqual(row['icon'], '')
+            self.assertEqual(row['background.image.drawing'], 'off')
+            self.assertEqual(row['background.drawing'], 'off')
+
     def test_focus_picker_keeps_only_icon_selection_and_hover_background(self):
         with tempfile.TemporaryDirectory() as temporary, patch.object(focus, 'cache_folder', return_value=Path(temporary)), patch.object(focus_menu, 'bar') as bar, patch.object(focus_menu, 'badge', return_value=Path('/badge.png')), patch.object(focus, 'read_focus', return_value={'state': 'off', 'image': None}):
             bar.return_value = {'items': []}

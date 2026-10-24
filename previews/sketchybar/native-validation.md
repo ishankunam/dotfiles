@@ -35,3 +35,13 @@ These calls verified native properties, rather than physical pointer movement.
 The original Focus state was off. The test restored it and confirmed that the icon was hidden and the popup was closed.
 Twenty-six fixture checks passed, including the actual popup-row environment, failure refresh, unknown-mode handling, and native badge rendering.
 The background SketchyBar process was unavailable as a computer-use app surface. Popup placement and physical mouse interaction on both monitors remain visually unverified.
+
+## Missing work row repair, 2026-10-24
+
+The live work row existed with `drawing=off`, `label.drawing=off`, and `icon=?`.
+The prior refresh only updated its badge, leaving those stale properties in place.
+Refresh now reconciles the complete row properties, including visibility, labels, and transparent backgrounds.
+The Focus reader also ignores an inherited popup-row `NAME` when choosing its default target.
+Native queries confirmed that all five rows are visible with the correct names and badges after refresh.
+The current work Focus and cached state remained unchanged. No mode-switching shortcuts ran during this repair.
+Twenty-eight fixture checks passed, including hidden-row recovery and popup-environment isolation.

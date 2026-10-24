@@ -121,10 +121,11 @@ def display_arguments(focus, image):
     return arguments
 
 
-def main(name=None):
+def main(name='focus'):
+    # A popup click's inherited NAME must never redirect bar state to a mode row.
     focus = read_focus()
     image = native_image(focus['image']) if focus['state'] == 'on' else None
-    subprocess.run([os.environ.get('BAR_NAME', 'sketchybar'), '--set', name or os.environ.get('NAME', 'focus'),
+    subprocess.run([os.environ.get('BAR_NAME', 'sketchybar'), '--set', name,
                     *display_arguments(focus, image)], check=True, timeout=3)
 
 
