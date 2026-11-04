@@ -26,7 +26,7 @@ def query(name):
 
 
 def close_popup():
-    bar('--set', 'clock', 'popup.drawing=off', 'label.highlight=off', 'label.shadow.drawing=off',
+    bar('--set', 'clock', 'popup.drawing=off',
         '--set', 'clock_group', 'background.border_color=0x1fffffff')
 
 
@@ -51,9 +51,7 @@ def render(year, month, renderer, hover=0, pressed=False, opening=False):
         arguments = ['--set', 'calendar.month', f'background.image={path}',
                      f'click_script={command}', 'background.drawing=on']
         if opening:
-            arguments += ['--set', 'clock', 'popup.drawing=on', 'label.highlight_color=0xffbd93f9',
-                          'label.highlight=on', 'label.shadow.drawing=on',
-                          'label.shadow.color=0x66bd93f9', 'label.shadow.distance=1',
+            arguments += ['--set', 'clock', 'popup.drawing=on',
                           '--set', 'clock_group', 'background.border_color=0xffbd93f9']
         bar(*arguments)
     except Exception:
