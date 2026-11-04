@@ -36,15 +36,22 @@ def render(year, month, renderer):
     # A fresh path also invalidates SketchyBar's image cache.
     with tempfile.NamedTemporaryFile(dir=CACHE, suffix='.png', delete=False) as image:
         path = image.name
+    previous_image = query('calendar.month')['geometry']['background']['image']['value']
     try:
         subprocess.run([str(renderer), json.dumps(model), path], check=True)
         height = 78 + 28 * len(weeks)
         command = f'python3 {shlex.quote(str(Path(__file__).resolve()))} click {year} {month}'
         bar('--set', 'clock', f'popup.height={height}',
             '--set', 'calendar.month', f'background.image={path}',
-            f'click_script={command}', '--set', 'clock', 'popup.drawing=on')
-    finally:
+            f'click_script={command}', 'background.drawing=on',
+            '--set', 'clock', 'popup.drawing=on')
+    except Exception:
         Path(path).unlink(missing_ok=True)
+        raise
+    # Retain the active image for redraws; remove only the image it replaced.
+    previous_path = Path(previous_image)
+    if previous_path.parent == CACHE and previous_path.suffix == '.png':
+        previous_path.unlink(missing_ok=True)
 
 
 def main():

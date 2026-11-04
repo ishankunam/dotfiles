@@ -95,7 +95,7 @@ group=(
            --subscribe clock system_woke mouse.exited.global \
            --add item calendar.month popup.clock \
            --set calendar.month width=280 padding_left=0 padding_right=0 \
-             icon.drawing=off label.drawing=off background.drawing=off \
+             icon.drawing=off label.drawing=off background.drawing=on \
              background.image.scale=0.5 \
            --add item status_gap right \
            --set status_gap width=7 padding_left=0 padding_right=0 \
