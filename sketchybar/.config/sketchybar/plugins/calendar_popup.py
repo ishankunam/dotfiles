@@ -79,6 +79,15 @@ def hit(rectangles, x, y, year, month):
     return 0
 
 
+def contains(rectangles, x, y):
+    for rect in rectangles:
+        left, top = rect['origin']
+        width, height = rect['size']
+        if left <= x < left + width and top <= y < top + height:
+            return True
+    return False
+
+
 def track(renderer):
     # A single watcher survives rapid close/reopen cycles.
     with (CACHE / 'watcher').open('w') as watcher:
@@ -90,6 +99,7 @@ def track(renderer):
         previous = None
         last_sample = None
         last_check = 0
+        outside_since = None
         try:
             with (CACHE / 'lock').open('w') as lock:
                 for sample in pointer.stdout:
@@ -100,9 +110,19 @@ def track(renderer):
                     x, y, pressed = map(float, sample.split())
                     fcntl.flock(lock, fcntl.LOCK_EX)
                     try:
-                        if query('clock').get('popup', {}).get('drawing') != 'on':
+                        clock = query('clock')
+                        if clock.get('popup', {}).get('drawing') != 'on':
                             return
                         item = query('calendar.month')
+                        inside = (contains(clock['bounding_rects'].values(), x, y)
+                                  or contains(item['bounding_rects'].values(), x, y))
+                        if inside:
+                            outside_since = None
+                        elif outside_since is None:
+                            outside_since = now
+                        elif now - outside_since >= 0.3:
+                            bar('--set', 'clock', 'popup.drawing=off')
+                            return
                         year, month = map(int, shlex.split(item['scripting']['click_script'])[-2:])
                         region = hit(item['bounding_rects'].values(), x, y, year, month)
                         state = (year, month, region, bool(pressed) and 1 <= region <= 3)
@@ -127,12 +147,15 @@ def main():
         if action == 'close':
             bar('--set', 'clock', 'popup.drawing=off')
             return
-        if action == 'toggle' and query('clock')['popup']['drawing'] == 'on':
-            bar('--set', 'clock', 'popup.drawing=off')
+        if action == 'open' and query('clock')['popup']['drawing'] == 'on':
             return
         renderer = CACHE / 'calendar-image'
         if not renderer.exists() or renderer.stat().st_mtime < SOURCE.stat().st_mtime:
             subprocess.run(['swiftc', str(SOURCE), '-o', str(renderer)], check=True)
+        if action == 'open':
+            x, y = map(float, subprocess.check_output([str(renderer), 'pointer'], text=True).split())
+            if not contains(query('clock')['bounding_rects'].values(), x, y):
+                return
         today = datetime.date.today()
         year, month = today.year, today.month
         if action == 'click':
@@ -152,8 +175,8 @@ def main():
             else:
                 return
         if 2 <= year <= 9998:
-            render(year, month, renderer, opening=action == 'toggle')
-        if action == 'toggle':
+            render(year, month, renderer, opening=action == 'open')
+        if action == 'open':
             subprocess.Popen([sys.executable, __file__, 'track'], start_new_session=True,
                              stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
