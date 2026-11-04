@@ -90,11 +90,11 @@ final class MenuController: NSObject, NSApplicationDelegate, NSMenuDelegate {
         if onHover, pill?.contains(NSEvent.mouseLocation) != true { return }
         let location = pill.map { NSPoint(x: $0.minX, y: $0.minY - 4) } ?? NSEvent.mouseLocation
         let dismissal = pill.map { trackPointer(for: menu, pill: $0) }
-        setMenuOutline(open: true)
+        setPillHighlight(open: true)
         NSApp.activate(ignoringOtherApps: true)
         menu.popUp(positioning: nil, at: location, in: nil)
         dismissal?.invalidate()
-        setMenuOutline(open: false)
+        setPillHighlight(open: false)
         if let selected {
             target.activate(options: [])
             let result = AXUIElementPerformAction(selected, kAXPressAction as CFString)
@@ -165,11 +165,17 @@ final class MenuController: NSObject, NSApplicationDelegate, NSMenuDelegate {
         selected = sender.representedObject as! AXUIElement?
     }
 
-    private func setMenuOutline(open: Bool) {
+    private func setPillHighlight(open: Bool) {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/opt/homebrew/bin/sketchybar")
-        process.arguments = ["--set", "application",
-                             "background.border_color=" + (open ? "0xa0bd93f9" : "0x1fffffff")]
+        let drawing = open ? "on" : "off"
+        process.arguments = [
+            "--set", "front_app", "label.highlight_color=0xffbd93f9",
+            "label.highlight=\(drawing)", "label.shadow.drawing=\(drawing)",
+            "label.shadow.color=0x66bd93f9", "label.shadow.distance=1",
+            "--set", "application",
+            "background.border_color=" + (open ? "0xffbd93f9" : "0x1fffffff")
+        ]
         guard (try? process.run()) != nil else { return }
         process.waitUntilExit()
     }
