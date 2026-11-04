@@ -25,11 +25,6 @@ def query(name):
     return json.loads(bar('--query', name))
 
 
-def close_popup():
-    bar('--set', 'clock', 'popup.drawing=off',
-        '--set', 'clock_group', 'background.border_color=0x1fffffff')
-
-
 def render(year, month, renderer, hover=0, pressed=False, opening=False):
     today = datetime.date.today()
     weeks = calendar.Calendar(firstweekday=6).monthdatescalendar(year, month)
@@ -51,8 +46,7 @@ def render(year, month, renderer, hover=0, pressed=False, opening=False):
         arguments = ['--set', 'calendar.month', f'background.image={path}',
                      f'click_script={command}', 'background.drawing=on']
         if opening:
-            arguments += ['--set', 'clock', 'popup.drawing=on',
-                          '--set', 'clock_group', 'background.border_color=0xffbd93f9']
+            arguments += ['--set', 'clock', 'popup.drawing=on']
         bar(*arguments)
     except Exception:
         Path(path).unlink(missing_ok=True)
@@ -127,7 +121,7 @@ def track(renderer):
                         elif outside_since is None:
                             outside_since = now
                         elif now - outside_since >= 0.3:
-                            close_popup()
+                            bar('--set', 'clock', 'popup.drawing=off')
                             return
                         year, month = map(int, shlex.split(item['scripting']['click_script'])[-2:])
                         region = hit(item['bounding_rects'].values(), x, y, year, month)
@@ -151,7 +145,7 @@ def main():
     with (CACHE / 'lock').open('w') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         if action == 'close':
-            close_popup()
+            bar('--set', 'clock', 'popup.drawing=off')
             return
         if action == 'open' and query('clock')['popup']['drawing'] == 'on':
             return
