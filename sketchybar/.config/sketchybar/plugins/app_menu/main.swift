@@ -16,7 +16,43 @@ final class MenuController: NSObject, NSApplicationDelegate, NSMenuDelegate {
     var sources: [ObjectIdentifier: AXUIElement] = [:]
     var selected: AXUIElement?
 
+    private var opening: DispatchWorkItem?
+    private var busy = false
+
     func applicationDidFinishLaunching(_ notification: Notification) {
+        if CommandLine.arguments.contains("--hover") {
+            guard AXIsProcessTrusted() else { NSApp.terminate(nil); return }
+            scheduleHover()
+        } else {
+            showMenu(onHover: false)
+        }
+    }
+
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows: Bool) -> Bool {
+        scheduleHover()
+        return false
+    }
+
+    private func scheduleHover() {
+        guard !busy, opening == nil, AXIsProcessTrusted() else { return }
+        let request = DispatchWorkItem { [weak self] in
+            self?.opening = nil
+            self?.showMenu(onHover: true)
+        }
+        opening = request
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(120), execute: request)
+    }
+
+    private func showMenu(onHover: Bool) {
+        guard !busy else { return }
+        busy = true
+        defer {
+            busy = false
+            selected = nil
+            sources.removeAll()
+        }
+        let pill = pillBounds()
+        if onHover && pill == nil { return }
         target = NSWorkspace.shared.frontmostApplication
         let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
         guard AXIsProcessTrustedWithOptions(options) else {
@@ -35,6 +71,7 @@ final class MenuController: NSObject, NSApplicationDelegate, NSMenuDelegate {
         guard let target,
               let value = attribute(AXUIElementCreateApplication(target.processIdentifier), kAXMenuBarAttribute),
               CFGetTypeID(value) == AXUIElementGetTypeID() else {
+            if onHover { return }
             showError("This application does not expose its menu bar.")
             return
         }
@@ -46,12 +83,18 @@ final class MenuController: NSObject, NSApplicationDelegate, NSMenuDelegate {
         // macOS puts the system Apple menu before the app's own menu.
         populate(menu, from: children(menuBar).dropFirst())
         guard !menu.items.isEmpty else {
+            if onHover { return }
             showError("No application menus are available.")
             return
         }
-        let location = anchor()
+        if onHover, pill?.contains(NSEvent.mouseLocation) != true { return }
+        let location = pill.map { NSPoint(x: $0.minX, y: $0.minY - 4) } ?? NSEvent.mouseLocation
+        let dismissal = pill.map { trackPointer(for: menu, pill: $0) }
+        setMenuOutline(open: true)
         NSApp.activate(ignoringOtherApps: true)
         menu.popUp(positioning: nil, at: location, in: nil)
+        dismissal?.invalidate()
+        setMenuOutline(open: false)
         if let selected {
             target.activate(options: [])
             let result = AXUIElementPerformAction(selected, kAXPressAction as CFString)
@@ -60,7 +103,6 @@ final class MenuController: NSObject, NSApplicationDelegate, NSMenuDelegate {
                 return
             }
         }
-        NSApp.terminate(nil)
     }
 
     func showError(_ message: String) {
@@ -123,7 +165,42 @@ final class MenuController: NSObject, NSApplicationDelegate, NSMenuDelegate {
         selected = sender.representedObject as! AXUIElement?
     }
 
-    func anchor() -> NSPoint {
+    private func setMenuOutline(open: Bool) {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/opt/homebrew/bin/sketchybar")
+        process.arguments = ["--set", "application",
+                             "background.border_color=" + (open ? "0xa0bd93f9" : "0x1fffffff")]
+        guard (try? process.run()) != nil else { return }
+        process.waitUntilExit()
+    }
+
+    private func trackPointer(for menu: NSMenu, pill: NSRect) -> Timer {
+        var outsideSince: TimeInterval?
+        let timer = Timer(timeInterval: 0.04, repeats: true) { [weak menu] _ in
+            guard let mouse = CGEvent(source: nil)?.location else { return }
+            let overPill = pill.contains(NSEvent.mouseLocation)
+            let windows = CGWindowListCopyWindowInfo(.optionOnScreenOnly, kCGNullWindowID)
+                as? [[String: Any]] ?? []
+            let overMenu = windows.contains { window in
+                guard window[kCGWindowOwnerPID as String] as? Int32 == getpid(),
+                      let bounds = window[kCGWindowBounds as String] as? [String: Any],
+                      let frame = CGRect(dictionaryRepresentation: bounds as CFDictionary)
+                else { return false }
+                return frame.contains(mouse)
+            }
+            if overPill || overMenu {
+                outsideSince = nil
+            } else {
+                let now = ProcessInfo.processInfo.systemUptime
+                outsideSince = outsideSince ?? now
+                if now - (outsideSince ?? now) >= 0.24 { menu?.cancelTracking() }
+            }
+        }
+        RunLoop.main.add(timer, forMode: .eventTracking)
+        return timer
+    }
+
+    private func pillBounds() -> NSRect? {
         let mouse = NSEvent.mouseLocation
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/opt/homebrew/bin/sketchybar")
@@ -131,21 +208,21 @@ final class MenuController: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let pipe = Pipe()
         process.standardOutput = pipe
         process.standardError = FileHandle.nullDevice
-        guard (try? process.run()) != nil else { return mouse }
+        guard (try? process.run()) != nil else { return nil }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         process.waitUntilExit()
         guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
               let rects = json["bounding_rects"] as? [String: [String: Any]],
-              let primary = NSScreen.screens.first else { return mouse }
+              let primary = NSScreen.screens.first else { return nil }
         for rect in rects.values {
             guard let origin = rect["origin"] as? [Double], origin.count == 2,
                   let size = rect["size"] as? [Double], size.count == 2 else { continue }
             let bounds = NSRect(x: origin[0], y: primary.frame.maxY - origin[1] - size[1], width: size[0], height: size[1])
             if bounds.insetBy(dx: -12, dy: -8).contains(mouse) {
-                return NSPoint(x: bounds.minX, y: bounds.minY - 4)
+                return bounds
             }
         }
-        return mouse
+        return nil
     }
 }
 

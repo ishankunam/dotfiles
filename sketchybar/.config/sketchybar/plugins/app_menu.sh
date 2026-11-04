@@ -8,4 +8,4 @@ if [[ ! -x "$BINARY" || "$SOURCE" -nt "$BINARY" ]]; then
   echo 'Build the app menu with plugins/app_menu/build.sh first.' >&2
   exit 1
 fi
-exec /usr/bin/open -g "$APP"
+exec /usr/bin/open -g "$APP" --args "$@"
