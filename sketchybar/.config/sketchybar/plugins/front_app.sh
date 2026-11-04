@@ -5,9 +5,15 @@
 # focused application in the $INFO variable:
 # https://felixkratz.github.io/SketchyBar/config/events#events-and-scripting
 
-if [ "$SENDER" = "mouse.entered" ]; then
-  exec "$(dirname "$0")/app_menu.sh" --hover
-fi
+case "$SENDER" in
+  mouse.entered)
+    "${BAR_NAME:-sketchybar}" --set application background.color=0xc0484058
+    exec "$(dirname "$0")/app_menu.sh" --hover
+    ;;
+  mouse.exited|mouse.exited.global)
+    exec "${BAR_NAME:-sketchybar}" --set application background.color=0x99282a36
+    ;;
+esac
 
 if [ "$SENDER" = "front_app_switched" ]; then
   [ "$INFO" = "SketchyBar App Menu" ] && exit 0
