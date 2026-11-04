@@ -43,7 +43,8 @@ final class MenuController: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.autoenablesItems = false
         menu.appearance = NSAppearance(named: .darkAqua)
         menu.font = NSFont.systemFont(ofSize: 14)
-        populate(menu, from: menuBar)
+        // macOS puts the system Apple menu before the app's own menu.
+        populate(menu, from: children(menuBar).dropFirst())
         guard !menu.items.isEmpty else {
             showError("No application menus are available.")
             return
@@ -71,9 +72,9 @@ final class MenuController: NSObject, NSApplicationDelegate, NSMenuDelegate {
         NSApp.terminate(nil)
     }
 
-    func populate(_ menu: NSMenu, from source: AXUIElement) {
+    func populate(_ menu: NSMenu, from elements: ArraySlice<AXUIElement>) {
         menu.removeAllItems()
-        for element in children(source) {
+        for element in elements {
             let title = attribute(element, kAXTitleAttribute) as? String ?? ""
             if title.isEmpty {
                 menu.addItem(.separator())
@@ -110,7 +111,7 @@ final class MenuController: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     func menuNeedsUpdate(_ menu: NSMenu) {
         guard let source = sources[ObjectIdentifier(menu)] else { return }
-        populate(menu, from: source)
+        populate(menu, from: children(source)[...])
         if menu.items.isEmpty {
             let unavailable = NSMenuItem(title: "No commands available", action: nil, keyEquivalent: "")
             unavailable.isEnabled = false
