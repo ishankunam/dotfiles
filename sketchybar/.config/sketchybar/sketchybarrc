@@ -76,6 +76,7 @@ group=(
              icon.drawing=off label.drawing=off \
            --add item front_app left \
            --set front_app icon.drawing=off script="$PLUGIN_DIR/front_app.sh" \
+             click_script="\"$PLUGIN_DIR/app_menu.sh\"" \
            --subscribe front_app front_app_switched
 
 ##### Adding Right Items #####
