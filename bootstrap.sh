@@ -8,7 +8,7 @@ cd "$DOTFILES_DIR"
 # Packages that mirror $HOME and get symlinked via stow.
 # obsidian/ is copied by hand (see obsidian/README.md); macos/ is a plain
 # script, not a stow package.
-STOW_PACKAGES=(aerospace brew claude ghostty git neovim sketchybar ssh tmux vscode zsh)
+STOW_PACKAGES=(aerospace agents brew claude ghostty git neovim sketchybar ssh tmux vscode zsh)
 
 echo "==> Homebrew"
 if ! command -v brew >/dev/null 2>&1; then

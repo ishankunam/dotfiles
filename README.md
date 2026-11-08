@@ -15,6 +15,7 @@ directory mirrors the exact path it should occupy under `$HOME`, and
 | `zsh/` | `.zshrc`, `.zprofile`, Powerlevel10k config (Oh My Zsh, `zsh-autosuggestions`, `zsh-syntax-highlighting`) |
 | `git/` | `.gitconfig` |
 | `ssh/` | `~/.ssh/config` (host aliases only — no keys, see below) |
+| `agents/` | Shared global agent instructions. The canonical `AGENTS.md` lives in `.config/agents/`, and Codex (`~/.codex`) and OpenCode (`~/.config/opencode`) link to it |
 | `brew/` | `.Brewfile` — every formula, cask, and VS Code extension |
 | `ghostty/` | Terminal config + Dracula theme |
 | `tmux/` | `.tmux.conf` (TPM, `tmux-resurrect`, `tmux-continuum`) |
