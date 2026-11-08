@@ -13,7 +13,7 @@ to read events. The helper only reads calendar data and does not log events.
   cannot locate that event, the helper opens the event's date instead.
 
 The first launch builds an ad hoc-signed app under `calendar/build/`. A source
-change rebuilds the app when the helper is not running. macOS may ask for
+change restarts the helper and rebuilds the app. macOS may ask for
 Calendar or Automation access again after a rebuild. If access is denied,
 change it in System Settings > Privacy & Security > Calendars or Automation.
 The helper exits after two minutes with no panel open.

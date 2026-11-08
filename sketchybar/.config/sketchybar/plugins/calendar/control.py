@@ -2,6 +2,7 @@
 """Build and send commands to the native SketchyBar calendar panel."""
 import fcntl
 import os
+import signal
 from pathlib import Path
 import subprocess
 import sys
@@ -32,9 +33,15 @@ def main():
         fcntl.flock(lock, fcntl.LOCK_EX)
         sources = [SOURCE / name for name in ('EventStore.swift', 'main.swift', 'build.sh')]
         if not BUILD.exists() or any(path.stat().st_mtime_ns > BUILD.stat().st_mtime_ns for path in sources):
-            # Do not rebuild under an active process, which would change its identity.
+            # Stop the old helper before replacing its signed app bundle.
             if running():
-                raise RuntimeError('Restart the calendar helper before rebuilding it')
+                os.kill(int((CACHE / 'pid').read_text()), signal.SIGTERM)
+                for _ in range(50):
+                    if not running():
+                        break
+                    time.sleep(0.1)
+                else:
+                    raise RuntimeError('Calendar helper did not stop for rebuild')
             subprocess.run([str(SOURCE / 'build.sh')], check=True)
         with tempfile.NamedTemporaryFile(mode='w', dir=queue, prefix='.pending-', delete=False) as file:
             file.write(action)
