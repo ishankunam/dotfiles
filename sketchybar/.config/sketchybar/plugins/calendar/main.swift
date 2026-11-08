@@ -167,7 +167,9 @@ final class CalendarController: NSObject, ObservableObject, NSApplicationDelegat
         selectedEvent = group
         openMessage = nil
         positionDetail()
+        NSApp.activate(ignoringOtherApps: true)
         detail.makeKeyAndOrderFront(nil)
+        detail.orderFrontRegardless()
     }
 
     func closeDetail() { selectedEvent = nil; detail.orderOut(nil) }
