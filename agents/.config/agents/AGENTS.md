@@ -37,4 +37,5 @@
 ## Git
 - Make atomic commits in conventional commit style. Commit without asking me.
 - Never push. Never merge. I do both by hand.
+- If the work has two or more independently reviewable layers, build stacked PRs as local branches: one branch per layer, each built on the previous one. I push and open the PRs by hand.
 - Add no attribution lines to commit messages or PR descriptions.
