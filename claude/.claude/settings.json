@@ -6,8 +6,12 @@
       "Bash(git pull)",
       "Bash(git pull *)",
       "Bash(gh pr merge *)",
-      "Bash(git push)",
-      "Bash(git push *)"
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(git push * master)",
+      "Bash(git push * main)",
+      "Bash(git push * HEAD:master)",
+      "Bash(git push * HEAD:main)"
     ],
     "ask": [
       "Bash(rm -rf *)",
