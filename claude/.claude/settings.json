@@ -1,9 +1,35 @@
 {
   "permissions": {
-    "defaultMode": "plan"
+    "defaultMode": "auto",
+    "deny": [
+      "Bash(git merge *)",
+      "Bash(git pull)",
+      "Bash(git pull *)",
+      "Bash(gh pr merge *)",
+      "Bash(git push)",
+      "Bash(git push *)"
+    ],
+    "ask": [
+      "Bash(rm -rf *)",
+      "Bash(git reset --hard *)",
+      "Bash(git clean *)",
+      "Bash(git checkout -- *)"
+    ]
   },
   "model": "sonnet",
   "hooks": {
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
+            "async": true
+          }
+        ]
+      }
+    ],
     "PermissionRequest": [
       {
         "hooks": [
@@ -109,7 +135,7 @@
   },
   "enableWorkflows": true,
   "enabledPlugins": {
-    "obsidian@obsidian-skills": true
+    "vercel@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -117,28 +143,41 @@
         "source": "github",
         "repo": "anthropics/claude-plugins-official"
       }
-    },
-    "obsidian-skills": {
-      "source": {
-        "source": "github",
-        "repo": "kepano/obsidian-skills"
+    }
+  },
+  "outputStyle": "Concise",
+  "syntaxHighlightingDisabled": false,
+  "effortLevel": "xhigh",
+  "modelSettings": {
+    "claude-sonnet-5-5": {
+      "effortLevel": "xhigh"
+    }
+  },
+  "advisorModel": "opus",
+  "askUserQuestionTimeout": "never",
+  "pluginConfigs": {
+    "cc-plugin-agents-md@builtin": {
+      "options": {
+        "instructionFiles": "claude-md-or-agents-md"
       }
     }
   },
-  "syntaxHighlightingDisabled": false,
-  "effortLevel": "xhigh",
-  "askUserQuestionTimeout": "never",
   "autoUpdatesChannel": "stable",
   "minimumVersion": "2.1.209",
-  "tui": "fullscreen",
+  "tui": "default",
+  "timeFormat": "12-hour",
   "theme": "auto",
-  "editorMode": "vim",
+  "editorMode": "normal",
   "verbose": false,
   "preferredNotifChannel": "ghostty",
-  "autoCompactEnabled": true,
+  "autoCompactEnabled": false,
   "switchModelsOnFlag": false,
   "remoteControlAtStartup": false,
-  "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true,
-  "useAutoModeDuringPlan": true
+  "inputNeededNotifEnabled": false,
+  "agentPushNotifEnabled": false,
+  "useAutoModeDuringPlan": true,
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  }
 }
