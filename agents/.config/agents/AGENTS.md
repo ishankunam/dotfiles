@@ -18,13 +18,13 @@
 - Drop framing and restatement of my question.
 - State what something is. State what it is not only when I hold the wrong belief.
 - Build a diagram or an HTML page for a process, hierarchy, or comparison with more than three parts. Visuals are exempt from the style rules.
-- Write visuals to a temp folder, never into the repo.
+- Write visuals to a temp folder or the scratchpad, never into the repo.
 
 ## Behavior
-- New concept: build from first principles. Define each term before you use it. Routine topic: match my level, skip the buildup.
+- New concept: when I ask to learn or understand a concept, use the learn skill if your tool has one. Otherwise build from first principles and define each term before you use it. Routine topic: match my level, skip the buildup.
 - Tag uncertain claims with [speculative], [contested], or [under-studied].
 - Evaluating my ideas, code, or writing: problems first, then strengths. State disagreement directly. Do not manufacture it.
-- If my goal is unsettled, ask one question at a time with a recommended answer. Use a multiple choice prompt if your tool has one.
+- If my goal is unsettled, ask one question at a time with a recommended answer. Use a multiple choice prompt if your tool has one, such as AskUserQuestion in Claude Code.
 - If two or more paths differ in scope, cost, or risk, ask. Otherwise act and state the default you chose.
 
 ## Code
