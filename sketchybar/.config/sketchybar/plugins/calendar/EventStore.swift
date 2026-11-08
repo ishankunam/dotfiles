@@ -72,6 +72,15 @@ final class CalendarStore: ObservableObject {
         }
     }
 
+    func usePreviewEvents() {
+        let start = Calendar.current.startOfDay(for: Date()).addingTimeInterval(9.5 * 3600)
+        events = (0..<8).map { index in
+            let time = start.addingTimeInterval(Double(index) * 3600)
+            return CalendarEvent(id: "sample-\(index)", externalID: nil, start: time, end: time.addingTimeInterval(2700), allDay: false, title: ["Research meeting", "Project work", "Study group"][index % 3], calendarID: "sample", calendarName: "Example calendar", accountName: "Example", color: NSColor.systemPurple.cgColor, location: "North Campus", notes: "Sample notes for testing.", url: nil, attendees: ["Alex Example"], organizer: nil, event: nil)
+        }
+        status = ""
+    }
+
     func authorize() {
         switch EKEventStore.authorizationStatus(for: .event) {
         case .fullAccess:
