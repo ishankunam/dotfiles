@@ -88,8 +88,14 @@ group=(
 "$BAR_NAME" --add event focus_changed \
            --add item clock right \
            --set clock update_freq=10 icon.drawing=off script="$PLUGIN_DIR/clock.sh" \
-             click_script="python3 \"$PLUGIN_DIR/calendar/control.py\" toggle" \
+             popup.align=right popup.height=246 popup.y_offset=2 \
+             popup.background.color=0xff282a36 popup.background.corner_radius=12 \
+             popup.background.border_width=1 popup.background.border_color=0x28ffffff \
            --subscribe clock system_woke mouse.entered mouse.exited mouse.exited.global \
+           --add item calendar.month popup.clock \
+           --set calendar.month width=280 padding_left=0 padding_right=0 \
+             icon.drawing=off label.drawing=off background.drawing=on \
+             background.image.scale=0.5 \
            --add item status_gap right \
            --set status_gap width=7 padding_left=0 padding_right=0 \
              icon.drawing=off label.drawing=off \
