@@ -7,7 +7,7 @@
 case "$SENDER" in
   mouse.entered)
     "${BAR_NAME:-sketchybar}" --set clock_group background.color=0xc0484058
-    exec python3 "$CONFIG_DIR/plugins/calendar_popup.py" open
+    exec python3 "$CONFIG_DIR/plugins/calendar/control.py" open
     ;;
   mouse.exited|mouse.exited.global)
     exec "${BAR_NAME:-sketchybar}" --set clock_group background.color=0x99282a36
