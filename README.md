@@ -22,6 +22,7 @@ directory mirrors the exact path it should occupy under `$HOME`, and
 | `aerospace/` | AeroSpace tiling window manager config |
 | `sketchybar/` | Menu bar replacement config |
 | `neovim/` | `init.lua` |
+| `rex/` | Rex terminal multiplexer `init.lua` (prefix, pane, and tab keybinds) |
 | `vscode/` | VS Code `settings.json` / `keybindings.json` |
 | `claude/` | Claude Code `settings.json` and `CLAUDE.md` (imports the shared `agents/` file, then adds Claude-only lines), plus `chat-instructions.md` (Claude Chat personal instructions, kept as reference and not wired to a live path) |
 | `macos/` | `defaults.sh` — Dock/Finder/Trackpad/appearance tweaks (not a stow package, just a script) |
