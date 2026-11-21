@@ -77,8 +77,6 @@ cask "nikitabobko/tap/aerospace"
 cask "alt-tab"
 # Memory training application
 cask "anki"
-# Terminal interface for Antigravity agents
-cask "antigravity-cli"
 # Display management tool
 cask "betterdisplay"
 # OpenAI's coding agent that runs in your terminal
@@ -87,7 +85,9 @@ cask "font-departure-mono"
 cask "font-hack-nerd-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
-# Local-first voice dictation
+# Chromium-based web browser
+cask "helium-browser"
+# Local voice dictation
 cask "anomalyco/tap/hex", trusted: true
 # Free and open-source media player
 cask "iina"
@@ -95,6 +95,8 @@ cask "iina"
 cask "jurplel/tap/instant-space-switcher"
 # Tool to control external monitor brightness & volume
 cask "monitorcontrol"
+# Knowledge base that works on top of a local folder of plain text Markdown files
+cask "obsidian"
 vscode "adpyke.codesnap"
 vscode "biomejs.biome"
 vscode "charliermarsh.ruff"
@@ -115,3 +117,4 @@ vscode "pkief.material-icon-theme"
 vscode "tamasfe.even-better-toml"
 vscode "vadimcn.vscode-lldb"
 vscode "violetbp.lc2k"
+npm "agent-desktop"
