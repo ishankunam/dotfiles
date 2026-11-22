@@ -1,0 +1,159 @@
+{
+  "version": 3,
+  "skills": {
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "commit": "5a37a6329fbad3666c3207392a6a7c0110e92efb",
+      "skillPath": "skills/react-best-practices/SKILL.md",
+      "skillFolderHash": "343db72180d05814949fef7d46be96b5c6ee86b3",
+      "installedAt": "2026-08-14T22:04:46.015Z",
+      "updatedAt": "2026-11-22T03:53:56.689Z"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "commit": "5a37a6329fbad3666c3207392a6a7c0110e92efb",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "skillFolderHash": "8ff770c9b25b9fdb5a97503fc98d86b723813031",
+      "installedAt": "2026-08-14T22:04:46.016Z",
+      "updatedAt": "2026-11-22T03:53:56.691Z"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/skills.git",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "skillFolderHash": "76a98a285cb0434f3d39e1a873823556330e398b",
+      "installedAt": "2026-08-14T22:04:50.240Z",
+      "updatedAt": "2026-08-14T22:04:50.240Z"
+    },
+    "grill-me": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/mattpocock/skills.git",
+      "skillPath": "skills/productivity/grill-me/SKILL.md",
+      "skillFolderHash": "3df14e2d3a89459bf300614be9247e3ce74798f8",
+      "pluginName": "mattpocock-skills",
+      "installedAt": "2026-08-14T22:18:13.659Z",
+      "updatedAt": "2026-11-22T03:48:55.179Z",
+      "commit": "abeeaf95660ba9e8b7c753eb38f441ca707a8823"
+    },
+    "improve-codebase-architecture": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/mattpocock/skills.git",
+      "skillPath": "skills/engineering/improve-codebase-architecture/SKILL.md",
+      "skillFolderHash": "587147dd230da299cc5e84971cb0a33f6676f8a6",
+      "pluginName": "mattpocock-skills",
+      "installedAt": "2026-08-14T22:19:04.386Z",
+      "updatedAt": "2026-11-22T03:48:55.224Z",
+      "commit": "abeeaf95660ba9e8b7c753eb38f441ca707a8823"
+    },
+    "agent-browser": {
+      "source": "vercel-labs/agent-browser",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-browser.git",
+      "skillPath": "skills/agent-browser/SKILL.md",
+      "skillFolderHash": "d75a393c9a371295c6d6be46c34938e76ef21184",
+      "installedAt": "2026-08-14T22:25:06.236Z",
+      "updatedAt": "2026-11-22T03:48:55.278Z",
+      "commit": "d2dfc782ccdd79d25a9b4f0acced9321789cecb8"
+    },
+    "handoff": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/mattpocock/skills.git",
+      "skillPath": "skills/productivity/handoff/SKILL.md",
+      "skillFolderHash": "ce24892bd2d4b9e7fd5ac9b95c03175e18bef388",
+      "pluginName": "mattpocock-skills",
+      "installedAt": "2026-08-17T03:55:01.968Z",
+      "updatedAt": "2026-11-22T03:48:55.269Z",
+      "commit": "abeeaf95660ba9e8b7c753eb38f441ca707a8823"
+    },
+    "agent-desktop": {
+      "source": "vercel-labs/agent-desktop",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-desktop.git",
+      "skillPath": "skills/agent-desktop/SKILL.md",
+      "skillFolderHash": "2b8dc2b7d5927a1e21713db09683e1ca3e87f2bc",
+      "installedAt": "2026-11-01T21:12:19.952Z",
+      "updatedAt": "2026-11-22T03:48:55.310Z",
+      "commit": "e8934a5e95e1d212c74ead95cd3e4701c04eca31"
+    },
+    "grilling": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/mattpocock/skills.git",
+      "skillPath": "skills/productivity/grilling/SKILL.md",
+      "skillFolderHash": "f551b6e0d219fdda0b6abf277f8f915b3127d1e9",
+      "pluginName": "mattpocock-skills",
+      "installedAt": "2026-11-08T01:39:35.937Z",
+      "updatedAt": "2026-11-08T01:39:35.937Z"
+    },
+    "vercel-react-native-skills": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "commit": "5a37a6329fbad3666c3207392a6a7c0110e92efb",
+      "skillPath": "skills/react-native-skills/SKILL.md",
+      "skillFolderHash": "8b4c6a51914e2111ab6f4f00cb81778652aa241d",
+      "installedAt": "2026-11-22T03:53:56.690Z",
+      "updatedAt": "2026-11-22T03:53:56.690Z"
+    },
+    "vercel-react-view-transitions": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "commit": "5a37a6329fbad3666c3207392a6a7c0110e92efb",
+      "skillPath": "skills/react-view-transitions/SKILL.md",
+      "skillFolderHash": "b490379f71eee822cf207605ce4fceaff6e10330",
+      "installedAt": "2026-11-22T03:53:56.690Z",
+      "updatedAt": "2026-11-22T03:53:56.690Z"
+    },
+    "prototype": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/mattpocock/skills.git",
+      "commit": "abeeaf95660ba9e8b7c753eb38f441ca707a8823",
+      "skillPath": "skills/engineering/prototype/SKILL.md",
+      "skillFolderHash": "e41d92e171f074a2b6887d8f6faca4a15c83d1ca",
+      "pluginName": "mattpocock-skills",
+      "installedAt": "2026-11-22T03:56:39.688Z",
+      "updatedAt": "2026-11-22T03:57:36.196Z"
+    },
+    "teach": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/mattpocock/skills.git",
+      "commit": "abeeaf95660ba9e8b7c753eb38f441ca707a8823",
+      "skillPath": "skills/productivity/teach/SKILL.md",
+      "skillFolderHash": "3fd617b610e59acbb99644de1ef37e394ff53cd1",
+      "pluginName": "mattpocock-skills",
+      "installedAt": "2026-11-22T03:57:57.806Z",
+      "updatedAt": "2026-11-22T03:57:57.806Z"
+    }
+  },
+  "dismissed": {
+    "findSkillsPrompt": true
+  },
+  "lastSelectedAgents": [
+    "amp",
+    "cline",
+    "codex",
+    "cursor",
+    "droid",
+    "fx",
+    "gemini-cli",
+    "github-copilot",
+    "kilo",
+    "kimi-code-cli",
+    "opencode",
+    "pi",
+    "warp",
+    "zed",
+    "claude-code"
+  ]
+}

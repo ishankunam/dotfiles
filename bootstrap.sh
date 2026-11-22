@@ -43,6 +43,9 @@ for pkg in "${STOW_PACKAGES[@]}"; do
   stow -t "$HOME" "$pkg"
 done
 
+echo "==> agent skills"
+bash "$DOTFILES_DIR/skills/restore.sh" || echo "Some skills failed to install. See the output above."
+
 echo
 read -r -p "Apply macOS system preference tweaks (Dock/Finder/Trackpad/dark mode)? [y/N] " apply_macos
 if [[ "$apply_macos" =~ ^[Yy]$ ]]; then
