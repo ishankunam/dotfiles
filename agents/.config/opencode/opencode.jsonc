@@ -16,5 +16,13 @@
         "gpt-6-luna": { "limit": { "context": 872000, "output": 128000 } }
       }
     }
+  },
+  "mcp": {
+    "servers": {
+      "parallel-mcp": {
+        "type": "remote",
+        "url": "https://mcp.parallel.ai/mcp?login"
+      }
+    }
   }
 }
