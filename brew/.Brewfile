@@ -66,7 +66,7 @@ brew "wget"
 # Feature-rich command-line audio/video downloader
 brew "yt-dlp"
 # The AI coding agent built for the terminal.
-brew "anomalyco/tap/opencode", trusted: true
+brew "anomalyco/tap/opencode-v2", trusted: true
 # Custom macOS statusbar with shell plugin, interaction and graph support
 brew "felixkratz/formulae/sketchybar"
 # Portable daemon + CLI that bridges AI coding agents to the Moshi mobile app
