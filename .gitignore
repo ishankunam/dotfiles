@@ -12,8 +12,8 @@ Icon?
 .vscode/
 *~
 
-# claude
-.claude
+# claude (repo-root runtime dir only; claude/.claude/ is a tracked stow package)
+/.claude
 
 # shell history & logs
 .zsh_history
