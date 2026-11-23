@@ -14,6 +14,9 @@
     "permissions": "prompt"
   },
   "animations": true,
+  "debug": {
+    "devtools": true
+  },
   "tabs": {
     "mode": "off",
     "layout": "horizontal",
