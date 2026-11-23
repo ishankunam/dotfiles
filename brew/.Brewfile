@@ -7,6 +7,8 @@ tap "rjyo/moshi", trusted: true
 brew "node"
 # Browser automation CLI for AI agents
 brew "agent-browser"
+# Toolchain of the web: formatter and linter for JavaScript and TypeScript
+brew "biome"
 # Resource monitor. C++ version and continuation of bashtop and bpytop
 brew "btop"
 # Incredibly fast JavaScript runtime, bundler, test runner, and package manager
