@@ -4,6 +4,20 @@
     { "action": "external_directory", "resource": "*", "effect": "ask" }
   ],
   "plugins": ["-opencode.provider.openai-context-caps"],
+  "formatter": {
+    "ruff": {
+      "command": ["sh", "-c", "ruff check --fix \"$1\"; ruff format \"$1\"", "sh", "$FILE"]
+    },
+    "biome": { "disabled": true },
+    "bun-js": {
+      "command": ["sh", "-c", "biome lint --write \"$1\"; bun fmt --no-script \"$1\"", "sh", "$FILE"],
+      "extensions": [".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx", ".mts", ".cts"]
+    },
+    "bun-other": {
+      "command": ["bun", "fmt", "--no-script", "$FILE"],
+      "extensions": [".css", ".html", ".json", ".jsonc", ".yaml", ".yml", ".md"]
+    }
+  },
   "providers": {
     "openai": {
       "models": {
