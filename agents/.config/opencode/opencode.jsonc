@@ -1,22 +1,56 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "permissions": [
-    { "action": "external_directory", "resource": "*", "effect": "ask" }
+    { "action": "external_directory", "resource": "*", "effect": "ask" },
   ],
   "plugins": ["-opencode.provider.openai-context-caps"],
+  "experimental": {
+    "todo": true,
+    "image_generate": true,
+    "artifacts": true,
+  },
   "formatter": {
     "ruff": {
-      "command": ["sh", "-c", "ruff check --fix \"$1\"; ruff format \"$1\"", "sh", "$FILE"]
+      "command": [
+        "sh",
+        "-c",
+        "ruff check --fix \"$1\"; ruff format \"$1\"",
+        "sh",
+        "$FILE",
+      ],
     },
     "biome": { "disabled": true },
     "bun-js": {
-      "command": ["sh", "-c", "biome lint --write \"$1\"; bun fmt --no-script \"$1\"", "sh", "$FILE"],
-      "extensions": [".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx", ".mts", ".cts"]
+      "command": [
+        "sh",
+        "-c",
+        "biome lint --write \"$1\"; bun fmt --no-script \"$1\"",
+        "sh",
+        "$FILE",
+      ],
+      "extensions": [
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".cjs",
+        ".ts",
+        ".tsx",
+        ".mts",
+        ".cts",
+      ],
     },
     "bun-other": {
       "command": ["bun", "fmt", "--no-script", "$FILE"],
-      "extensions": [".css", ".html", ".json", ".jsonc", ".yaml", ".yml", ".md"]
-    }
+      "extensions": [
+        ".css",
+        ".html",
+        ".json",
+        ".jsonc",
+        ".yaml",
+        ".yml",
+        ".md",
+      ],
+    },
   },
   "providers": {
     "openai": {
@@ -27,16 +61,16 @@
         "gpt-6.1-sol": { "limit": { "context": 872000, "output": 128000 } },
         "gpt-6-astra": { "limit": { "context": 872000, "output": 128000 } },
         "gpt-6-sol": { "limit": { "context": 872000, "output": 128000 } },
-        "gpt-6-luna": { "limit": { "context": 872000, "output": 128000 } }
-      }
-    }
+        "gpt-6-luna": { "limit": { "context": 872000, "output": 128000 } },
+      },
+    },
   },
   "mcp": {
     "servers": {
       "parallel-mcp": {
         "type": "remote",
-        "url": "https://mcp.parallel.ai/mcp?login"
-      }
-    }
-  }
+        "url": "https://mcp.parallel.ai/mcp?login",
+      },
+    },
+  },
 }
