@@ -2,7 +2,6 @@ tap "anomalyco/tap"
 tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae", trusted: true
 tap "jurplel/tap", trusted: true
 tap "nikitabobko/tap", trusted: true
-tap "rjyo/moshi", trusted: true
 # Open-source, cross-platform JavaScript runtime environment
 brew "node"
 # Browser automation CLI for AI agents
@@ -71,8 +70,6 @@ brew "yt-dlp"
 brew "anomalyco/tap/opencode-v2", trusted: true
 # Custom macOS statusbar with shell plugin, interaction and graph support
 brew "felixkratz/formulae/sketchybar"
-# Portable daemon + CLI that bridges AI coding agents to the Moshi mobile app
-brew "rjyo/moshi/moshi-hook"
 # AeroSpace is an i3-like tiling window manager for macOS
 cask "nikitabobko/tap/aerospace"
 # Enable Windows-like alt-tab
